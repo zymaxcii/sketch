@@ -59,7 +59,8 @@ void loop()
   content.toUpperCase();
   
   // change here the UID of the card/cards that you want to give access
-  if (content.substring(1) == "BD 31 15 2B")
+  // original "BD 31 15 2B"
+  if (content.substring(1) == "03 DF 1F 19")
   {
      Serial.println("Authorized access");
      Serial.println();
