@@ -1,10 +1,10 @@
 // theramin.ino
-// chapyter 6
+// chapter 6
 // theramin
 
-// connect led to pin 13 or use internal led
-// connect potentiometer to A0
-// connect buzzer to pin 8: the other end to +5v?
+// connect led to pin D2 or use internal led
+// connect potentiometer to A4
+// connect buzzer to pin 13: the other end to +5v?
 
 
 int sensorValue;
@@ -12,7 +12,7 @@ int sensorValue;
 int sensorLow = 1023;
 int sensorHigh = 0;
 
-const int ledPin = 3;  // original 13
+const int ledPin = 2;  // original 13
 
 
 void setup()

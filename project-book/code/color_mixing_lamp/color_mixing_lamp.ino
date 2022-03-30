@@ -3,17 +3,19 @@
 // chapter 4
 // color mixing lamp
 
-// rgb led connected to pins 3, 4, 5: cathode to ground
+// rgb led connected to pins 9, 10, 11: cathode to ground
 // good to have Pin in variable names?
-const int greenLEDPin = 3;
-const int redLEDPin = 4;
-const int blueLEDPin = 5;
 
-// 3 photoresistors connected to A0, A1, A2
+// should use #define
+const int greenLEDPin = 9;
+const int redLEDPin = 10;
+const int blueLEDPin = 11;
+
+// 3 photoresistors connected to A1, A2, A3
 // the other end to +5v?
-const int redSensorPin = A0;
-const int greenSensorPin = A1;
-const int blueSensorPin = A2;
+const int redSensorPin = A1;
+const int greenSensorPin = A2;
+const int blueSensorPin = A3;
 
 int redValue = 0;
 int greenValue = 0;

@@ -1,3 +1,4 @@
+// love_o_meter.ino
 // Arduino project book
 // chapter 3
 // love-o-meter.ino
@@ -18,7 +19,7 @@ void setup()
 {
   Serial.begin(9600);
 
-  for (int pinNumber = 3; pinNumber<6; pinNumber++)
+  for (int pinNumber = 2; pinNumber<5; pinNumber++)
   {
     pinMode(pinNumber, OUTPUT);
     digitalWrite(pinNumber, LOW);   // turn off led
@@ -49,9 +50,8 @@ void loop()
   Serial.println(temperature);
 
   check_temperature(temperature);
-  delay(200);
+  delay(500);
 }
-
 
 
 void check_temperature(float temperature)
@@ -60,33 +60,33 @@ void check_temperature(float temperature)
   // why this logic causes sensorVal to be wrong on second loop onwards?
   if (temperature < baselineTemp)
   {
-    digitalWrite(3, LOW);     // all 3 leds off: no love at all
+    digitalWrite(2, LOW);     // all 3 leds off: no love at all
+    digitalWrite(3, LOW);
     digitalWrite(4, LOW);
-    digitalWrite(5, LOW);
   }
   else
   {
     if (temperature >= baselineTemp+2 && temperature < baselineTemp+4)
     {
-      digitalWrite(3, HIGH);  // 22 to 24 degree: 1 led lit
+      digitalWrite(2, HIGH);  // 22 to 24 degree: 1 led lit
+      digitalWrite(3, LOW);
       digitalWrite(4, LOW);
-      digitalWrite(5, LOW);
     }
     else
     {
       if (temperature >= baselineTemp+4 && temperature < baselineTemp+6)
       {
-        digitalWrite(3, HIGH);  // 24 to 26: 2 leds lit
-        digitalWrite(4, HIGH);
-        digitalWrite(5, LOW);
+        digitalWrite(2, HIGH);  // 24 to 26: 2 leds lit
+        digitalWrite(3, HIGH);
+        digitalWrite(4, LOW);
       }
       else
       {
         if (temperature >= baselineTemp+6)
         {
-          digitalWrite(3, HIGH);  // above 26 degree: all 3 leds lit
+          digitalWrite(2, HIGH);  // above 26 degree: all 3 leds lit
+          digitalWrite(3, HIGH);
           digitalWrite(4, HIGH);
-          digitalWrite(5, HIGH);
         }
       }    
     }  
