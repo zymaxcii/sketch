@@ -5,7 +5,7 @@
 // Refer to https://surtrtech.com/ for more information
 // Emitting 1KHz sound for 1s and then 2KHz sound for 1s
 
-int buzzer = 3;      // can use any digital pin
+int buzzer = 13;      // can use any digital pin
  
 void setup()
 {
