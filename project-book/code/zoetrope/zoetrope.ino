@@ -4,13 +4,13 @@
 
 // use a DC motor
 // IN1, IN2 to pins 2, 3
-// EN to pin 9
-// connect potentiometer to anlog input A0
-// connect direction switch to pin 4
-// connect onOff switch to pin 5
+// EN to pin 11 (PWM)
+// connect potentiometer to anlog input A4
+// connect direction switch to pin 6
+// connect onOff switch to pin 7
 // using L293D IC the code is similar to that using L298N motor driver module
 
-// IN1, In2, EN = 2, 3, 9
+// IN1, In2, EN = 2, 3, 11
 const int controlPin1 = 2;
 const int controlPin2 = 3;
 const int enablePin   = 9;
@@ -91,4 +91,3 @@ void loop()
   previousDirectionSwitchState = directionSwitchState;
   previousOnOffSwitchState = onOffSwitchState;
 }
-

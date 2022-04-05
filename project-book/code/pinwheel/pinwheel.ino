@@ -7,14 +7,15 @@
 // toggle the switch to spin the pinwheel
 
 
-const int switchPin = 2;
-const int motorPin  = 9;
+const int switchPin = 6;
+const int motorPin  = 11;
 
 int switchState = 0;
 
 
 void setup() 
 {
+  Serial.begin(9600);
   pinMode(motorPin, OUTPUT);
   pinMode(switchPin, INPUT_PULLUP);    // or INPUT_PULLUP
 }
@@ -23,7 +24,7 @@ void setup()
 void loop()
 {
   switchState = digitalRead(switchPin);
-
+  Serial.println(switchState);
   if (switchState == HIGH)
   {
     digitalWrite(motorPin, HIGH);
@@ -33,4 +34,3 @@ void loop()
     digitalWrite(motorPin, LOW);
   }
 }
-
