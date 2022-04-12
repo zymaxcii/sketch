@@ -1,3 +1,4 @@
+// rainsensor.ino
 /*
  
  All the resources for this project:
@@ -7,11 +8,13 @@
 
 int rainPin = A0;
 int greenLED = 6;
-int redLED = 7;
+int redLED = 4;
 // you can adjust the threshold value
 int thresholdValue = 800;
 
-void setup(){
+
+void setup()
+{
   pinMode(rainPin, INPUT);
   pinMode(greenLED, OUTPUT);
   pinMode(redLED, OUTPUT);
@@ -20,16 +23,21 @@ void setup(){
   Serial.begin(9600);
 }
 
-void loop() {
-  // read the input on analog pin 0:
+
+void loop()
+{
+  // read the input on analog pin A0
   int sensorValue = analogRead(rainPin);
   Serial.print(sensorValue);
-  if(sensorValue < thresholdValue){
+  
+  if (sensorValue < thresholdValue)
+  {
     Serial.println(" - Doesn't need watering");
     digitalWrite(redLED, LOW);
     digitalWrite(greenLED, HIGH);
   }
-  else {
+  else
+  {
     Serial.println(" - Time to water your plant");
     digitalWrite(redLED, HIGH);
     digitalWrite(greenLED, LOW);

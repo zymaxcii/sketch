@@ -1,4 +1,4 @@
-
+// time_with_rtc.ino
 //Code by tronixstuff
 
 
@@ -9,21 +9,26 @@ byte decToBcd(byte val)
 {
   return( (val/10*16) + (val%10) );
 }
+
+
 // Convert binary coded decimal to normal decimal numbers
 byte bcdToDec(byte val)
 {
   return( (val/16*10) + (val%16) );
 }
+
+
 void setup()
 {
   Wire.begin();
   Serial.begin(9600);
   // set the initial time here:
   // DS3231 seconds, minutes, hours, day, date, month, year
-  setDS3231time(30,42,16,5,13,10,16);
+  setDS3231time(30,18,15,6,8,04,22);
 }
-void setDS3231time(byte second, byte minute, byte hour, byte dayOfWeek, byte
-dayOfMonth, byte month, byte year)
+
+
+void setDS3231time(byte second, byte minute, byte hour, byte dayOfWeek, byte dayOfMonth, byte month, byte year)
 {
   // sets time and date data to DS3231
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
@@ -37,13 +42,9 @@ dayOfMonth, byte month, byte year)
   Wire.write(decToBcd(year)); // set year (0 to 99)
   Wire.endTransmission();
 }
-void readDS3231time(byte *second,
-byte *minute,
-byte *hour,
-byte *dayOfWeek,
-byte *dayOfMonth,
-byte *month,
-byte *year)
+
+
+void readDS3231time(byte *second,byte *minute,byte *hour,byte *dayOfWeek,byte *dayOfMonth,byte *month,byte *year)
 {
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
   Wire.write(0); // set DS3231 register pointer to 00h
@@ -58,6 +59,8 @@ byte *year)
   *month = bcdToDec(Wire.read());
   *year = bcdToDec(Wire.read());
 }
+
+
 void displayTime()
 {
   byte second, minute, hour, dayOfWeek, dayOfMonth, month, year;
@@ -68,12 +71,14 @@ void displayTime()
   Serial.print(hour, DEC);
   // convert the byte variable to a decimal number when displayed
   Serial.print(":");
+ 
   if (minute<10)
   {
     Serial.print("0");
   }
   Serial.print(minute, DEC);
   Serial.print(":");
+ 
   if (second<10)
   {
     Serial.print("0");
@@ -86,7 +91,9 @@ void displayTime()
   Serial.print("/");
   Serial.print(year, DEC);
   Serial.print(" \nDay of week: ");
-  switch(dayOfWeek){
+ 
+  switch (dayOfWeek)
+  {
   case 1:
     Serial.println("Sunday");
     break;
@@ -110,8 +117,11 @@ void displayTime()
     break;
   }
 }
+
+
 void loop()
 {
   displayTime(); // display the real-time clock data on the Serial Monitor,
+  Serial.println("\n");
   delay(5000); // every second
 }
