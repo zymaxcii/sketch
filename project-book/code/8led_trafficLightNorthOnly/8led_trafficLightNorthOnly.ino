@@ -1,4 +1,4 @@
-// trafficLight_NorthOnly.ino
+// 8led_trafficLightNorthOnly.ino
 
 //********************************************************************//
 //                  North One Way Traffic Signal                      //
@@ -8,21 +8,22 @@
 //********************************************************************//
 
 
-#define UK_PATTERN false
+#define UK_PATTERN true    // false
 
 #define OFF 8
 #define RED 4
 #define YELLOW 2
 #define GREEN 1
 
-#define RED_PIN 11
-#define YELLOW_PIN 10
-#define GREEN_PIN 9
+#define RED_PIN 5
+#define YELLOW_PIN 6
+#define GREEN_PIN 7
 
+// not used in code
 #define NORTH 8
-#define SOUTH 7
-#define EAST 6
-#define WEST 5
+#define SOUTH 9
+#define EAST 10
+#define WEST 11
 
 
 void setup()
@@ -73,7 +74,7 @@ void loop()
   
   // OK, so other direction turned green and back to red, so we can turn back to green
   // Figure out which traffic pattern we're using
-  if(UK_PATTERN)
+  if (UK_PATTERN)
   {
     // UK_PATTERN is true, so we'll do the red+yellow combo before turning green
     digitalWrite(RED_PIN, HIGH);
@@ -93,4 +94,3 @@ void loop()
   // are enabled while changing the colors at the same time. Between this and
   // TrafficLight_2WayStop.ino you should be able to get a full 4-way traffic light.
 }
-
