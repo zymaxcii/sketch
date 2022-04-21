@@ -2,14 +2,14 @@
 // This sketch looks more promising - mty
 
 #define OFF 99
-#define RED 11
-#define YELLOW 10
-#define GREEN 9
+#define RED 7
+#define YELLOW 6
+#define GREEN 5
 
 #define NORTH 8
-#define SOUTH 7
-#define EAST 6
-#define WEST 5
+#define SOUTH 9
+#define EAST 10
+#define WEST 11
 
 unsigned long phaseStart;
 byte cycleCounter;
@@ -141,6 +141,7 @@ void loop()
 
 void StartupSequence()
 {
+
   int stepTime = 200;
   for (byte i=0; i<2; i++)
   {
@@ -226,4 +227,3 @@ void Show(byte road, byte color)
   }
   delayMicroseconds(500);
 }
-
