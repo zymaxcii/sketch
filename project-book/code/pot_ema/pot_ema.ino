@@ -1,10 +1,8 @@
 // pot_ema.ino
-// ema_pot2.ino
 // Read potentiometer value and compute exponential moving averages (EMA)
 // print to serial monitor
 // note: max and min value of this pot is 0 - 923 with EMA_a = 0.01
 // note: max and min value of this pot is 0 - 1021 with EMA_a = 0.6
-
 
 // Boards to run the sketch:
 // my poteniometer board
@@ -20,13 +18,13 @@
 
 
 // Global Variables
-int sensorPin   = A0;      // pin number to use the ADC
+int sensorPin   = A0;
 int sensorValue = 0;      // initialization of sensor variable, equivalent to EMA Y
 
 // alpha between 0 and 1
 // low alpha-slow response
-float EMA_a = 0.6;      // initialization of EMA alpha, 0.6 original
-int EMA_S = 0;           // initialization of EMA S
+float EMA_a = 0.6;        // initialization of EMA alpha, 0.6 original
+int EMA_S = 0;            // initialization of EMA S
 
  
 void setup()

@@ -12,10 +12,12 @@
 // 5. to revert for normal use, disconnect D3, reconnect to GND
 // 6. reverse all led polarity - common cathode
 
-
-const int cathode[8] = {6,7,8,9,10,11,12,13};      // my std 8 led pins
+// my standard pin assignments for 8 leds on uno and nano: 6,7,8,9,10,11,12,13
+// pins 2,3,4,5 for switches; pin 2 with interrupt
+const int cathode[8] = {6,7,8,9, 10,11,12,13};      // my std 8 led pins
 const int anode = 3;    // pwm pin
 int delayTime = 10;
+
 
 void setup()
 {

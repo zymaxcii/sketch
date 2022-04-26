@@ -15,12 +15,14 @@
 #define YELLOW 2
 #define GREEN 1
 
-#define RED_PIN 5
-#define YELLOW_PIN 6
-#define GREEN_PIN 7
+// my standard pin assignments for 8 leds on uno and nano: 6,7,8,9,10,11,12,13
+// pins 2,3,4,5 for switches; pin 2 with interrupt
+#define RED_PIN 6
+#define YELLOW_PIN 7
+#define GREEN_PIN 8
 
 // not used in code
-#define NORTH 8
+#define NORTH 8    // conflict
 #define SOUTH 9
 #define EAST 10
 #define WEST 11

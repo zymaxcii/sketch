@@ -1,9 +1,11 @@
 // 8led_trafficLight.ino
 // too many blocking delay()
 
-#define redLight 5
-#define yellowLight 6
-#define greenLight 7
+// my standard pin assignments for 8 leds on uno and nano: 6,7,8,9,10,11,12,13
+// pins 2,3,4,5 for switches; pin 2 with interrupt
+#define redLight 6
+#define yellowLight 7
+#define greenLight 8
 
 
 void setup()

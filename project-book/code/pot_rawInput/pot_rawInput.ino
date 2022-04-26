@@ -1,8 +1,6 @@
 // pot_rawInput.ino
-// ema_pot.ino
 // Read raw potentiometer value and print to serial monitor
 // note: max and min value of this pot is 0 - 1008
-//
 //
 // https://www.norwegiancreations.com/2015/10/tutorial-potentiometers-with-arduino-and-filtering/
 // no ema
@@ -23,6 +21,7 @@
 // Global Variables
 int sensorPin   = 0;      // pin number to use the ADC
 int sensorValue = 0;    // initialization of sensor variable
+
  
 void setup()
 {

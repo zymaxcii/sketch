@@ -2,13 +2,15 @@
 // https://www.engineersgarage.com/articles-arduino-led-chaser-sequencer-13-light-patterns/
 
 
-#define led0 5
-#define led1 6
-#define led2 7
-#define led3 8
-#define led5 10
-#define led6 11
-#define led7 12
+// my standard pin assignments for 8 leds on uno and nano: 6,7,8,9,10,11,12,13
+// pins 2,3,4,5 for switches; pin 2 with interrupt
+#define led0 6
+#define led1 7
+#define led2 8
+#define led3 9
+#define led5 11
+#define led6 12
+#define led7 13
 
 int delayTime1 = 300;
 int delayTime2 = 200;

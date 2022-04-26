@@ -4,12 +4,15 @@
 // press button to start scnning
 // pot at A0 determines the scanning rate
 
+// to do: can modify this code to simulate led display of AS-66 alkaline water dispenser
+
 const int buttonPin = 2;
 const int ledPin1 = 13;
 int buttonState = 0;
 
-// int leds[] = {3, 4, 6, 7, 8, 9, 10, 11};
-int leds[] = {5, 6, 7, 8, 9, 10, 11, 12};
+// my standard pin assignments for 8 leds on uno and nano: 6,7,8,9,10,11,12,13
+// pins 2,3,4,5 for switches; pin 2 with interrupt
+int leds[] = {6,7,8,9,10,11,12,13};
 
 #define NUMBER_OF_LEDS (sizeof(leds)/sizeof(int))
 

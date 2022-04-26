@@ -44,8 +44,6 @@ void setup()
   pinMode(tiltZero, INPUT_PULLUP);
   pinMode(tiltUp,   INPUT_PULLUP);
   pinMode(tiltDown, INPUT_PULLUP);
-
-
   Serial.begin(9600);
 }
 

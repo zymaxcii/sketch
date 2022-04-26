@@ -1,13 +1,11 @@
 // 8led_spellMyName.ino
 // more like spitting out ascii code
 // https://www.instructables.com/how-make-8-leds-blinking-with-arduino/
-
 // Turns on 8 LEDs to spell my name in Binary
 
-// Pins 2-9 have my 8 LEDs connected to spell my name
-// int led[8] = {2,3,4,5,6,7,8,9};
-// int led[8] = {5,6,7,8,9,10,11,12};
-int led[8] = {12,11,10,9,8,7,6,5};      // pin 12 is msb
+// my standard pin assignments for 8 leds on uno and nano: 6,7,8,9,10,11,12,13
+// pins 2,3,4,5 for switches; pin 2 with interrupt
+int led[8] = {13,12,11,10,9,8,7,6};      // pin 13 is msb
 
 
 // MyNameLength holds the length of my name in characters
@@ -15,7 +13,6 @@ int led[8] = {12,11,10,9,8,7,6,5};      // pin 12 is msb
 // char name[MyNameLength]= {'M','a','r','k'};
 #define MyNameLength 6
 char name[MyNameLength]= {'0','1','2','3','4','5'};
-
 
 
 void setup()
@@ -27,7 +24,6 @@ void setup()
     pinMode(led[i], OUTPUT);    
   }
 }
-
 
 
 // LightUp routine lights up the 8 LEDs to spell out in binary the letter passed in

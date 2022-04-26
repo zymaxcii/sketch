@@ -10,7 +10,9 @@ const byte numPins = 8; // how many leds
 int state;				      // used for HIGH or LOW
  
 // pins to connect leds
-byte pins[] = {5, 6, 7, 8, 9, 10, 11, 12};
+// my standard pin assignments for 8 leds on uno and nano: 6,7,8,9,10,11,12,13
+// pins 2,3,4,5 for switches; pin 2 with interrupt
+byte pins[] = {6,7,8,9,10,11,12,13};
 
 
 void setup()

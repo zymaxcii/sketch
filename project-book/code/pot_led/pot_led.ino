@@ -1,11 +1,8 @@
-//
+// pot_led.ino
+// Adafruit Arduino - Lesson 8. Analog Inputs - LEDs
+// looks like this sketch is using ledsr module - to check it out
 
-/*
-pot_led.ino
-Adafruit Arduino - Lesson 8. Analog Inputs - LEDs
-*/
-
-int potPin = 0;   // A0
+int potPin = 0;     // A0
 int latchPin = 5;
 int clockPin = 6;
 int dataPin  = 4;
