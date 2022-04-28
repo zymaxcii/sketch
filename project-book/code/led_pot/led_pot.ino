@@ -1,6 +1,7 @@
 // led_pot.ino
 // 4 leds controlled by a potentiometer
 // 25% each
+// uses 8led module
 
 // pot_led_4Lightup.ino
 // led_lightUpByPercent.ino

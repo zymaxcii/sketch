@@ -1,14 +1,17 @@
-// ledsr_serialmon.ino
+// 8ledsr_serialmon.ino
 
 /*
 Adafruit Arduino - Lesson 5. Serial Monitor
 */
 
-// 74HC595 pins DS, SH_CP, ST_CP: 14, 11, 12
-// connect pins 14, 11, 12: D2, D3, D4
-int datapin  = 2; 
-int clockpin = 3;
-int latchpin = 4;
+// 74HC595 pins DS, ST_CP, SH_CP: 14, 12, 11 (data, storage, shift register)
+// pin headers bottom to top:
+// 11 SH_CP D8
+// 12 ST_CP D7
+// 14 DS    D6
+int clockpin = 8;
+int latchpin = 7;
+int datapin  = 6;     // bottom pin
 
 byte leds = 0;
 
@@ -29,7 +32,7 @@ void setup()
 
 void loop()
 {
-  if (Serial.available())
+  if (Serial.available())  
   {
     char ch = Serial.read();
     if (ch >= '0' && ch <= '7')

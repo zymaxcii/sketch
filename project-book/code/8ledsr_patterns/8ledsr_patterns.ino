@@ -1,42 +1,37 @@
-// ledsr_patterns.ino
-// led_8sr.ino
+// 8ledsr_patterns.ino
 // Perform various test patterns on 8 leds connected via a 74HC595 shift register
 // taken from robotic nation
-//
 // 74HC595 uses a type of serial connection called SPI
 // Serial Peripheral Interface that requires three pins
 
 void oneOnAtATime(), pingPong(), randomLED(), marquee(), binaryCount(), allOff(), allOn(); 
 
-// 74HC595 pins DS, SH_CP, ST_CP: 14, 11, 12
-// connect pins D8, D6, D7 
-// connect pins 14, 11, 12: D2, D3, D4
-//int datapin  = 8; 
-//int clockpin = 6;
-//int latchpin = 7;
-
-
-int datapin  = 6; 
-int clockpin = 7;
-int latchpin = 8;
+// 74HC595 pins DS, ST_CP, SH_CP: 14, 12, 11 (data, storage, shift register)
+// pin headers bottom to top:
+// 11 SH_CP D8
+// 12 ST_CP D7
+// 14 DS    D6
+int clockpin = 8;
+int latchpin = 7;
+int datapin  = 6;     // bottom pin
 
 // data sent to shift register
 byte data = 0;
 const int delayTime = 100;
+
 
 void setup()
 {
   pinMode(datapin,  OUTPUT);
   pinMode(clockpin, OUTPUT);  
   pinMode(latchpin, OUTPUT);
-  // Serial.begin(9600);
 }
 
 
 void loop()
 {
 
-  // allOn();
+  allOn();
   binaryCount();          // Bit patterns from 0 to 255
   oneAfterAnother();      // All on, all off
   oneOnAtATime();         // Scroll down the line
