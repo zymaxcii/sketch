@@ -12,7 +12,7 @@ int clockpin = 8;
 int latchpin = 7;
 int datapin  = 6;     // bottom pin
 
-int delayTime = 100;
+int delayTime = 300;
 
 void clock_signal(void)
 {

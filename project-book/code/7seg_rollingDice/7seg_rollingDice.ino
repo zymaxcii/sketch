@@ -17,16 +17,18 @@
 //10  G	D8	
 //
 
-// I/O connections:
-// segments A,B,C,D,E,F,G,DP to pins D2,D3,D4,D5,D6,D7,D8,D9
+// My standard I/O connections:
+// segments A,B,C,D,E,F,G,DP to digital pins 6,7,8,9,10,11,12,13
 // common cathode 42056W8 pins 3,8 to GND
+// pins 0,1 for serial
+// pins 2,3,4,5 for switches
 
 
 #include "SevSeg.h"
 
 SevSeg sevseg;
 
-const int buttonPin = 10;     // pushbutton connected to D10
+const int buttonPin = 2;     // pushbutton connected to D2
 int buttonState = 0;          // current state of the button
 int lastButtonState = LOW;    // previous state of the button
 int buttonPushCounter = 0;    // counter for the number of button presses
@@ -41,7 +43,7 @@ void setup()
   
   // segments A,B,C,D,E,F,G,DP to pins D2,D3,D4,D5,D6,D7,D8,D9
   // common cathode 42056W8 pins 3,8 to GND
-  byte segmentPins[] = {2, 3, 4 , 5, 6 , 7, 8, 9};
+  byte segmentPins[] = {6, 7, 8, 9, 10, 11, 12, 13};
   bool resistorsOnSegments = true; 
 
   byte hardwareConfig = COMMON_CATHODE;

@@ -17,7 +17,7 @@ int datapin  = 6;     // bottom pin
 
 // data sent to shift register
 byte data = 0;
-const int delayTime = 100;
+const int delayTime = 200;
 
 
 void setup()
