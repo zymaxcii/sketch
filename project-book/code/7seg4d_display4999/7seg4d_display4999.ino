@@ -21,10 +21,12 @@
 //11  A  D2
 //12  D1 D10
 
+// my standard i/o connections for 7 segment 4-digit led:
 // bottom CCW pins 1-6, then 7-12
 // pins 1-12: E,D,DP,C,G,D4, B,D3,D2,F,A,D1
-// segments A,B,C,D,E,F,G,DP to pins D2,D3,D4,D5,D6,D7,D8,D9
-// common cathode 3641AS pins D1,D2,D3,D4: D10,D11,D12,D13
+// segments A,B,C,D,E,F,G,DP to pins D6,D7,D8,D9,D10,D11,D12,D13
+// common cathode 3641AS pins D1,D2,D3,D4: D2,D3,D4,D5
+
 
 #include "SevSeg.h"
 
@@ -33,9 +35,8 @@ SevSeg sevseg;
 void setup()
 {
   byte numDigits = 4;
-
-  byte digitPins[]   = {10, 11, 12, 13};
-  byte segmentPins[] = {2, 3, 4, 5, 6, 7, 8, 9};
+  byte digitPins[]   = {2, 3, 4, 5};
+  byte segmentPins[] = {6,7,8,9,10,11,12,13};
 
   bool resistorsOnSegments = true; 
   bool updateWithDelaysIn  = true;
