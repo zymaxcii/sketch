@@ -1,26 +1,29 @@
 // dotMatrix_faces.ino
 
-// dot_matrix_faces.ino
 /*
+ dot_matrix_faces.ino
  Created by Rui Santos
  All the resources for this project:
  http://randomnerdtutorials.com/
 */
 
-
 #include "LedControl.h"
 #include "binary.h"
 
 /*
- DIN connects to pin 12
- CLK connects to pin 11
- CS connects to pin 10 
+ DIN connects to pin D8
+ CLK connects to pin D10
+ CS connects to pin  D9
+ physical connection order: DIN,CS,CLK
+ no special digital pin requirement: DIN,CS,CLK
 */
 
-LedControl lc=LedControl(12, 11, 10, 1);
+// my standard connection to match physical pins
+LedControl lc=LedControl(8, 10, 9, 1);
+// last parameter: 1 display only
 
 // delay time between faces
-unsigned long delaytime = 1000;
+unsigned long delaytime = 500;
 
 // happy face
 byte hf[8] =

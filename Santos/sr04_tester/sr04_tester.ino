@@ -6,14 +6,14 @@
  * Complete Guide for Ultrasonic Sensor HC-SR04
    Ultrasonic sensor Pins:
      VCC: +5VDC
-     Trig : Trigger (INPUT) - Pin11
-     Echo: Echo (OUTPUT) - Pin 12
+     Trig : Trigger (INPUT) - Pin 9
+     Echo: Echo (OUTPUT)    - Pin 8
      GND: GND
 */
 
- 
-int trigPin = 11;          // Trig - green Jumper
-int echoPin = 12;          // Echo - yellow Jumper
+// trig and echo: normal digital pins will do
+int trigPin = 9;
+int echoPin = 8;
 long duration, cm, inches;
 
 
@@ -50,6 +50,5 @@ void loop()
   Serial.print(cm);
   Serial.print("cm");
   Serial.println();
-  // original 250
-  delay(5000);
+  delay(250);      // original 250
 }

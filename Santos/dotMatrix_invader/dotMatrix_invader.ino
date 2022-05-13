@@ -1,12 +1,22 @@
 // dotMatrix_invader.ino
+// A0 is to detect movement of backpack
 
 // invader.ino
 // https://maker.pro/arduino/projects/dot-matrix-display-hackpack
 
 #include "LedControl.h"
 
-// LedControl lc=LedControl(13,11,12,1);    // original
-LedControl lc=LedControl(12,11,10,1);
+/*
+ DIN connects to pin D8
+ CLK connects to pin D10
+ CS connects to pin  D9
+ physical connection order: DIN,CS,CLK
+ no special digital pin requirement: DIN,CS,CLK
+*/
+
+// my standard connection to match physical pins
+LedControl lc=LedControl(8, 10, 9, 1);
+// last parameter: 1 display only
 
 int a[5], k=0, rno=0;
 unsigned long delayTime = 200;
@@ -170,7 +180,7 @@ void loop()
 
   if (test==1)
   {
-    lc.shutdown(0, false);	// Turns on the display
+    lc.shutdown(0, false);	// turns on the display
     disp(rno);
   }
   else
@@ -179,6 +189,6 @@ void loop()
       inc=-inc;
 
     rno=rno+inc;
-    lc.shutdown(0,true);	// Turns off the display
+    lc.shutdown(0,true);	// turns off the display
   }
 }

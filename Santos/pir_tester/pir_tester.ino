@@ -5,11 +5,14 @@
     For complete project details, visit: http://RandomNerdTutorials.com/pirsensor
     Modified by Rui Santos based on PIR sensor by Limor Fried
 */
- 
-int led = 13;
-int sensor = 2;
+
+// my standard pin assignments
+int led = 4;
+int sensor = 8;
+
 int state = LOW;             // by default, no motion detected
 int val = 0;                 // sensor value
+
 
 void setup()
 {
