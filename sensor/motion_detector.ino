@@ -9,7 +9,7 @@
 // relay pin is controlled with D8
 // active wire is connected to normally Closed and common
 int relay = 8;
-volatile byte relayState = LOW;
+volatile byte relayState = LOW;    // used with ISR
 
 // PIR Motion Sensor is connected to D2
 // driven by interrupt

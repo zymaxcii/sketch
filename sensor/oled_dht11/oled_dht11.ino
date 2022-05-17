@@ -6,8 +6,8 @@
 #include <Adafruit_SSD1306.h>
 #include <DHT.h>
 
-#define DHTPIN 2
-#define DHTTYPE DHT11       // DHT 11
+#define DHTPIN 8
+#define DHTTYPE DHT11       // blue
 #define OLED_RESET 4
 Adafruit_SSD1306 display(OLED_RESET);
 
@@ -19,7 +19,7 @@ void setup()
 {
   Wire.begin();
   dht.begin();              // initialize dht
-  // initialize with I2C addr 0x3C (for 128x32)(initializing display)
+  // initialize with I2C addr 0x3C for 128x32
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   Serial.begin(9600);
 }

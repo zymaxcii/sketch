@@ -8,23 +8,23 @@
 */
 
 
-int ledOpen = 8;
-int ledClose = 10;
-int switchReed = 6;
+int ledOpen  = 4;      // red
+int ledClose = 6;      // green
+int switchReed = 2;
 
 
 void setup()
 {
   pinMode(ledOpen,  OUTPUT);
   pinMode(ledClose, OUTPUT);
-  pinMode(switchReed, INPUT);
+  pinMode(switchReed, INPUT_PULLUP);
   Serial.begin(9600);
 }
 
 
 void loop()
 {
-  if (digitalRead(switchReed)==HIGH)
+  if (digitalRead(switchReed)==LOW)
   {
     digitalWrite(ledOpen, LOW);
     digitalWrite(ledClose, HIGH);
@@ -37,5 +37,5 @@ void loop()
     Serial.println("Your Door is Open");
   }
   // original 1
-  delay(5000);
+  delay(100);
 }

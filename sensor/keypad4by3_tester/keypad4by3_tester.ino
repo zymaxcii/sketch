@@ -1,5 +1,5 @@
-// keypad_tester.ino
-
+// keypad4by3_tester.ino
+// can work on my 4 by 4 keypad; just disable last col
 // Arduino_with_Keypad.ino
 
 #include "Keypad.h"
@@ -15,11 +15,15 @@ char keys[ROWS][COLS] =
   {'#','0','*'}
 };
 
-// row pinouts of the keypad R1 = D8, R2 = D7, R3 = D6, R4 = D5
-byte rowPins[ROWS] = {8, 7, 6, 5};
 
-// column pinouts of the keypad C1 = D4, C2 = D3, C3 = D2
-byte colPins[COLS] = {4, 3, 2};   
+// use analog pins as digital outputs
+// Nano: A0 to A5; not A6 or A7 (analog inputs only)
+
+// column pinouts of the keypad C1,C2,C3
+byte colPins[COLS] = {4,5,6};   
+
+// row pinouts of the keypad R1,R2,R3,R4
+byte rowPins[ROWS] = {8,9,10,11};
 
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 

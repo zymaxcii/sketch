@@ -1,4 +1,4 @@
-// 3231rtc_tester.ino
+// rtc3231_tester.ino
 
 // time_with_rtc.ino
 // Code by tronixstuff
@@ -25,10 +25,10 @@ void setup()
 {
   Wire.begin();
   Serial.begin(9600);
-  // set the initial time here:
+  // set the initial time here
   // DS3231 seconds, minutes, hours, day, date, month, year
   // comment out when not needed
-  setDS3231time(30,18,15,6,8,04,22);
+  // setDS3231time(00,07,15,3,17,05,22);
 }
 
 
@@ -125,7 +125,7 @@ void displayTime()
 
 void loop()
 {
-  displayTime();           // display the real-time clock data on the Serial Monitor,
-  Serial.println("\n");
+  displayTime();           // display real-time clock data on Serial Monitor
+  // Serial.println("\n");
   delay(5000);             // every second
 }
