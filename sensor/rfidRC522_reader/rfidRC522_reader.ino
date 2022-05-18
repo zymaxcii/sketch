@@ -1,7 +1,7 @@
-// RFID
+// rfidRC522_reader.ino
 
 /*
- * 
+ * RFID
  * All the resources for this project: http://randomnerdtutorials.com/
  * Modified by Rui Santos
  * 

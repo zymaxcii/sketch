@@ -23,7 +23,7 @@ long debounceDelay = 10000;
 void setup()
 {
   pinMode(relay, OUTPUT);
-  digitalWrite(relay, HIGH);
+  digitalWrite(relay, HIGH);      // active low
   // PIR motion sensor set as an input
   pinMode(PIRInterrupt, INPUT);
   // Triggers detectMotion function on rising mode to turn the relay on
