@@ -7,7 +7,7 @@ Adafruit Arduino - Lesson 14. Sweep
 
 #include <Servo.h>
 
-int servoPin = 10;
+int servoPin = 8;
 
 Servo servo;
 
@@ -43,4 +43,3 @@ void loop()
     delay(100);
   }
 }
-

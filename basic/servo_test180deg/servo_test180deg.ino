@@ -10,7 +10,7 @@ long num = 500;
 
 void setup()
 {
-  servo1.attach(9);
+  servo1.attach(8);
   Serial.begin(9600); 
   Serial.print("Enter Pulse length = ");
 }
@@ -29,4 +29,3 @@ void loop()
   servo1.writeMicroseconds(num);
   delay(15);
 }
-
