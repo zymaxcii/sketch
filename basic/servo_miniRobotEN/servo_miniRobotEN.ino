@@ -1,5 +1,5 @@
 // miniRobotEn.ino
-// not working
+// working now
 
 // https://www.robotshop.com/community/robots/show/micro-servo-robot
 
@@ -53,12 +53,13 @@ boolean playmode = false, Step = false;
 
 void setup()
 {
-  pinMode(4, INPUT);  // sets the digital pin 4 as input
-  pinMode(6, INPUT);
+  pinMode(4, INPUT_PULLUP);  // sets the digital pin 4 as input
+  pinMode(6, INPUT_PULLUP);
   pinMode(13, OUTPUT);  // sets the digital pin 13 as outtput
   digitalWrite(13, HIGH);   // sets the LED on
+  
   servo_0.attach(3); // attaches the servo
-  servo_1.attach(5);
+  servo_1.attach(9);
   servo_2.attach(10);
   servo_3.attach(11);
   Serial.begin(9600); // Baudrate have to be same on the IDE
@@ -129,7 +130,7 @@ void loop() // here we go!
   }// ende playmode
 
 // ---------------------------------------------------------------------------------Hardware pause switch PIN 6
-    while (digitalRead(4) == true)
+    while (digitalRead(4) == LOW)
       { 
         digitalWrite(13, HIGH); delay(500);   
         digitalWrite(13, LOW); delay(500);

@@ -19,8 +19,8 @@ void setup()
 {
   // Set up everything and will run once
 
-  servo1.attach(8); // Attach servos and define the pin modes
-  servo2.attach(9);
+  servo1.attach(3);     // Attach servos and define the pin modes
+  servo2.attach(9);     // require pwm pins?
   servo3.attach(10);
   servo4.attach(11);
 }
