@@ -1,8 +1,8 @@
 // 7seg4d_ani.ino
 // https://www.instructables.com/4-Digit-7-Segment-LED-Display-Arduino/
+// what does it do or show?
 
-
-//segments
+// segments
 int a = 1;
 int b = 2;
 int c = 3;
@@ -11,15 +11,18 @@ int e = 5;
 int f = 6;
 int g = 7;
 int p = 8;
-//digits
+
+// digits
 int d4 = 9;
 int d3 = 10;
 int d2 = 11;
 int d1 = 12;
-//other
+
+// other
 int del = 100;
 int buttoncount = 0;
 int loopcount = 0;
+
 
 void setup()
 {
@@ -35,6 +38,7 @@ void setup()
   pinMode(f, OUTPUT);
   pinMode(g, OUTPUT);
   pinMode(p, OUTPUT);
+  
   digitalWrite(a, HIGH);
   digitalWrite(b, HIGH);
   digitalWrite(c, HIGH);
@@ -45,6 +49,7 @@ void setup()
   digitalWrite(p, HIGH);
 }
 
+
 void loop()
 {
   roulette(4);
@@ -54,6 +59,7 @@ void loop()
   circles(4);
   delay(100);
 }
+
 
 void pickDigit(int x)
 {
@@ -79,6 +85,7 @@ void pickDigit(int x)
   }
 }
 
+
 void clearLEDs()
 {
   digitalWrite(a, HIGH);
@@ -91,9 +98,11 @@ void clearLEDs()
   digitalWrite(p, HIGH);
 }
 
+
 void roulette(int x)
 {
   loopcount = 0;
+  
   while (loopcount < x)
   {
     digitalWrite(a, LOW);
@@ -131,9 +140,11 @@ void roulette(int x)
   }
 }
 
+
 void zigzag(int x)
 {
   loopcount = 0;
+  
   while(loopcount < x)
   {
     digitalWrite(a, LOW);
@@ -189,9 +200,11 @@ void zigzag(int x)
   }
 }
 
+
 void circles(int x)
 {
   loopcount = 0;
+
   while (loopcount < x)
   {
     digitalWrite(a, LOW);
@@ -200,6 +213,7 @@ void circles(int x)
     digitalWrite(g, LOW);
     pickDigit(1);
     delay(250);
+
     digitalWrite(a, HIGH);
     digitalWrite(b, HIGH);
     digitalWrite(f, HIGH);
@@ -208,6 +222,7 @@ void circles(int x)
     digitalWrite(e, LOW);
     pickDigit(2);
     delay(250);
+
     digitalWrite(a, LOW);
     digitalWrite(b, LOW);
     digitalWrite(f, LOW);
@@ -216,6 +231,7 @@ void circles(int x)
     digitalWrite(e, HIGH);
     pickDigit(3);
     delay(250);
+
     digitalWrite(a, HIGH);
     digitalWrite(b, HIGH);
     digitalWrite(f, HIGH);
@@ -228,4 +244,3 @@ void circles(int x)
     loopcount++;
   }
 }
-

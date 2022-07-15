@@ -1,8 +1,11 @@
-// 7seg4dI2C_clock.ino
+// 7seg4d_ClockI2C.ino
 // https://thecustomizewindows.com/2017/02/making-digital-clock-arduino-7-segment-4-digit-tm1637/
+// using rtc DS3231
+// fail to compile: problem with TM1637 library
 
 #include <Wire.h>
-#include "TM1637.h" 
+#include "TM1637.h"
+ 
 #define CLK 6         
 #define DIO 7 
 #define brightness 6 
@@ -10,18 +13,23 @@
 #define keyMin 4 
 #define keyPL  3
 
-TM1637 tm1637(CLK,DIO);  
+TM1637 tm1637(CLK,DIO);
+  
 #define DS3231_I2C_ADDRESS 0x68
   
 volatile boolean flag;
 
-byte decToBcd(byte val){
+byte decToBcd(byte val)
+{
   return ( (val/10*16) + (val%10) );
 }
 
-byte bcdToDec(byte val){
+
+byte bcdToDec(byte val)
+{
   return ( (val/16*10) + (val%16) );
 }
+
 
 void setDateDs3231(byte second,  
                    byte minute,        // 0-59
@@ -31,17 +39,18 @@ void setDateDs3231(byte second,
                    byte month,         // 1-12
                    byte year)          // 0-99
 {
-   Wire.beginTransmission(DS3231_I2C_ADDRESS);
-   Wire.write(0);
-   Wire.write(decToBcd(second));    
-   Wire.write(decToBcd(minute));
-   Wire.write(decToBcd(hour));     
-   Wire.write(decToBcd(dayOfWeek));
-   Wire.write(decToBcd(dayOfMonth));
-   Wire.write(decToBcd(month));
-   Wire.write(decToBcd(year));
-   Wire.endTransmission();
+  Wire.beginTransmission(DS3231_I2C_ADDRESS);
+  Wire.write(0);
+  Wire.write(decToBcd(second));    
+  Wire.write(decToBcd(minute));
+  Wire.write(decToBcd(hour));     
+  Wire.write(decToBcd(dayOfWeek));
+  Wire.write(decToBcd(dayOfMonth));
+  Wire.write(decToBcd(month));
+  Wire.write(decToBcd(year));
+  Wire.endTransmission();
 }
+
 
 void getDateDs3231(byte *second,
           byte *minute,
@@ -51,7 +60,6 @@ void getDateDs3231(byte *second,
           byte *month,
           byte *year)
 {
-
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
   Wire.write(0);
   Wire.endTransmission();
@@ -67,26 +75,32 @@ void getDateDs3231(byte *second,
   *year       = bcdToDec(Wire.read());
 }
 
-void setINT(){  
+
+void setINT()
+{
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
   Wire.write(0x0E);
   Wire.write(0x0);
   Wire.endTransmission();
 }
 
-void blink() {
+
+void blink()
+{
   digitalWrite(13, !digitalRead(13));
   flag = !flag;
   tm1637.point(flag); 
 }
 
-void setup() {
-//  Serial.begin(9600);
+
+void setup()
+{
+  // Serial.begin(9600);
   Wire.begin();
   pinMode(13, OUTPUT);
   pinMode(keyHor, INPUT_PULLUP);
   pinMode(keyMin, INPUT_PULLUP);
-  pinMode(keyPL, INPUT_PULLUP);
+  pinMode(keyPL,  INPUT_PULLUP);
 
   tm1637.init();
   tm1637.set(brightness);  
@@ -95,7 +109,9 @@ void setup() {
   attachInterrupt(0, blink, CHANGE);
 }
 
-void loop(){
+
+void loop()
+{
   byte second, minute, hour, dayOfWeek, dayOfMonth, month, year; 
   getDateDs3231(&second, &minute, &hour, &dayOfWeek, &dayOfMonth, &month, &year); 
   int8_t TimeDisp[4]; 
@@ -105,22 +121,25 @@ void loop(){
   TimeDisp[2] = minute / 10;
   TimeDisp[3] = minute % 10;
 
-  if (!digitalRead(keyHor) && !digitalRead(keyPL)){   
-      second = 0;     
-      hour++;  
-      if (hour > 23) hour = 0;  
-      setDateDs3231(second, minute, hour, dayOfWeek, dayOfMonth, month, year); 
-      delay(200);
+  if (!digitalRead(keyHor) && !digitalRead(keyPL))
+  {
+    second = 0;     
+    hour++;  
+    
+    if (hour > 23) hour = 0;  
+    setDateDs3231(second, minute, hour, dayOfWeek, dayOfMonth, month, year); 
+    delay(200);
   }
-  if (!digitalRead(keyMin) && !digitalRead(keyPL)){   // минуты
-      second = 0;
-      minute++;
-      if (minute > 59) minute = 0;
-      setDateDs3231(second, minute, hour, dayOfWeek, dayOfMonth, month, year);
-      delay(200);
+  
+  if (!digitalRead(keyMin) && !digitalRead(keyPL))
+  {
+    second = 0;
+    minute++;
+    
+    if (minute > 59) minute = 0;
+    setDateDs3231(second, minute, hour, dayOfWeek, dayOfMonth, month, year);
+    delay(200);
   }
 
   tm1637.display(TimeDisp);
- 
-  
 } 

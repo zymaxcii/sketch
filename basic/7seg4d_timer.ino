@@ -1,7 +1,7 @@
 // 7seg4d_timer.ino
 // https://www.instructables.com/4-Digit-7-Segment-LED-Display-Arduino/
 
-//segments
+// segments
 int a = 1;
 int b = 2;
 int c = 3;
@@ -10,15 +10,18 @@ int e = 5;
 int f = 6;
 int g = 7;
 int p = 8;
-//digits
+
+// digits
 int d4 = 9;
 int d3 = 10;
 int d2 = 11;
 int d1 = 12;
-//other
+
+// other
 long n = 0;
 int x = 100;
 int del = 45;
+
 
 void setup()
 {
@@ -35,6 +38,7 @@ void setup()
   pinMode(g, OUTPUT);
   pinMode(p, OUTPUT);
 }
+
 
 void loop()
 {
@@ -67,6 +71,7 @@ void loop()
   }
 }
 
+
 void pickDigit(int x)
 {
   digitalWrite(d1, LOW);
@@ -83,27 +88,30 @@ void pickDigit(int x)
   }
 }
 
+
 void pickNumber(int x)
 {
   switch(x)
   {
-    default: zero(); break;
-    case 1: one(); break;
-    case 2: two(); break;
-    case 3: three(); break;
-    case 4: four(); break;
-    case 5: five(); break;
-    case 6: six(); break;
-    case 7: seven(); break;
-    case 8: eight(); break;
-    case 9: nine(); break;
+  default: zero(); break;
+  case 1: one();   break;
+  case 2: two();   break;
+  case 3: three(); break;
+  case 4: four();  break;
+  case 5: five();  break;
+  case 6: six();   break;
+  case 7: seven(); break;
+  case 8: eight(); break;
+  case 9: nine();  break;
   }
 }
+
 
 void dispDec(int x)
 {
   digitalWrite(p, LOW);
 }
+
 
 void clearLEDs()
 {
