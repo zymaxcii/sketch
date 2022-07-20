@@ -1,5 +1,7 @@
 // 7seg4d_timer.ino
 // https://www.instructables.com/4-Digit-7-Segment-LED-Display-Arduino/
+// don't know what it does!
+// what is connected to D13?
 
 // segments
 int a = 1;
@@ -29,6 +31,7 @@ void setup()
   pinMode(d2, OUTPUT);
   pinMode(d3, OUTPUT);
   pinMode(d4, OUTPUT);
+
   pinMode(a, OUTPUT);
   pinMode(b, OUTPUT);
   pinMode(c, OUTPUT);
@@ -64,7 +67,6 @@ void loop()
   delayMicroseconds(del);
   
   n++;
-  
   if (digitalRead(13) == HIGH)
   {
     n = 0;
@@ -81,9 +83,9 @@ void pickDigit(int x)
   
   switch(x)
   {
-    case 1: digitalWrite(d1, HIGH); break;
-    case 2: digitalWrite(d2, HIGH); break;
-    case 3: digitalWrite(d3, HIGH); break;
+    case 1:  digitalWrite(d1, HIGH); break;
+    case 2:  digitalWrite(d2, HIGH); break;
+    case 3:  digitalWrite(d3, HIGH); break;
     default: digitalWrite(d4, HIGH); break;
   }
 }
@@ -93,16 +95,16 @@ void pickNumber(int x)
 {
   switch(x)
   {
-  default: zero(); break;
-  case 1: one();   break;
-  case 2: two();   break;
-  case 3: three(); break;
-  case 4: four();  break;
-  case 5: five();  break;
-  case 6: six();   break;
-  case 7: seven(); break;
-  case 8: eight(); break;
-  case 9: nine();  break;
+  default: zero();  break;
+  case 1:  one();   break;
+  case 2:  two();   break;
+  case 3:  three(); break;
+  case 4:  four();  break;
+  case 5:  five();  break;
+  case 6:  six();   break;
+  case 7:  seven(); break;
+  case 8:  eight(); break;
+  case 9:  nine();  break;
   }
 }
 
@@ -124,6 +126,7 @@ void clearLEDs()
   digitalWrite(g, HIGH);
   digitalWrite(p, HIGH);
 }
+
 
 void zero()
 {
