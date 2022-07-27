@@ -45,10 +45,13 @@
 
 // Defining constants corresponding to the pin each Potentiometer is plugged into 
 // change to whatever you are using them for
-#define SWITCH_1 2
-#define SWITCH_2 3
-#define SWITCH_3 4
+// #define SWITCH_1 2
+// #define SWITCH_2 3
+// #define SWITCH_3 4
 
+#define SWITCH_1 4
+#define SWITCH_2 5
+#define SWITCH_3 6
 
 // Gets everything up and running
 void setup()                  

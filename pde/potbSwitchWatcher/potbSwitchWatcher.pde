@@ -1,4 +1,6 @@
 // potb-SwitchWatcher.pde
+// work hand in hand with potbSerialUpdater.ino
+// not working - problem with no using /dev/ttyUSB0
 
 // https://www.instructables.com/How-to-Make-a-Little-Switch-and-Potentiometer-Box-/
 
@@ -121,8 +123,8 @@ void draw()
 }
 
 
-//----------------------------------------------------------------------------
-//Start of draw routines (split up just to make code nicer to read)
+// ----------------------------------------------------------------------------
+// Start of draw routines (split up just to make code nicer to read)
 
 /*
  * The draw update routine (executed every cycle) for items in the comm box (box 1)
@@ -214,11 +216,11 @@ void drawDialBox()
 }
 
 
-//End of Draw routines
-//-------------------------------------------------------------
+// End of Draw routines
+// -------------------------------------------------------------
 
-//-------------------------------------------------------------
-//Start of Service routines
+// -------------------------------------------------------------
+// Start of Service routines
 
 /*
  * mousePressed is called everytime the mouse is pressed this 
@@ -246,7 +248,8 @@ String pollSerialPort()
   {
     // if a serial port has been defined
     if (serialPort.available() > 1)
-    {               //if there is serial data
+    {               
+      //if there is serial data
       data = serialPort.readStringUntil(char(13));          // read a line of data
     }
   }
@@ -347,10 +350,10 @@ void loadVariables(String data)
 }
 
 
-//End of Service Routines
-//-------------------------------------------------------------
+// End of Service Routines
+// -------------------------------------------------------------
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 // Start of setup routines (routines called once or not very often)
 
 /*
@@ -366,7 +369,7 @@ void defineButtons()
 
 
 /*
- * updates the serial port being used to comunicate with the arduino
+ * updates the serial port being used to communicate with the arduino
  * portIndex is the index of the port we wish to use in Serial.list();
  * as Serial.list() is loaded into memory at startup adding serial ports 
  * after startup could cause unexcpected operation
@@ -389,18 +392,20 @@ void updateSerialPort(int portIndex)
       serialPort.stop();
     }  // if a Serial port is already being used stop it before loading a new one 
     
+    
+    // looks like this is the problem - mty
     serialPort = new Serial(this, Serial.list()[serialPortIndex], 9600);  
     // Create a new Serial object to comunicate with the Arduino 9600 Baud
   }
 }
 
-//End of setup/not very commonly called routines
-//-------------------------------------------------------------------------------------
+// End of setup/not very commonly called routines
+// -------------------------------------------------------------------------------------
 
 
-//Example button and RectButton code from processing.org example with some changes 
-//made mostly to simplify and remove roll over animation
-//http://processing.org/learning/topics/buttons.html (2008-09-23)
+// Example button and RectButton code from processing.org example with some changes 
+// made mostly to simplify and remove roll over animation
+// http://processing.org/learning/topics/buttons.html (2008-09-23)
 class Button
 {
   int x, y;  int width, height;
