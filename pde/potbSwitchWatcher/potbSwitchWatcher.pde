@@ -393,8 +393,9 @@ void updateSerialPort(int portIndex)
     }  // if a Serial port is already being used stop it before loading a new one 
     
     
-    // looks like this is the problem - mty
-    serialPort = new Serial(this, Serial.list()[serialPortIndex], 9600);  
+    // looks like this is the problem - mty; hard code it here
+    // serialPort = new Serial(this, Serial.list()[serialPortIndex], 9600);
+    serialPort = new Serial(this, Serial.list()[4], 9600);  
     // Create a new Serial object to comunicate with the Arduino 9600 Baud
   }
 }
