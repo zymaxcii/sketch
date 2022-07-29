@@ -1,40 +1,25 @@
 /*
-  Blink
+ * Blink
+ *
+ * The basic Arduino example.  Turns on an LED on for one second,
+ * then off for one second, and so on...  We use pin 13 because,
+ * depending on your Arduino board, it has either a built-in LED
+ * or a built-in resistor so that you need only an LED.
+ *
+ * http://www.arduino.cc/en/Tutorial/Blink
+ */
 
-  Turns an LED on for one second, then off for one second, repeatedly.
+int ledPin = 13;                // LED connected to digital pin 13
 
-  Most Arduinos have an on-board LED you can control. On the UNO, MEGA and ZERO
-  it is attached to digital pin 13, on MKR1000 on pin 6. LED_BUILTIN is set to
-  the correct LED pin independent of which board is used.
-  If you want to know what pin the on-board LED is connected to on your Arduino
-  model, check the Technical Specs of your board at:
-  https://www.arduino.cc/en/Main/Products
-
-  modified 8 May 2014
-  by Scott Fitzgerald
-  modified 2 Sep 2016
-  by Arturo Guadalupi
-  modified 8 Sep 2016
-  by Colby Newman
-
-  This example code is in the public domain.
-
-  http://www.arduino.cc/en/Tutorial/Blink
-*/
-
-// the setup function runs once when you press reset or power the board
-void setup()
+void setup()                    // run once, when the sketch starts
 {
-  // initialize digital pin LED_BUILTIN as an output
-  pinMode(3, OUTPUT);
+  pinMode(ledPin, OUTPUT);      // sets the digital pin as output
 }
 
-
-// the loop function runs over and over again forever
-void loop()
+void loop()                     // run over and over again
 {
-  digitalWrite(3, HIGH);             // turn the LED on (HIGH is the voltage level)
-  delay(2000);                       // wait for a second
-  digitalWrite(3, LOW);              // turn the LED off by making the voltage LOW
-  delay(1000);                       // wait for a second
+  digitalWrite(ledPin, HIGH);   // sets the LED on
+  delay(1000);                  // waits for a second
+  digitalWrite(ledPin, LOW);    // sets the LED off
+  delay(1000);                  // waits for a second
 }
