@@ -4,7 +4,7 @@
 // turn on LED for half a second, then off for half a second,repeatedly
 //info@primerobotics.in
 //www.primerobotics.in
-
+// added 1 line to test out git
 
 int OptoPin=7;               // attach input of 4n35 to pin 7
 
