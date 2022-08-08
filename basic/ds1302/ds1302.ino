@@ -1,3 +1,7 @@
+// ds1302.ino
+
+// https://docs.google.com/document/d/e/2PACX-1vQfgD6z_DbvsePnDIoKMtx1W0B9DcW_LGmpeIDGWZ-LcOoxHtGY3uwuHJ_CMIp_dZ_EWIudq8zKWOny/pub
+
 // A quick demo of how to use my DS1302-library to
 // quickly send time and date information over a serial link
 // I assume you know how to connect the DS1302.

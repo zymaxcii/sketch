@@ -1,6 +1,6 @@
 // lazySusan.ino
 // https://www.mauroalfieri.it/elettronica/photo-lazy-susan-foto-360-gradi.html
-
+// https://www.thingiverse.com/thing:13269
 
 // include the library code
 #include <LiquidCrystal.h>
