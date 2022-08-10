@@ -1,35 +1,52 @@
-// ir_3led.ino?
-// IRremote.ino
+// ir_dim3leds.ino
+// Use infrared remote control to control and dim 3 leds
+// keys used are 1-9 and OK
 
 // https://www.the-diy-life.com/controlling-an-arduino-with-an-infrared-remote-control/
-
-
 // The DIY Life
 // Michael Klements
 // 24 January 2020
 
-// hardware setup
-// ir remote
-// 3 leds: D5, D9, D6
+// My standard hardware setup
+// ir receiver: D8
+// led : D4, D5, D6
+
 
 #include <IRremote.h>
 
-int iRPin = 8;            // IR sensor connected to Pin 4
-IRrecv irrecv(iRPin);     // Create an IR object of the class
+#define ONE      0xFFA25D
+#define TWO      0xFF629D
+#define THREE    0xFFE21D
+#define FOUR     0xFF22DD
+#define FIVE     0xFF02FD
+#define SIX      0xFFC23D
+#define SEVEN    0xFFE01F
+#define EIGHT    0xFFA857
+#define NINE     0xFF906F
+#define ZERO     0xFF9867
+#define ASTERISK 0xFF6897
+#define HASH     0xFFB04F
+#define OK       0xFF38C7
+#define UP       0xFF18E7
+#define DOWN     0xFF4AB5
+#define RIGHT    0xFF5AA5
+#define LEFT     0xFF10EF
+
+int iRPin = 8;                // IR sensor connected to Pin 4
+IRrecv irrecv(iRPin);         // Create an IR object of the class
 decode_results results;
 
-int ledRPin = 4;          // Define LED pin numbers
+int ledRPin = 4;              // Define LED pin numbers
 int ledGPin = 5;
 int ledBPin = 6;
 
-int rVal = 512;           // Define initial brightness values - mid brightness
+int rVal = 512;               // Define initial brightness values - mid brightness
 int gVal = 512;
 int bVal = 512;
 
 
 void setup()
 {
-  //Serial.begin(9600);       // Only used to get HEX value for each button
   irrecv.enableIRIn();        // Start the IR receiver
   
   pinMode(ledRPin, OUTPUT);   // Define the LED pins
@@ -54,55 +71,55 @@ void changeLED(unsigned long value)
 {
   switch (value)                            // Determine which button has been pressed
   {
-    case 0xFFA25D:                          // Button 1 Pressed - Brighten Red 0xFD08F7
+    case ONE:                               // Button 1 Pressed - Brighten Red 0xFD08F7
       if (rVal<=973)                        // Stops red value from going too high, out of range
         rVal = rVal + 50;                   // Increase red brightness
       analogWrite(ledRPin,rVal);
       break;
       
-    case 0xFF22DD:                          // Button 4 Pressed - Dim Red 0xFD28D7
+    case FOUR:                              // Button 4 Pressed - Dim Red 0xFD28D7
       if(rVal>=50)                          // Stops red value from going too low, out of range
         rVal = rVal - 50;                   // Decrease red brightness
       analogWrite(ledRPin,rVal);
       break;
       
-    case 0xFD18E7:                          // Button 7 Pressed - Turn Red Off 0xFD18E7
+    case SEVEN:                             // Button 7 Pressed - Turn Red Off 0xFD18E7
       analogWrite(ledRPin,0);
       break;
       
-    case 0xFF629D:                          // Button 2 Pressed - Brighten Green 0xFD8877
+    case TWO:                               // Button 2 Pressed - Brighten Green 0xFD8877
       if(gVal<=973)
         gVal = gVal + 50;
       analogWrite(ledGPin,gVal);
       break;
       
-    case 0xFF02FD:                          // Button 5 Pressed - Dim Green 0xFDA857
+    case FIVE:                              // Button 5 Pressed - Dim Green 0xFDA857
       if(gVal>=50)
         gVal = gVal - 50;
       analogWrite(ledGPin,gVal);
       break;
       
-    case 0xFD9867:                          // Button 8 Pressed - Turn Green Off 0xFD9867
+    case EIGHT:                             // Button 8 Pressed - Turn Green Off 0xFD9867
       analogWrite(ledGPin,0);
       break;
       
-    case 0xFFE21D:                          // Button 3 Pressed - Brighten Blue 0xFD48B7
+    case THREE:                             // Button 3 Pressed - Brighten Blue 0xFD48B7
       if(bVal<=973)
         bVal = bVal + 50;
       analogWrite(ledBPin,bVal);
       break;
       
-    case 0xFFC23D:                          // Button 6 Pressed - Dim Blue 0xFD6897
+    case SIX:                               // Button 6 Pressed - Dim Blue 0xFD6897
       if(bVal>=50)
         bVal = bVal - 50;
       analogWrite(ledBPin,bVal);
       break;
       
-    case 0xFD58A7:                         // Button 9 Pressed - Turn Blue Off 0xFD58A7
+    case NINE:                              // Button 9 Pressed - Turn Blue Off 0xFD58A7
       analogWrite(ledBPin,0);
       break;
       
-    case 0xFFB04F:                         // Power Button Pressed - Turn All LEDs Off 0xFD00FF
+    case OK:                                // Power Button Pressed - Turn All LEDs Off 0xFD00FF
       analogWrite(ledRPin,0);
       analogWrite(ledGPin,0);
       analogWrite(ledBPin,0);

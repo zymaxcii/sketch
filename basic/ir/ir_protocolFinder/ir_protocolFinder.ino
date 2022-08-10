@@ -1,22 +1,25 @@
-// ir_Remote_protocolFinder.ino
-// fail to compile
+// ir_protocolFinder.ino
+// Infrared remote control protocol finder
 
 // https://www.makerguides.com/ir-receiver-remote-arduino-tutorial/
 
+// My standard hardware setup
+// ir receiver: D8
 
-#include <IRremote.h>                                      // include the IRremote library
 
-#define RECEIVER_PIN 8                                     // define the IR receiver pin
-IRrecv receiver(RECEIVER_PIN);                             // create a receiver object of the IRrecv class
-decode_results results;                                    // create a results object of the decode_results class
+#include <IRremote.h>
+
+#define RECEIVER_PIN 8
+IRrecv receiver(RECEIVER_PIN);
+decode_results results;
 unsigned long key_value = 0;                               // variable to store the pressed key value
 
 
 void setup()
 {
   Serial.begin(9600);
-  receiver.enableIRIn();                                   // enable the receiver
-  receiver.blink13(true);                                  // enable blinking of the built-in LED when an IR signal is received
+  receiver.enableIRIn();
+  receiver.blink13(true);
 }
 
 

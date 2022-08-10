@@ -1,6 +1,10 @@
-// ir_Remote2.ino
+// ir_printHexCode.ino
+// Print remote control's key value to serial monitor
 
 // https://www.instructables.com/Arduino-Infrared-Remote-tutorial/
+
+// My standard hardware setup
+// ir receiver: D8
 
 
 #include <IRremote.h>
