@@ -6,7 +6,7 @@
 
 #include <IRremote.h>                                     // include the IRremote library
 
-#define RECEIVER_PIN 2                                    // define the IR receiver pin
+#define RECEIVER_PIN 8                                    // define the IR receiver pin
 IRrecv receiver(RECEIVER_PIN);                            // create a receiver object of the IRrecv class
 decode_results results;                                   // create a results object of the decode_results class
 unsigned long key_value = 0;                              // variable to store the key value
@@ -82,7 +82,7 @@ void loop()
         Serial.println("ST/REPT");
         break;
         
-      case 0xFD08F7:
+      case 0xFFA25D:                  // 0xFD08F7
         Serial.println("1");
         break;
         

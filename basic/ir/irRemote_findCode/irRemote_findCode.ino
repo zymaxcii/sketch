@@ -9,7 +9,7 @@
 
 #include <IRremote.h>                                           // include the IRremote library
 
-#define RECEIVER_PIN 2                                          // define the IR receiver pin
+#define RECEIVER_PIN 8                                          // define the IR receiver pin
 IRrecv receiver(RECEIVER_PIN);                                  // create a receiver object of the IRrecv class
 decode_results results;                                         // create a results object of the decode_results class
 

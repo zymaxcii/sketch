@@ -6,7 +6,7 @@
 
 #include <IRremote.h>                                      // include the IRremote library
 
-#define RECEIVER_PIN 2                                     // define the IR receiver pin
+#define RECEIVER_PIN 8                                     // define the IR receiver pin
 IRrecv receiver(RECEIVER_PIN);                             // create a receiver object of the IRrecv class
 decode_results results;                                    // create a results object of the decode_results class
 unsigned long key_value = 0;                               // variable to store the pressed key value
@@ -65,10 +65,10 @@ void loop()
 //        Serial.println("SANYO");
 //        break;
         
-      case MITSUBISHI:
-        Serial.println("MITSUBISHI");
-        break;
-        
+//      case MITSUBISHI:
+//        Serial.println("MITSUBISHI");
+//        break;
+//        
       case SAMSUNG:
         Serial.println("SAMSUNG");
         break;
@@ -81,10 +81,10 @@ void loop()
         Serial.println("WHYNTER");
         break;
         
-      case AIWA_RC_T501:
-        Serial.println("AIWA_RC_T501");
-        break;
-        
+//      case AIWA_RC_T501:
+//        Serial.println("AIWA_RC_T501");
+//        break;
+//        
       case PANASONIC:
         Serial.println("PANASONIC");
         break;
