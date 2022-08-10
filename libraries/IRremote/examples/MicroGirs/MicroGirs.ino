@@ -61,12 +61,19 @@
  *  In IrSqrutinizer, recognition of repeating signals will therefore not work.
  * The size of the data is platform dependent ("unsigned int", which is 16 bit on AVR boards, 32 bits on 32 bit boards).
  *
+ * For minimal footprint, undefine all DECODE* and SEND_* in IRremote.h.
+ *
+ * For optimal results, try for example to set _GAP to 100000
+ * (what a brilliant variable name!!) and RAW_BUFFER_LENGTH to 251
+ * in IRremoteInt.h.
  */
-#include <Arduino.h>
-
-//#define RAW_BUFFER_LENGTH  750  // 750 is the value for air condition remotes.
 
 // Change the following two entries if desired
+
+/**
+ * Input Pin used by the receiver, can be arbitrary (almost...)
+ */
+#define INPUTPIN 5
 
 /**
  * Baud rate for the serial/USB connection.
@@ -74,10 +81,7 @@
  */
 #define BAUDRATE 115200
 
-#define NO_DECODER
-
-#include "PinDefinitionsAndMore.h" //Define macros for input and output pin etc.
-#include "IRremote.hpp"
+#include <IRremote.h>
 #include <limits.h>
 
 /**
@@ -103,14 +107,14 @@
 /**
  * The modules supported, as given by the "modules" command.
  */
-#if defined(TRANSMIT)
-#if defined(RECEIVE)
+#ifdef TRANSMIT
+#ifdef RECEIVE
 #define modulesSupported "base transmit receive"
 #else // ! RECEIVE
 #define modulesSupported "base transmit"
 #endif
 #else // !TRANSMIT
-#if defined(RECEIVE)
+#ifdef RECEIVE
 #define modulesSupported "base receive"
 #else // ! RECETVE
 #error At lease one of TRANSMIT and RECEIVE must be defined
@@ -142,11 +146,25 @@ typedef unsigned frequency_t; // max 65535, unless 32-bit
 /**
  * Type used for durations in micro seconds.
  */
-typedef uint16_t microseconds_t; // max 65535
+typedef unsigned microseconds_t; // max 65535, unless 32-bit
 
 static const microseconds_t DUMMYENDING = 40000U;
 static const frequency_t FREQUENCY_T_MAX = UINT16_MAX;
 static const frequency_t MICROSECONDS_T_MAX = UINT16_MAX;
+
+#ifdef RECEIVE
+/**
+ * Instance of the IRremote class.
+ */
+IRrecv irRecv(INPUTPIN);
+#endif
+
+#ifdef TRANSMIT
+/*}
+ * Instance of the IRremote class.
+ */
+IRsend irSend;
+#endif
 
 /**
  * Our own tokenizer class. Breaks the command line into tokens.
@@ -157,11 +175,12 @@ private:
     static const int invalidIndex = -1;
 
     int index; // signed since invalidIndex is possible
-    const String &payload;
+    const String& payload;
     void trim();
 
 public:
     Tokenizer(const String &str);
+    virtual ~Tokenizer();
 
     String getToken();
     String getRest();
@@ -173,8 +192,10 @@ public:
     static const int invalid = INT_MAX;
 };
 
-Tokenizer::Tokenizer(const String &str) :
-        index(0), payload(str) {
+Tokenizer::Tokenizer(const String& str) : index(0), payload(str) {
+}
+
+Tokenizer::~Tokenizer() {
 }
 
 String Tokenizer::getRest() {
@@ -189,7 +210,7 @@ String Tokenizer::getLine() {
 
     int i = payload.indexOf('\n', index);
     String s = (i > 0) ? payload.substring(index, i) : payload.substring(index);
-    index = (i > 0) ? i + 1 : invalidIndex;
+    index = (i > 0) ? i+1 : invalidIndex;
     return s;
 }
 
@@ -201,9 +222,9 @@ String Tokenizer::getToken() {
     String s = (i > 0) ? payload.substring(index, i) : payload.substring(index);
     index = (i > 0) ? i : invalidIndex;
     if (index != invalidIndex)
-        if (index != invalidIndex)
-            while (payload.charAt(index) == ' ')
-                index++;
+    if (index != invalidIndex)
+        while (payload.charAt(index) == ' ')
+            index++;
     return s;
 }
 
@@ -223,9 +244,9 @@ frequency_t Tokenizer::getFrequency() {
 }
 ///////////////// end Tokenizer /////////////////////////////////
 
-#if defined(TRANSMIT)
+#ifdef TRANSMIT
 static inline unsigned hz2khz(frequency_t hz) {
-    return (hz + 500) / 1000;
+    return (hz + 500)/1000;
 }
 
 /**
@@ -245,48 +266,50 @@ static inline unsigned hz2khz(frequency_t hz) {
  * @param frequency Modulation frequency, in Hz (not kHz as normally in IRremote)
  * @param times Number of times to send the signal, in the sense above.
  */
-static void sendRaw(const microseconds_t intro[], unsigned lengthIntro, const microseconds_t repeat[], unsigned lengthRepeat,
-        const microseconds_t ending[], unsigned lengthEnding, frequency_t frequency, unsigned times) {
+static void sendRaw(const microseconds_t intro[], unsigned lengthIntro,
+        const microseconds_t repeat[], unsigned lengthRepeat,
+        const microseconds_t ending[], unsigned lengthEnding,
+        frequency_t frequency, unsigned times) {
     if (lengthIntro > 0U)
-        IrSender.sendRaw(intro, lengthIntro, hz2khz(frequency));
+        irSend.sendRaw(intro, lengthIntro, hz2khz(frequency));
     if (lengthRepeat > 0U)
         for (unsigned i = 0U; i < times - (lengthIntro > 0U); i++)
-            IrSender.sendRaw(repeat, lengthRepeat, hz2khz(frequency));
+            irSend.sendRaw(repeat, lengthRepeat, hz2khz(frequency));
     if (lengthEnding > 0U)
-        IrSender.sendRaw(ending, lengthEnding, hz2khz(frequency));
+        irSend.sendRaw(ending, lengthEnding, hz2khz(frequency));
 }
 #endif // TRANSMIT
 
-#if defined(RECEIVE)
+#ifdef RECEIVE
+/**
+ * Reads a command from the stream given as argument.
+ * @param stream Stream to read from, typically Serial.
+ */
+static void receive(Stream& stream) {
+    irRecv.enableIRIn();
+    irRecv.resume(); // Receive the next value
+    decode_results results;
 
-static void dump(Stream &stream) {
-    unsigned int count = IrReceiver.decodedIRData.rawDataPtr->rawlen;
+    while (!irRecv.decode(&results)) {
+    }
+    irRecv.disableIRIn();
+
+    dump(stream, &results);
+}
+
+static void dump(Stream& stream, decode_results* results) {
+    unsigned int count = results->rawlen;
     // If buffer gets full, count = RAW_BUFFER_LENGTH, which is odd,
     // and IrScrutinizer does not like that.
-    count &= ~1;
+    count &=  ~1;
     for (unsigned int i = 1; i < count; i++) {
         stream.write(i & 1 ? '+' : '-');
-        stream.print(IrReceiver.decodedIRData.rawDataPtr->rawbuf[i] * MICROS_PER_TICK, DEC);
+        stream.print(results->rawbuf[i] * MICROS_PER_TICK, DEC);
         stream.print(" ");
     }
     stream.print('-');
     stream.println(DUMMYENDING);
 }
-
-/**
- * Reads a command from the stream given as argument.
- * @param stream Stream to read from, typically Serial.
- */
-static void receive(Stream &stream) {
-    IrReceiver.start();
-
-    while (!IrReceiver.decode()) {
-    }
-    IrReceiver.stop();
-
-    dump(stream);
-}
-
 #endif // RECEIVE
 
 /**
@@ -298,23 +321,19 @@ void setup() {
         ; // wait for serial port to connect.
 
     Serial.println(F(PROGNAME " " VERSION));
-    // Just to know which program is running on my Arduino
-    Serial.println(F("START " __FILE__ " from " __DATE__ "\r\nUsing library version " VERSION_IRREMOTE));
-
-#if defined(RECEIVE)
-    // Start the receiver and if not 3. parameter specified, take LED_BUILTIN pin from the internal boards definition as default feedback LED
-    IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
-
-    Serial.print(F("Ready to receive IR signals of protocols: "));
-    printActiveIRProtocols(&Serial);
-    Serial.print(F("at pin "));
+    //Serial.setTimeout(SERIALTIMEOUT);
+/*
+#ifdef RECEIVE
+    // There is unfortunately no disableIRIn in IRremote.
+    // Therefore, turn it on, and leave it on.
+    // We _hope_ that it will not interfere with sending.
+    irRecv.enableIRIn();
 #endif
-
-    IrSender.begin(); // Start with IR_SEND_PIN as send pin and enable feedback LED at default feedback LED pin
-
+*/
 }
 
-static String readCommand(Stream &stream) {
+
+static String readCommand(Stream& stream) {
     while (stream.available() == 0) {
     }
 
@@ -323,7 +342,7 @@ static String readCommand(Stream &stream) {
     return line;
 }
 
-static void processCommand(const String &line, Stream &stream) {
+static void processCommand(const String& line, Stream& stream) {
     Tokenizer tokenizer(line);
     String cmd = tokenizer.getToken();
 
@@ -335,47 +354,47 @@ static void processCommand(const String &line, Stream &stream) {
     }
 
     switch (cmd[0]) {
-    case 'm':
-        stream.println(F(modulesSupported));
-        break;
+        case 'm':
+            stream.println(F(modulesSupported));
+            break;
 
-#if defined(RECEIVE)
-    case 'r': // receive
+#ifdef RECEIVE
+        case 'r': // receive
         //case 'a':
         //case 'c':
-        receive(stream);
-        break;
+            receive(stream);
+            break;
 #endif // RECEIVE
 
-#if defined(TRANSMIT)
-    case 's': // send
-    {
-        // TODO: handle unparsable data gracefully
-        unsigned noSends = (unsigned) tokenizer.getInt();
-        frequency_t frequency = tokenizer.getFrequency();
-        unsigned introLength = (unsigned) tokenizer.getInt();
-        unsigned repeatLength = (unsigned) tokenizer.getInt();
-        unsigned endingLength = (unsigned) tokenizer.getInt();
-        microseconds_t intro[introLength];
-        microseconds_t repeat[repeatLength];
-        microseconds_t ending[endingLength];
-        for (unsigned i = 0; i < introLength; i++)
-            intro[i] = tokenizer.getMicroseconds();
-        for (unsigned i = 0; i < repeatLength; i++)
-            repeat[i] = tokenizer.getMicroseconds();
-        for (unsigned i = 0; i < endingLength; i++)
-            ending[i] = tokenizer.getMicroseconds();
-        sendRaw(intro, introLength, repeat, repeatLength, ending, endingLength, frequency, noSends);
-        stream.println(F(okString));
-    }
-        break;
+#ifdef TRANSMIT
+        case 's': // send
+        {
+            // TODO: handle unparsable data gracefully
+            unsigned noSends = (unsigned) tokenizer.getInt();
+            frequency_t frequency = tokenizer.getFrequency();
+            unsigned introLength = (unsigned) tokenizer.getInt();
+            unsigned repeatLength = (unsigned) tokenizer.getInt();
+            unsigned endingLength = (unsigned) tokenizer.getInt();
+            microseconds_t intro[introLength];
+            microseconds_t repeat[repeatLength];
+            microseconds_t ending[endingLength];
+            for (unsigned i = 0; i < introLength; i++)
+                intro[i] = tokenizer.getMicroseconds();
+            for (unsigned i = 0; i < repeatLength; i++)
+                repeat[i] = tokenizer.getMicroseconds();
+            for (unsigned i = 0; i < endingLength; i++)
+                ending[i] = tokenizer.getMicroseconds();
+            sendRaw(intro, introLength, repeat, repeatLength, ending, endingLength, frequency, noSends);
+            stream.println(F(okString));
+        }
+            break;
 #endif // TRANSMIT
 
-    case 'v': // version
-        stream.println(F(PROGNAME " " VERSION));
-        break;
-    default:
-        stream.println(F(errorString));
+        case 'v': // version
+            stream.println(F(PROGNAME " " VERSION));
+            break;
+        default:
+            stream.println(F(errorString));
     }
 }
 

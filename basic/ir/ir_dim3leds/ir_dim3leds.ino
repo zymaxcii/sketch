@@ -1,6 +1,7 @@
 // ir_dim3leds.ino
 // Use infrared remote control to control and dim 3 leds
 // keys used are 1-9 and OK
+// code works with IRremote library 2.x
 
 // https://www.the-diy-life.com/controlling-an-arduino-with-an-infrared-remote-control/
 // The DIY Life

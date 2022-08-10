@@ -1,5 +1,6 @@
 // ir_printHexCode.ino
 // Print remote control's key value to serial monitor
+// code works with IRremote library 2.x
 
 // https://www.instructables.com/Arduino-Infrared-Remote-tutorial/
 
