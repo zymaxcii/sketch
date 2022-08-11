@@ -1,5 +1,9 @@
 // ir_protocolFinder.ino
 // Infrared remote control protocol finder
+// aka printMfgCode.ino
+// print manufacturer codes
+// works with IRremote 2.x library
+// compile well with IRremote 2.5: no error
 
 // https://www.makerguides.com/ir-receiver-remote-arduino-tutorial/
 
@@ -64,14 +68,14 @@ void loop()
         Serial.println("JVC");
         break;
         
-//      case SANYO:
-//        Serial.println("SANYO");
-//        break;
+      case SANYO:
+        Serial.println("SANYO");
+        break;
         
-//      case MITSUBISHI:
-//        Serial.println("MITSUBISHI");
-//        break;
-//        
+      case MITSUBISHI:
+        Serial.println("MITSUBISHI");
+        break;
+        
       case SAMSUNG:
         Serial.println("SAMSUNG");
         break;
@@ -84,10 +88,10 @@ void loop()
         Serial.println("WHYNTER");
         break;
         
-//      case AIWA_RC_T501:
-//        Serial.println("AIWA_RC_T501");
-//        break;
-//        
+      case AIWA_RC_T501:
+        Serial.println("AIWA_RC_T501");
+        break;
+        
       case PANASONIC:
         Serial.println("PANASONIC");
         break;

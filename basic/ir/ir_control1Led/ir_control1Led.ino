@@ -2,6 +2,7 @@
 // On remote control, button 1 turns on led, button 2 turns off led
 // ignore all other keys
 // code works with IRremote library 2.x
+// useful for repurposing remote controls
 
 // https://www.youtube.com/watch?v=3jeSfsnQOWk
 
