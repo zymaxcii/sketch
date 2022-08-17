@@ -12,6 +12,7 @@
 #include <IRremote.h>
 
 int RECV_PIN = 8;
+uint32_t Previous;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
 
@@ -26,8 +27,13 @@ void setup()
 void loop()
 {
   if (irrecv.decode(&results))
+  {
+    // if we have received an IR signal
+    if (results.value==0xFFFFFFFF)           // repeat code when key is held down
     {
-      Serial.println(results.value, HEX);
-      irrecv.resume();                       // Receive the next value
+      results.value=Previous;
     }
+    Serial.println(results.value, HEX);
+    irrecv.resume();                       // Receive the next value
+  }
 }
