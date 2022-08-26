@@ -6,12 +6,12 @@
 // https://www.instructables.com/Arduino-Infrared-Remote-tutorial/
 
 // My standard hardware setup
-// ir receiver: D8
+// ir receiver: D11
 
 
 #include <IRremote.h>
 
-int RECV_PIN = 8;
+int RECV_PIN = 11;
 uint32_t Previous;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
@@ -21,6 +21,7 @@ void setup()
 {
   Serial.begin(9600);
   irrecv.enableIRIn();                       // Start the receiver
+  Serial.println("setup done");
 }
 
 
@@ -33,7 +34,13 @@ void loop()
     {
       results.value=Previous;
     }
+    Serial.print("hex code: ");
     Serial.println(results.value, HEX);
+    delay(200);                            // critical delay
     irrecv.resume();                       // Receive the next value
+  }
+  else
+  {
+     // Serial.println("no ir signal");
   }
 }

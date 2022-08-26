@@ -4,7 +4,7 @@
 // https://www.makerguides.com/ir-receiver-remote-arduino-tutorial/
 
 // My standard hardware setup
-// ir receiver: D8
+// ir receiver: D11
 
 #include <IRremote.h>
 
@@ -26,7 +26,7 @@
 #define RIGHT    0xFF5AA5
 #define LEFT     0xFF10EF
 
-#define RECEIVER_PIN 8                                    // define the IR receiver pin
+#define RECEIVER_PIN 11                                   // define the IR receiver pin
 IRrecv receiver(RECEIVER_PIN);                            // create a receiver object of the IRrecv class
 decode_results results;                                   // create a results object of the decode_results class
 unsigned long key_value = 0;                              // variable to store the key value
@@ -121,6 +121,7 @@ void loop()
     }
     
     key_value = results.value;
+    delay(100);                           // critical
     receiver.resume();
   }
 }

@@ -13,7 +13,7 @@ http://dronebotworkshop.com
 #include <IRremote.h>
 
 // Define sensor pin
-const int RECV_PIN = 8;
+const int RECV_PIN = 11;
 
 // Define LED pin constants
 const int redPin = 4;
@@ -67,6 +67,7 @@ void loop()
         }
         break;
    }
+   delay(100);                   // critical
    irrecv.resume();
   }
 }

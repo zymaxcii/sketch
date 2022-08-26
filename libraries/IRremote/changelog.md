@@ -1,5 +1,13 @@
-## 2.5.0 2020/07
-- Added support for MagiQuest IR wands
+## 2.6.0 2020/08
+- Added support for MagiQuest IR wands.
+- Corrected Samsung timing.
+- NEC repeat implementation.
+- Formatting and changing TIMER_CONFIG_KHZ and TIMER_CONFIG_NORMAL macros to static functions.
+- Added IRAM_ATTR for ESP32 ISR.
+- Removed #define HAS_AVR_INTERRUPT_H.
+- Changed Receiver States. Now starting with 0.
+- Changed switch to if / else if in IRRemote.cpp because of ESP32 compiler bug.
+- Changed DEBUG handling since compiler warns about empty "IF" or "ELSE" statements in IRRemote.cpp.
 
 ## 2.5.0 2020/06
 - corrected keywords.txt.

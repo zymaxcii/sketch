@@ -23,10 +23,6 @@
 #include "IRremote.h"
 #undef IR_GLOBAL
 
-#ifdef HAS_AVR_INTERRUPT_H
-#include <avr/interrupt.h>
-#endif
-
 //+=============================================================================
 // The match functions were (apparently) originally MACROs to improve code speed
 //   (although this would have bloated the code) hence the names being CAPS
@@ -41,19 +37,22 @@
 //   functions even in non-DEBUG mode
 //
 int MATCH(int measured, int desired) {
-    DBG_PRINT(F("Testing: "));
-    DBG_PRINT(TICKS_LOW(desired), DEC);
-    DBG_PRINT(F(" <= "));
-    DBG_PRINT(measured, DEC);
-    DBG_PRINT(F(" <= "));
-    DBG_PRINT(TICKS_HIGH(desired), DEC);
-
+#if DEBUG
+    Serial.print(F("Testing: "));
+    Serial.print(TICKS_LOW(desired), DEC);
+    Serial.print(F(" <= "));
+    Serial.print(measured, DEC);
+    Serial.print(F(" <= "));
+    Serial.print(TICKS_HIGH(desired), DEC);
+#endif
     bool passed = ((measured >= TICKS_LOW(desired)) && (measured <= TICKS_HIGH(desired)));
+#if DEBUG
     if (passed) {
-        DBG_PRINTLN(F("?; passed"));
+        Serial.println(F("?; passed"));
     } else {
-        DBG_PRINTLN(F("?; FAILED"));
+        Serial.println(F("?; FAILED"));
     }
+#endif
     return passed;
 }
 
@@ -61,26 +60,28 @@ int MATCH(int measured, int desired) {
 // Due to sensor lag, when received, Marks tend to be 100us too long
 //
 int MATCH_MARK(int measured_ticks, int desired_us) {
-    DBG_PRINT(F("Testing mark (actual vs desired): "));
-    DBG_PRINT(measured_ticks * MICROS_PER_TICK, DEC);
-    DBG_PRINT(F("us vs "));
-    DBG_PRINT(desired_us, DEC);
-    DBG_PRINT("us");
-    DBG_PRINT(": ");
-    DBG_PRINT(TICKS_LOW(desired_us + MARK_EXCESS_MICROS) * MICROS_PER_TICK, DEC);
-    DBG_PRINT(F(" <= "));
-    DBG_PRINT(measured_ticks * MICROS_PER_TICK, DEC);
-    DBG_PRINT(F(" <= "));
-    DBG_PRINT(TICKS_HIGH(desired_us + MARK_EXCESS_MICROS) * MICROS_PER_TICK, DEC);
-
+#if DEBUG
+    Serial.print(F("Testing mark (actual vs desired): "));
+    Serial.print(measured_ticks * MICROS_PER_TICK, DEC);
+    Serial.print(F("us vs "));
+    Serial.print(desired_us, DEC);
+    Serial.print(F("us: "));
+    Serial.print(TICKS_LOW(desired_us + MARK_EXCESS_MICROS) * MICROS_PER_TICK, DEC);
+    Serial.print(F(" <= "));
+    Serial.print(measured_ticks * MICROS_PER_TICK, DEC);
+    Serial.print(F(" <= "));
+    Serial.print(TICKS_HIGH(desired_us + MARK_EXCESS_MICROS) * MICROS_PER_TICK, DEC);
+#endif
     // compensate for marks exceeded by demodulator hardware
     bool passed = ((measured_ticks >= TICKS_LOW(desired_us + MARK_EXCESS_MICROS))
             && (measured_ticks <= TICKS_HIGH(desired_us + MARK_EXCESS_MICROS)));
+#if DEBUG
     if (passed) {
-        DBG_PRINTLN(F("?; passed"));
+        Serial.println(F("?; passed"));
     } else {
-        DBG_PRINTLN(F("?; FAILED"));
+        Serial.println(F("?; FAILED"));
     }
+#endif
     return passed;
 }
 
@@ -88,26 +89,28 @@ int MATCH_MARK(int measured_ticks, int desired_us) {
 // Due to sensor lag, when received, Spaces tend to be 100us too short
 //
 int MATCH_SPACE(int measured_ticks, int desired_us) {
-    DBG_PRINT(F("Testing space (actual vs desired): "));
-    DBG_PRINT(measured_ticks * MICROS_PER_TICK, DEC);
-    DBG_PRINT(F("us vs "));
-    DBG_PRINT(desired_us, DEC);
-    DBG_PRINT("us");
-    DBG_PRINT(": ");
-    DBG_PRINT(TICKS_LOW(desired_us - MARK_EXCESS_MICROS) * MICROS_PER_TICK, DEC);
-    DBG_PRINT(F(" <= "));
-    DBG_PRINT(measured_ticks * MICROS_PER_TICK, DEC);
-    DBG_PRINT(F(" <= "));
-    DBG_PRINT(TICKS_HIGH(desired_us - MARK_EXCESS_MICROS) * MICROS_PER_TICK, DEC);
-
+#if DEBUG
+    Serial.print(F("Testing space (actual vs desired): "));
+    Serial.print(measured_ticks * MICROS_PER_TICK, DEC);
+    Serial.print(F("us vs "));
+    Serial.print(desired_us, DEC);
+    Serial.print(F("us: "));
+    Serial.print(TICKS_LOW(desired_us - MARK_EXCESS_MICROS) * MICROS_PER_TICK, DEC);
+    Serial.print(F(" <= "));
+    Serial.print(measured_ticks * MICROS_PER_TICK, DEC);
+    Serial.print(F(" <= "));
+    Serial.print(TICKS_HIGH(desired_us - MARK_EXCESS_MICROS) * MICROS_PER_TICK, DEC);
+#endif
     // compensate for marks exceeded and spaces shortened by demodulator hardware
-    bool passed = ((measured_ticks >= TICKS_LOW (desired_us - MARK_EXCESS_MICROS))
-                  && (measured_ticks <= TICKS_HIGH(desired_us - MARK_EXCESS_MICROS)));
+    bool passed = ((measured_ticks >= TICKS_LOW(desired_us - MARK_EXCESS_MICROS))
+            && (measured_ticks <= TICKS_HIGH(desired_us - MARK_EXCESS_MICROS)));
+#if DEBUG
     if (passed) {
-        DBG_PRINTLN(F("?; passed"));
+        Serial.println(F("?; passed"));
     } else {
-        DBG_PRINTLN(F("?; FAILED"));
+        Serial.println(F("?; FAILED"));
     }
+#endif
     return passed;
 }
 
@@ -124,7 +127,7 @@ int MATCH_SPACE(int measured_ticks, int desired_us) {
 //   Gap width is recorded; Ready is cleared; New logging starts
 //
 ISR (TIMER_INTR_NAME) {
-    TIMER_RESET;
+    TIMER_RESET; // reset timer interrupt flag if required (currently only for Teensy and ATmega4809)
 
     // Read if IR Receiver -> SPACE [xmt LED off] or a MARK [xmt LED on]
     // digitalRead() is very slow. Optimisation is possible, but makes the code unportable
@@ -135,9 +138,13 @@ ISR (TIMER_INTR_NAME) {
         irparams.rcvstate = IR_REC_STATE_OVERFLOW;  // Buffer overflow
     }
 
-    switch (irparams.rcvstate) {
+    /*
+     * Due to a ESP32 compiler bug https://github.com/espressif/esp-idf/issues/1552 no switch statements are possible for ESP32
+     * So we change the code to if / else if
+     */
+//    switch (irparams.rcvstate) {
     //......................................................................
-    case IR_REC_STATE_IDLE: // In the middle of a gap
+    if (irparams.rcvstate == IR_REC_STATE_IDLE) { // In the middle of a gap
         if (irdata == MARK) {
             if (irparams.timer < GAP_TICKS) {  // Not big enough to be a gap.
                 irparams.timer = 0;
@@ -150,17 +157,13 @@ ISR (TIMER_INTR_NAME) {
                 irparams.rcvstate = IR_REC_STATE_MARK;
             }
         }
-        break;
-        //......................................................................
-    case IR_REC_STATE_MARK:  // Timing Mark
+    } else if (irparams.rcvstate == IR_REC_STATE_MARK) {  // Timing Mark
         if (irdata == SPACE) {   // Mark ended; Record time
             irparams.rawbuf[irparams.rawlen++] = irparams.timer;
             irparams.timer = 0;
             irparams.rcvstate = IR_REC_STATE_SPACE;
         }
-        break;
-        //......................................................................
-    case IR_REC_STATE_SPACE:  // Timing Space
+    } else if (irparams.rcvstate == IR_REC_STATE_SPACE) {  // Timing Space
         if (irdata == MARK) {  // Space just ended; Record time
             irparams.rawbuf[irparams.rawlen++] = irparams.timer;
             irparams.timer = 0;
@@ -173,18 +176,13 @@ ISR (TIMER_INTR_NAME) {
             // Don't reset timer; keep counting Space width
             irparams.rcvstate = IR_REC_STATE_STOP;
         }
-        break;
-        //......................................................................
-    case IR_REC_STATE_STOP:  // Waiting; Measuring Gap
+    } else if (irparams.rcvstate == IR_REC_STATE_STOP) {  // Waiting; Measuring Gap
         if (irdata == MARK) {
             irparams.timer = 0;  // Reset gap timer
         }
-        break;
-        //......................................................................
-    case IR_REC_STATE_OVERFLOW:  // Flag up a read overflow; Stop the State Machine
+    } else if (irparams.rcvstate == IR_REC_STATE_OVERFLOW) {  // Flag up a read overflow; Stop the State Machine
         irparams.overflow = true;
         irparams.rcvstate = IR_REC_STATE_STOP;
-        break;
     }
 
 #ifdef BLINKLED

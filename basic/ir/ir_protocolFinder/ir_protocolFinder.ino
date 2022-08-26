@@ -8,12 +8,12 @@
 // https://www.makerguides.com/ir-receiver-remote-arduino-tutorial/
 
 // My standard hardware setup
-// ir receiver: D8
+// ir receiver: D11                                        // any digital pin will do
 
 
 #include <IRremote.h>
 
-#define RECEIVER_PIN 8
+#define RECEIVER_PIN 11
 IRrecv receiver(RECEIVER_PIN);
 decode_results results;
 unsigned long key_value = 0;                               // variable to store the pressed key value
@@ -119,6 +119,7 @@ void loop()
     }
     
     key_value = results.value;
+    delay(100);
     receiver.resume();
   }
 }

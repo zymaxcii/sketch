@@ -1,7 +1,6 @@
 // it_powerOnOff.ino
 // infrared transmitter emulating TV power on off switch
 
-
 /*
 IR Transmitter Demonstration 1
 IR-Xmit-Demo1.ino
@@ -28,6 +27,7 @@ void setup()
 {
   // Set Switch pin as Input
   pinMode(switchPin, INPUT_PULLUP);
+  Serial.begin(9600);
 }
 
 
@@ -40,6 +40,7 @@ void loop()
   if (buttonState == LOW)
   {
     irsend.sendNEC(0xFEA857, 32); // TV power code
+    Serial.println("code sent");
   }
   // Add a small delay before repeating
   delay(200);

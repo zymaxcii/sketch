@@ -9,7 +9,7 @@
 // 24 January 2020
 
 // My standard hardware setup
-// ir receiver: D8
+// ir receiver: D11
 // led : D4, D5, D6
 
 
@@ -33,7 +33,7 @@
 #define RIGHT    0xFF5AA5
 #define LEFT     0xFF10EF
 
-int iRPin = 8;                // IR sensor connected to Pin 4
+int iRPin = 11;               // IR sensor connected to Pin 11
 IRrecv irrecv(iRPin);         // Create an IR object of the class
 decode_results results;
 
@@ -62,8 +62,8 @@ void loop()
   {
     //Serial.println(results.value, HEX);   // Only used to get HEX value for each button
     changeLED(results.value);               // Change the LED accordingly
+    delay(100);                             // critical 200 better
     irrecv.resume();                        // Wait for next signal
-    delay(100);
   }
 }
 

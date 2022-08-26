@@ -18,10 +18,10 @@ http://dronebotworkshop.com
 #include <Servo.h>
 
 // Define Sensor Pin
-const int RECV_PIN = 8;
+const int RECV_PIN = 11;
 
 // Define Servo Pin
-const int SERVO_PIN = 9;
+const int SERVO_PIN = 9;           // must be pwm pin
 
 // Define Variable for Servo position
 // Start at 90 Degrees (Center position)

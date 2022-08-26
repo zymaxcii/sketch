@@ -7,7 +7,7 @@
 // https://www.youtube.com/watch?v=3jeSfsnQOWk
 
 // My standard hardware setup
-// ir receiver: D8
+// ir receiver: D11
 // led : D4
 
 
@@ -16,7 +16,7 @@
 #define Button_1 0xFFA25D
 #define Button_2 0xFF629D
 
-int receiver = 8;
+int receiver = 11;
 uint32_t Previous; 
 IRrecv irrecv(receiver);                                  // create a new instance of receiver
 decode_results results;
@@ -46,8 +46,9 @@ void loop()
       case Button_2 : digitalWrite(4, LOW);  break;      // led off
     }
     
-    Serial.println (results.value, HEX);                  // display HEX results 
-    irrecv.resume();                                      // next value
+    Serial.println (results.value, HEX);                 // display HEX results
+    delay(200);                                          // critical delay
+    irrecv.resume();                                     // next value
   }
   Previous=results.value;
 }
