@@ -1,6 +1,10 @@
 // ir_dim3leds.ino
-// Use infrared remote control to control and dim 3 leds
+// Use infrared remote control to control brighten and dim 3 leds
 // keys used are 1-9 and OK
+// buttons 1,4,7: brighten, dim, off red led
+// buttons 2,5,8: same with 2nd led, yellow
+// buttons 3,6,9: same with 4rd led, green
+// button OK: all leds off
 // code works with IRremote library 2.x
 
 // https://www.the-diy-life.com/controlling-an-arduino-with-an-infrared-remote-control/
@@ -9,8 +13,9 @@
 // 24 January 2020
 
 // My standard hardware setup
-// ir receiver: D11
+// ir receiver:  D11
 // led : D4, D5, D6
+// using remote control supplied with the module
 
 
 #include <IRremote.h>

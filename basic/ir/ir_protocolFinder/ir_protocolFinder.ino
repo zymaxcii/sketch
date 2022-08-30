@@ -9,6 +9,7 @@
 
 // My standard hardware setup
 // ir receiver: D11                                        // any digital pin will do
+// can use any remote control
 
 
 #include <IRremote.h>
@@ -119,7 +120,7 @@ void loop()
     }
     
     key_value = results.value;
-    delay(100);
+    delay(100);                   // critical delay
     receiver.resume();
   }
 }

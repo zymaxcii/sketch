@@ -5,6 +5,8 @@
 
 // My standard hardware setup
 // ir receiver: D11
+// using the standard remote supplied with the IR module
+
 
 #include <IRremote.h>
 
@@ -121,7 +123,7 @@ void loop()
     }
     
     key_value = results.value;
-    delay(100);                           // critical
+    delay(100);                           // critical: get invalid code w/o this delay
     receiver.resume();
   }
 }

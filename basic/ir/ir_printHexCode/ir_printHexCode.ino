@@ -7,7 +7,7 @@
 
 // My standard hardware setup
 // ir receiver: D11
-
+// can use any remote control
 
 #include <IRremote.h>
 
@@ -36,7 +36,7 @@ void loop()
     }
     Serial.print("hex code: ");
     Serial.println(results.value, HEX);
-    delay(200);                            // critical delay
+    delay(200);                            // critical delay: get invalid code w/o this delay
     irrecv.resume();                       // Receive the next value
   }
   else

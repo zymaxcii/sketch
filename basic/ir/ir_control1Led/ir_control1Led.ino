@@ -13,6 +13,7 @@
 
 #include <IRremote.h>
 
+// standard remote 
 #define Button_1 0xFFA25D
 #define Button_2 0xFF629D
 

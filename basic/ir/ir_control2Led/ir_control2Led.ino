@@ -1,5 +1,6 @@
 // ir_control2Led.ino
-
+// Button 1 turns red led on then 2sec later off
+// Button 2 toggles yellow led
 
 /*
 IR Receiver Demonstration 3
@@ -8,6 +9,13 @@ Control LED's using Unused IR Remote keys
 DroneBot Workshop 2017
 http://dronebotworkshop.com
 */
+
+// my standard hardware setup
+// ir receiver D11
+// red led     D4
+// yellow led  D5
+// using the remote provided with the module
+
 
 // Include IR Remote Library by Ken Shirriff
 #include <IRremote.h>
@@ -33,7 +41,7 @@ void setup()
   irrecv.enableIRIn();
   
   // Set LED pins as Outputs
-  pinMode(redPin, OUTPUT);
+  pinMode(redPin,    OUTPUT);
   pinMode(yellowPin, OUTPUT);
 }
 
@@ -44,16 +52,16 @@ void loop()
   {
     switch(results.value)
     {
-      case 0xFECA35:
-        //Red Keypad Button
+      case 0xFFA25D:
+        // Button 1
         // Turn on LED for 2 Seconds
         digitalWrite(redPin, HIGH);
         delay(2000);
         digitalWrite(redPin, LOW);
         break;
 
-      case 0xFE8A75:
-        // Yellow Keypad Button
+      case 0xFF629D:
+        // Button 2
         // Toggle LED On or Off
         if(togglestate==0)
         {

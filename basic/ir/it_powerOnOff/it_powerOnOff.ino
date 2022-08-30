@@ -39,7 +39,8 @@ void loop()
   // If button is pressed send power code command
   if (buttonState == LOW)
   {
-    irsend.sendNEC(0xFEA857, 32); // TV power code
+    // irsend.sendNEC(0xFEA857, 32); // TV power code
+    irsend.sendSharp(0x16, 32);        // TV power code
     Serial.println("code sent");
   }
   // Add a small delay before repeating
