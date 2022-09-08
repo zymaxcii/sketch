@@ -1,5 +1,7 @@
 // test_pan_tilt.ino
 
+// www.learnrobotics.org
+
 #include <Servo.h>
 
 Servo panServo;  // create servo object to control a servo

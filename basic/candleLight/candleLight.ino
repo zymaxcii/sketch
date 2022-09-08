@@ -1,3 +1,4 @@
+// candleLight.ino
 /*
  * CandleLight
  * -----------
@@ -9,16 +10,18 @@
  * 
  */
 
-int ledPin = 9;    // select the pin for the LED
+int ledPin = 9;    // select the pwm pin for the LED
 int val = 0;       // variable that holds the current LED brightness
 int delayval = 0;  // variable that holds the current delay time
 
-void setup() {
+void setup()
+{
   randomSeed(0);            // initialize the random number generator
   pinMode(ledPin, OUTPUT);  // declare the ledPin as an OUTPUT
 }
 
-void loop() {
+void loop()
+{
   val = random(100,255);       // pick a random number between 100 and 255
   analogWrite(ledPin, val);    // set the LED brightness
 

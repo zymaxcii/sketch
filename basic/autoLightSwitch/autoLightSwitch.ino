@@ -1,3 +1,5 @@
+// autoLightSwitch.ino
+
 /*
  * Tutorial 2b: Automatic Light Switch
  * 

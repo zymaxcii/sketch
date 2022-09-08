@@ -1,3 +1,6 @@
+// https://www.arduino.cc/en/Tutorial/BuiltInExamples/Calibration
+// Define a maximum and minimum for expected analog sensor values
+
 /*
   Calibration
 
@@ -73,4 +76,3 @@ void loop() {
   // fade the LED using the calibrated value:
   analogWrite(ledPin, sensorValue);
 }
-
