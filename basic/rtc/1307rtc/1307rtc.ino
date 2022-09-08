@@ -1,4 +1,4 @@
-// rtc.ino
+// 1307rtc.ino
 // using DS1307 with 2 servos
 
 // http://samsneatprojectblogcode.blogspot.com/
