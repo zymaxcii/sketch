@@ -126,6 +126,7 @@ void loop()
         break;
     }
     key_value = results.value;                         // store the value as key_value
+    // missing delay
     receiver.resume();                                 // reset the receiver for the next code
   }
 }

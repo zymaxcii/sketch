@@ -1,4 +1,5 @@
 // ir_Remote-controlLCD.ino
+// redundant? to delete?
 
 // https://www.makerguides.com/ir-receiver-remote-arduino-tutorial/
 
@@ -12,6 +13,7 @@
 #include <IRremote.h>
 
 #define RECEIVER_PIN 6                         // define the connections
+
 #define RED_LED_PIN 2
 #define YELLOW_LED_PIN 3
 #define GREEN_LED_PIN 4
@@ -141,7 +143,7 @@ void loop()
         break;
     }
 
-    key_value = results.value;
+    key_value = results.value;    // missing critical delay
     receiver.resume();
   }
 }
