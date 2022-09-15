@@ -11,9 +11,28 @@
 #include <IRremote.h>                                    // include the IRremote library
 #include <LiquidCrystal.h>                               // include the LiquidCrystal library
 
+#define ONE      0xFFA25D
+#define TWO      0xFF629D
+#define THREE    0xFFE21D
+#define FOUR     0xFF22DD
+#define FIVE     0xFF02FD
+#define SIX      0xFFC23D
+#define SEVEN    0xFFE01F
+#define EIGHT    0xFFA857
+#define NINE     0xFF906F
+#define ZERO     0xFF9867
+#define ASTERISK 0xFF6897
+#define HASH     0xFFB04F
+#define OK       0xFF38C7
+#define UP       0xFF18E7
+#define DOWN     0xFF4AB5
+#define RIGHT    0xFF5AA5
+#define LEFT     0xFF10EF
+
+
 LiquidCrystal lcd = LiquidCrystal(2, 3, 4, 5, 6, 7);     // create an LCD object with pin parameters (RS, E, D4, D5, D6, D7)
 
-#define RECEIVER_PIN 8                                   // define the IR receiver pin
+#define RECEIVER_PIN 11                                  // define the IR receiver pin
 IRrecv receiver(RECEIVER_PIN);                           // create a receiver object of the IRrecv class
 decode_results results;                                  // create a results object of the decode_results class
 unsigned long key_value = 0;                             // variable to store the key value
@@ -37,36 +56,38 @@ void loop()
       // if the value is equal to 0xFFFFFFFF
       results.value = key_value; // set the value to the key value
     }
+
+    lcd.print("Testing");
     
     switch (results.value)
     {
       // compare the value to the following cases
-      case 0xFD00FF:                                     // if the value is equal to 0xFD00FF
+      case OK:                                     // if the value is equal to 0xFD00FF
         lcd.clear();                                     // clear the display
         break;
         
-      case 0xFD807F:
-        lcd.print("VOL+");
+      case UP:
+        lcd.print("VOL+ UP");
         break;
         
-      case 0xFD40BF:
-        lcd.print("FUNC/STOP");
-        break;
-        
-      case 0xFD20DF:
-        lcd.print("|<<");
-        break;
-        
-      case 0xFDA05F:
-        lcd.print(">||");
-        break;
-        
-      case 0xFD609F:
-        lcd.print(">>|");
-        break;
-        
-      case 0xFD10EF:
+      case DOWN:
         lcd.print("DOWN");
+        break;
+        
+      case LEFT:
+        lcd.print("<");
+        break;
+        
+      case RIGHT:
+        lcd.print(">");
+        break;
+        
+      case ONE:
+        lcd.print("ONE");
+        break;
+        
+      case TWO:
+        lcd.print("TWO");
         break;
         
       case 0xFD906F:
