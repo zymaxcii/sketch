@@ -1,3 +1,5 @@
+// https://www.tweaking4all.com/hardware/arduino/adruino-led-strip-effects/
+
 #include "FastLED.h"
 #include <EEPROM.h>
 #define NUM_LEDS 12 
