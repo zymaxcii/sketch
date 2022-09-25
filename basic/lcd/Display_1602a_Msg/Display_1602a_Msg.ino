@@ -51,12 +51,12 @@ void setup()
 {
   // set up the LCD's number of columns and rows: 
   lcd.begin(16, 2);
-  
+  lcd.clear();
   // Print a message to the LCD
-  // lcd.print("hello, yang fan!");
-  // lcd.display();
-  // delay(5000);
-  // lcd.noDisplay();
+  lcd.print("hello, yang fan!");
+  lcd.display();
+  delay(5000);
+  lcd.noDisplay();
 
   lcd.display();
   lcd.print("Oven Alarm Sys");
@@ -126,4 +126,3 @@ void monitorOven()
     delay(5000);
   }
 }
-
