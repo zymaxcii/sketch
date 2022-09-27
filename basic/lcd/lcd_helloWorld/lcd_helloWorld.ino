@@ -1,3 +1,6 @@
+// lcd_helloWorld.ino
+// Print Hello World and the time passed in seconds
+
 /*
  * Tutorial 8: Using the LCD
  * 
@@ -10,12 +13,12 @@
  * can see the characters on the LCD.
  *
  * The circuit:
- * - LCD RS pin to digital pin 12
- * - LCD Enable pin to digital pin 11
- * - LCD D4 pin to digital pin 5
- * - LCD D5 pin to digital pin 4
- * - LCD D6 pin to digital pin 3
- * - LCD D7 pin to digital pin 2
+ * - LCD RS pin to digital pin 8
+ * - LCD Enable pin to digital pin 9
+ * - LCD D4 pin to digital pin 4
+ * - LCD D5 pin to digital pin 5
+ * - LCD D6 pin to digital pin 6
+ * - LCD D7 pin to digital pin 7
  * - LCD R/W pin to ground
  * - 10K potentiometer divider for LCD pin VO:
  * - 330ohm resistor betweenm LCD pin A and 5v
@@ -39,29 +42,37 @@
  *
  */
 
-// include the library
+// My standard hardware setup
+// lcd pins:  RS EN D4 D5 D6 D7
+// to MCU:    D8 D9 D4 D5 D6 D7
+
 #include <LiquidCrystal.h>
 
 // all of our LCD pins
-int lcdRSPin = 12;
-int lcdEPin = 11;
-int lcdD4Pin = 5;
-int lcdD5Pin = 4;
-int lcdD6Pin = 3;
-int lcdD7Pin = 2;
+int lcdRSPin = 8;
+int lcdEPin =  9;
+int lcdD4Pin = 4;
+int lcdD5Pin = 5;
+int lcdD6Pin = 6;
+int lcdD7Pin = 7;
 
 // initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(lcdRSPin, lcdEPin,
-                  lcdD4Pin, lcdD5Pin, lcdD6Pin, lcdD7Pin);
+//                  RS EN D4 D5 D6 D7
+// LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+
+
+LiquidCrystal lcd(lcdRSPin, lcdEPin, lcdD4Pin, lcdD5Pin, lcdD6Pin, lcdD7Pin);
+
 
 void setup()
 {
-    // set up the LCD's number of columns and rows: 
+    // set up the LCD's number of columns and rows
     lcd.begin(16, 2);
 
-    // Print a message to the LCD.
-    lcd.print("hello, world!");
+    // Print a message to the LCD
+    lcd.print("Hello, World!");
 }
+
 
 void loop()
 {

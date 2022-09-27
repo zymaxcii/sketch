@@ -1,6 +1,11 @@
-// DIsplay_2004a_ScanAddr.ino
-//
+// lcdi2c_scanAddress.ino
 // I2C address scanner program
+
+
+// My standard hardware setup
+// Uno: pins sda, scl; gnd and vcc of lcd
+
+
 #include <Wire.h>
 
 
@@ -20,7 +25,7 @@ void loop()
   Serial.println("Scanning...");
 
   nDevices = 0;
-  for(address = 1; address < 127; address++ )
+  for (address = 1; address < 127; address++ )
   {
     Wire.beginTransmission(address);
     error = Wire.endTransmission();
@@ -29,8 +34,9 @@ void loop()
     {
       Serial.print("I2C device found at address 0x");
       if (address < 16)
+      {
         Serial.print("0");
-
+      }
       Serial.print(address,HEX);
       Serial.println("  !");
 

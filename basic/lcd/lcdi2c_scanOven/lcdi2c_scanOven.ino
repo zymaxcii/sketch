@@ -1,11 +1,14 @@
-// Display_2004a_Oven.ino
-//
-// Use pins 20, 21 on Mega 2560 for sda, scl
+// lcdi2c_scanOven.ino
+// Simulate oven alarm system using i2c version of lcd 2004A
+// logic not working yet
 
-// include the library code:
+// My standard hardware setup
+// Uno: pins sda, scl; gnd and vcc
+
 #include <LiquidCrystal_I2C.h>
 
-// initialize the library with the numbers of the interface pins
+void monitorOven();
+
 // address at 0x27
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
@@ -13,7 +16,7 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);
 void setup()
 {
   lcd.init();                       // initialize the lcd
-  lcd.backlight();  
+  lcd.backlight();                  // turn backlight on
   
   // Print a message to the LCD
   // lcd.print("hello, yang fan!");
@@ -27,11 +30,11 @@ void setup()
   lcd.print("Texas Instrument");
   lcd.setCursor(0, 2);
   lcd.print("Singapore");
-  delay(5000);
+  delay(1000);
   
   lcd.clear();
   lcd.print("Scanning ovens...");
-  delay(5000);
+  delay(1000);
 
   // Test message
   Serial.begin(9600);
