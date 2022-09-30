@@ -1,40 +1,23 @@
-// lcd1602i2c.ino
-// don't understand this. why i2c still need to specify various pins?
-// compile error: POSITIVE not declared in this scope
+// lcdi2c_demo.ino
+// Flash backlight and scroll
 
 // https://dronebotworkshop.com/lcd-displays-arduino/
 
-/*
-  LCD Display with I2C Interface Demo
-  lcd-i2c-demo.ino
-  Use NewLiquidCrystal Library
-  DroneBot Workshop 2018
-  https://dronebotworkshop.com
-*/
+// My standard hardware setup
+// Uno: pins sda, scl; gnd and vcc
 
-// hardware setup
-// lcd 1602 i2c only
-
-
-// Include Wire Library for I2C
-#include <Wire.h>
-
-// Include NewLiquidCrystal Library for I2C
+#include <Wire.h>                  // for i2c
 #include <LiquidCrystal_I2C.h>
 
-// Define LCD pinout
-const int  en = 2, rw = 1, rs = 0, d4 = 4, d5 = 5, d6 = 6, d7 = 7, bl = 3;
+const int i2c_addr = 0x27;
 
-// Define I2C Address - change if reqiuired
-const int i2c_addr = 0x3F;
-
-LiquidCrystal_I2C lcd(i2c_addr, en, rw, rs, d4, d5, d6, d7, bl, POSITIVE);
+LiquidCrystal_I2C lcd(i2c_addr, 20, 4);
 
 
 void setup()
 {
-  // Set display type as 16 char, 2 rows
-  lcd.begin(16,2);
+  lcd.init();                        // initialize the lcd
+  lcd.backlight();                   // turn backlight on
   
   // Print on first row
   lcd.setCursor(0,0);
@@ -47,8 +30,8 @@ void setup()
   lcd.setCursor(0,1);
   lcd.print("How are you?");
   
-  // Wait 8 seconds
-  delay(8000);
+  // Wait 2 seconds
+  delay(2000);
   
   // Clear the display
   lcd.clear();
@@ -63,7 +46,7 @@ void loop()
   lcd.setCursor(0,1);
   lcd.print("Flash 4 times");
   
-  delay(3000);
+  delay(2000);
   lcd.clear();
   
   // Flash backlight 4 times
@@ -97,6 +80,6 @@ void loop()
   // clear screen 
   lcd.clear();
   
-  //Delay
+  // Delay
   delay(1000);
 }

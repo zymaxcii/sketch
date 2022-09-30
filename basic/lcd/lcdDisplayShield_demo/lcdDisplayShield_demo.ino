@@ -40,18 +40,18 @@ int adc_key_in = 0;
 // Returns button constant value
 int read_LCD_buttons()
 {
-   // read the value from the sensor
-   adc_key_in = analogRead(0);
+  // read the value from the sensor
+  adc_key_in = analogRead(0);
        
-   // Approx button values are 0, 144, 329, 504, 741
-   // Add approx 50 to those values and check to see if we are close
-   if (adc_key_in > 1000) return btnNONE; // No button is pressed
-   if (adc_key_in < 50)   return btnRIGHT; // Right pressed
-   if (adc_key_in < 195)  return btnUP;  // Up presed
-   if (adc_key_in < 380)  return btnDOWN;  // Down pressed
-   if (adc_key_in < 555)  return btnLEFT;  // Left pressed
-   if (adc_key_in < 790)  return btnSELECT; // Select pressed 
-   return btnNONE;  // If no valid response return No button pressed
+  // Approx button values are 0, 144, 329, 504, 741
+  // Add approx 50 to those values and check to see if we are close
+  if (adc_key_in > 1000) return btnNONE;     // No button is pressed
+  if (adc_key_in < 50)   return btnRIGHT;    // Right pressed
+  if (adc_key_in < 195)  return btnUP;       // Up presed
+  if (adc_key_in < 380)  return btnDOWN;     // Down pressed
+  if (adc_key_in < 555)  return btnLEFT;     // Left pressed
+  if (adc_key_in < 790)  return btnSELECT;   // Select pressed 
+  return btnNONE;                            // no valid response return No button pressed
 } 
 
 
@@ -87,26 +87,31 @@ void loop()
     lcd.print("RIGHT ");
     break;
     }
+    
     case btnLEFT:
     {
     lcd.print("LEFT   ");
     break;
     }
+    
     case btnUP:
     {
     lcd.print("UP    ");
     break;
     }
+    
     case btnDOWN:
     {
     lcd.print("DOWN  ");
     break;
     }
+    
     case btnSELECT:
     {
     lcd.print("SELECT");
     break;
     }
+    
     case btnNONE:
     {
     lcd.print("NONE  ");

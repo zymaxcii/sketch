@@ -1,13 +1,10 @@
 // lcdi2c_scanAddress.ino
 // I2C address scanner program
 
-
 // My standard hardware setup
 // Uno: pins sda, scl; gnd and vcc of lcd
 
-
 #include <Wire.h>
-
 
 void setup()
 {
@@ -59,4 +56,3 @@ void loop()
 
   delay(5000); // wait 5 seconds for next scan
 }
-

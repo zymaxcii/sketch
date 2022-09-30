@@ -1,14 +1,14 @@
-// lcdI2C_lm35.ino
+// lcdi2c-lm35.ino
 
-#include <LiquidCrystal_I2C.h>                // header for I2C lcd
+#include <LiquidCrystal_I2C.h>
 
-// LiquidCrystal_I2C lcd(0x27,16,2);          // I2C address = 0x27
 LiquidCrystal_I2C lcd(0x27,20, 4);
 
 const long eventTime_Tem = 2000;              // delay time
 unsigned long previousTime_Tem = 0; 
 int x;
 unsigned long temptot = 0;
+
 
 void setup()
 {
