@@ -1,4 +1,4 @@
-// Header file "setDisplay.h":
+// setDisplay.h
 
 
 // Press button, set display

@@ -1,12 +1,16 @@
-// tm1638.ino
-// don't know what it does
+// tm1638_display10to11K.ino
+// Display numbers from 10000 to 11000
 
 // https://www.instructables.com/Arduino-and-TM1638-LED-Display-Modules/
 
-
 // My standard hardware setup
+// Led-Key module
+// VCC 3.5V
+// GND GND
+// STB D7
+// CLK D9
+// DIO D8
 //
-
 
 #include <TM1638.h>
 

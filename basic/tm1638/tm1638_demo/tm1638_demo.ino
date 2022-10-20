@@ -1,17 +1,18 @@
 // tm1638_demo.ino
-// https://www.electroschematics.com/tm1638/
+// Demo 3 modes: counting, scroll and button
 
+// https://www.electroschematics.com/tm1638/
 // https://github.com/moozzyk/TM1638/blob/master/TM1638_demo/TM1638_demo.ino 
 
 
 // My standard hardware setup
-// Arduino              TM1638 based board
-// 3.3V   ------------------ VCC
-// GND    ------------------ GND
-// PIN #7 ------------------ STB
-// PIN #8 ------------------ DIO
-// PIN #9 ------------------ CLK
-//
+// Led-Key module
+// VCC 3.5V
+// GND GND
+// STB D7
+// CLK D9
+// DIO D8
+
 
 const int strobe = 7; // STB to D7
 const int clock  = 9; // CLK to D9

@@ -1,4 +1,4 @@
-// Header file "readButtons.h":
+// readButtons.h
 
 // read TM1638 button status
 uint8_t readButtons()
