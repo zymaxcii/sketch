@@ -2,7 +2,7 @@
 // Read buttons 1 to 5
 // button 1: display frequency count
 // button 2: display temperature and humidity
-// button 3: display bar graph
+// button 3: display bar graph according to A7 analog input
 // button 4: display scrolled text
 // button 5: display binary count
 
@@ -20,6 +20,8 @@
 // VCC 5V
 // GND GND
 // S D6
+//
+// Pot A7
 
 
 
@@ -28,7 +30,7 @@
 #include <DHT.h>
 
 
-DHT dht(6, DHT22);      // DHT11 original
+DHT dht(5, DHT11);      // DHT11 is blue
 
 int stb=7, clk=9, dio=8; uint8_t buttons;
 

@@ -27,7 +27,7 @@ void setup()
  
 void loop()
 {
-  for (a=1; a<=100; a++)
+  for (a=1; a<=500; a++)
   {
     module.setDisplayToDecNumber(a, 0, false);
     delay(100);

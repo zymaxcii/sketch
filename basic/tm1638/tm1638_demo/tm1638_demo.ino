@@ -1,8 +1,5 @@
 // tm1638_demo.ino
-
-// https://www.electroschematics.com/tm1638/
 // Demo 3 modes: counting, scroll and button
-
 
 // https://www.electroschematics.com/tm1638/
 // https://github.com/moozzyk/TM1638/blob/master/TM1638_demo/TM1638_demo.ino 
@@ -17,9 +14,9 @@
 // DIO D8
 
 
-const int strobe = 7; // STB to D7
-const int clock  = 9; // CLK to D9
-const int data   = 8; // DIO to D8
+const int strobe = 7;   // STB to D7
+const int clock  = 9;   // CLK to D9
+const int data   = 8;   // DIO to D8
 
 
 void sendCommand(uint8_t value)

@@ -1,5 +1,6 @@
 // tm1638_displayLED.ino
-// Don't know what it does
+// Light up all segments on first and last digits and also third and sixth LEDs
+// No key interactions
 
 // https://github.com/moozzyk/TM1638/blob/master/TM1638_display_LED/TM1638_display_LED.ino
 

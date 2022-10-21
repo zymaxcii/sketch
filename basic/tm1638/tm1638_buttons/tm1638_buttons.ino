@@ -37,7 +37,7 @@ void setup()
   pinMode(clock, OUTPUT);
   pinMode(data, OUTPUT);
 
-  sendCommand(0x8f);  // activate
+  sendCommand(0x8f);       // activate
   reset();
 }
 
