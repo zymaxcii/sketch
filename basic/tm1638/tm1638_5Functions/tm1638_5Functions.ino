@@ -1,18 +1,42 @@
-// tm1638.ino
+// tm1638-readButtons.ino
+// Read buttons 1 to 5
+// button 1: display frequency count
+// button 2: display temperature and humidity
+// button 3: display bar graph
+// button 4: display scrolled text
+// button 5: display binary count
+
 // https://akuzechie.blogspot.com/2021/02/tm1638-module-executing-multiple.html
+
+// My standard hardware setup
+// Led-Key module
+// VCC 3.5V
+// GND GND
+// STB D7
+// CLK D9
+// DIO D8
+//
+// DHT22
+// VCC 5V
+// GND GND
+// S D6
+
 
 
 // TM1638: Multiple Functions
 #include <FreqCount.h>
 #include <DHT.h>
 
-DHT dht(6, DHT11);
+
+DHT dht(6, DHT22);      // DHT11 original
+
 int stb=7, clk=9, dio=8; uint8_t buttons;
 
 int digit[]  = {0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
 int letter[] = {0x76,0x79,0x38,0x38,0x3F};
 unsigned long freq; int temp, hum, pot, value[7];
 
+// In local folder
 #include "tm1638_Initialization.h"
 #include "readButtons.h"
 #include "setLED.h"
@@ -25,7 +49,7 @@ void setup()
 {
   pinMode(stb, OUTPUT);
   pinMode(clk, OUTPUT);
-  pinMode(dio,OUTPUT);
+  pinMode(dio, OUTPUT);
 
   FreqCount.begin(1000);
   dht.begin();

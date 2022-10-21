@@ -1,4 +1,4 @@
-// Header file "setLED.h":
+// setLED.h
 
 // Button press, set LED
 void setLed(int value, int position)

@@ -1,4 +1,6 @@
-// Header file "scroll_2021.h":
+// scroll_2021.h
+// Scroll "2021" across the display
+
 
 // scroll "2021"
 void scroll_2021()

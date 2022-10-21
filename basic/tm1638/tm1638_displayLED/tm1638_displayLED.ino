@@ -1,9 +1,21 @@
 // tm1638_displayLED.ino
+// Don't know what it does
+
 // https://github.com/moozzyk/TM1638/blob/master/TM1638_display_LED/TM1638_display_LED.ino
+
+// My standard hardware setup
+// Led-Key module
+// VCC 3.5V
+// GND GND
+// STB D7
+// CLK D9
+// DIO D8
+
 
 const int strobe = 7;
 const int clock = 9;
 const int data = 8;
+
 
 void sendCommand(uint8_t value)
 {
@@ -12,17 +24,20 @@ void sendCommand(uint8_t value)
   digitalWrite(strobe, HIGH);
 }
 
+
 void reset()
 {
-  sendCommand(0x40); // set auto increment mode
+  sendCommand(0x40);                       // set auto increment mode
   digitalWrite(strobe, LOW);
   shiftOut(data, clock, LSBFIRST, 0xc0);   // set starting address to 0
+  
   for(uint8_t i = 0; i < 16; i++)
   {
     shiftOut(data, clock, LSBFIRST, 0x00);
   }
   digitalWrite(strobe, HIGH);
 }
+
 
 void setup()
 {
@@ -34,9 +49,10 @@ void setup()
   reset();
 }
 
+
 void loop()
 {
-  sendCommand(0x44);  // set single address
+  sendCommand(0x44);                     // set single address
 
   digitalWrite(strobe, LOW);
   shiftOut(data, clock, LSBFIRST, 0xc0); // 1st digit

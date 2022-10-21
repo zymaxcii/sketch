@@ -1,4 +1,7 @@
-// Header file "functions.h":
+// functions.h
+// Contains various functions
+// What is connected to A7?
+
 
 // Convert frequency value to display characters
 void value2DispConv(int n)

@@ -1,10 +1,13 @@
 // tm1638_buttons.ino
+// Display position of buttons pressed on LEDs
+
 // https://github.com/moozzyk/TM1638/blob/master/TM1638_buttons/TM1638_buttons.ino
 
 
 const int strobe = 7;
 const int clock = 9;
 const int data = 8;
+
 
 void sendCommand(uint8_t value)
 {
@@ -13,17 +16,20 @@ void sendCommand(uint8_t value)
   digitalWrite(strobe, HIGH);
 }
 
+
 void reset()
 {
-  sendCommand(0x40); // set auto increment mode
+  sendCommand(0x40);                       // set auto increment mode
   digitalWrite(strobe, LOW);
   shiftOut(data, clock, LSBFIRST, 0xc0);   // set starting address to 0
-  for(uint8_t i = 0; i < 16; i++)
+  
+  for (uint8_t i = 0; i < 16; i++)
   {
     shiftOut(data, clock, LSBFIRST, 0x00);
   }
   digitalWrite(strobe, HIGH);
 }
+
 
 void setup()
 {
@@ -34,6 +40,7 @@ void setup()
   sendCommand(0x8f);  // activate
   reset();
 }
+
 
 uint8_t readButtons(void)
 {
@@ -54,6 +61,7 @@ uint8_t readButtons(void)
   return buttons;
 }
 
+
 void setLed(uint8_t value, uint8_t position)
 {
   pinMode(data, OUTPUT);
@@ -64,6 +72,7 @@ void setLed(uint8_t value, uint8_t position)
   shiftOut(data, clock, LSBFIRST, value);
   digitalWrite(strobe, HIGH);
 }
+
 
 void loop()
 {
