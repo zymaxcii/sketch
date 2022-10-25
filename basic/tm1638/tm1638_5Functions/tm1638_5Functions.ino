@@ -56,6 +56,7 @@ void setup()
   FreqCount.begin(1000);
   dht.begin();
   TM1638_Initialization();
+  Serial.begin(9600);
 }
 
 

@@ -17,14 +17,25 @@
  *
  */
 
+// My standard hardware setup
+// lm35
+// ====
+// Bottom facing flat side, right to left
+// 1 GND
+// 2 OUT A0
+// 3 VCC +5V
+
+
 // the output pin of the LM35 temperature sensor
 int lm35Pin = A0;
+
 
 void setup()
 {
     // set up serial at 9600 baud   
     Serial.begin(9600);
 }
+
 
 void loop()
 { 
@@ -35,7 +46,7 @@ void loop()
     analogValue = analogRead(lm35Pin);
 
     // convert the 10bit analog value to celcius
-    temperature = float(analogValue) / 1023;
+    temperature = float(analogValue) / 1024;            // 1023 or 1024?
     temperature = temperature * 500;
 
     // print the temperature over serial
@@ -46,4 +57,3 @@ void loop()
     // wait 1s before reading the temperature again
     delay(1000);
 }
-

@@ -1,12 +1,13 @@
-// lm35.ino
-// test LM35 temperature sensor
+// lm35_v1.ino
+// test LM35 temperature sensor, version 1
 
 // My standard hardware setup
 // lm35
 // ====
-// VCC +5V
-// GND GND
-// S   A0
+// Bottom facing flat side, right to left
+// 1 GND
+// 2 OUT A0
+// 3 VCC +5V
 
 
 int val;
@@ -27,19 +28,21 @@ void loop()
   float cel = mv/10;
   float farh = (cel*9)/5 + 32;
 
-//  Serial.print("Sensor value = ");
-//  Serial.print(val);
-//  Serial.println();
+  Serial.print("Sensor value = ");
+  Serial.print(val);
+  Serial.println();
 
-  Serial.print("TEMPRATURE = ");
+  Serial.print("Temperature = ");
   Serial.print(cel);
   Serial.print("*C");
   Serial.println();
-  delay(1000);
+  // delay(1000);
   
 // uncomment this to get temperature in fahrenheit
-  Serial.print("TEMPRATURE = ");
+  Serial.print("Temperature = ");
   Serial.print(farh);
   Serial.print("*F");
   Serial.println();
+  Serial.println();
+  delay(3000);
 }

@@ -1,5 +1,7 @@
 // lcdi2c-lm35_Robojax.ino
-// Display temperature from lm35 on a LCD
+// Display temperature from lm35 on a I2C 2004 LCD
+// temperature readings are very accurate
+
 // http://robojax.com/node/1162
 
 /*
@@ -19,11 +21,18 @@
 */
 
 // My standard hardware setup
-// Uno: pins sda, scl; gnd and vcc
 // lm35
+// ====
+// Bottom facing flat side, right to left
+// 1 GND
+// 2 OUT A0
+// 3 VCC +5V
+//
+// Uno: pins sda, scl; gnd and vcc
+
 
 const int inPin = A0;                     // can change
-const int VCC2 = 2;
+const int VCC2 = 2;                       // for what?
 const int iteration = 1000;               // can change (see video)
 const float LM35_FACTOR = 0.01;           // do not change
 

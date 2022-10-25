@@ -1,11 +1,17 @@
 // lm35-improved.ino
+// Display temperature readings in serial monitor
 
 // https://www.makerguides.com/lm35-arduino-tutorial/
-/* LM35 analog temperature sensor with Arduino example code
+// LM35 analog temperature sensor with Arduino example code
 // More info: https://www.makerguides.com
 
-// hardware setup
-// lm35 : A0
+// My standard hardware setup
+// lm35
+// ====
+// Bottom facing flat side, right to left
+// 1 GND
+// 2 OUT A0
+// 3 VCC +5V
 
 
 #define sensorPin A0

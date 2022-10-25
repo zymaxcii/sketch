@@ -95,6 +95,8 @@ void barGraph()
   {
     buttons = readButtons();
     pot = constrain(analogRead(A7), 0, 1000);
+    Serial.println(pot);
+
     pot = map(pot, 0,1000, 0,16);
 
     switch(pot)

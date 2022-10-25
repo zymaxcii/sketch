@@ -6,6 +6,14 @@
 // LM35 analog temperature sensor with Arduino example code
 // More info: https://www.makerguides.com
 
+// My standard hardware setup
+// lm35
+// ====
+// Bottom facing flat side, right to left
+// 1 GND
+// 2 OUT A0
+// 3 VCC +5V
+
 // Define pin
 #define sensorPin A0
 

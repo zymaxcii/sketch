@@ -1,4 +1,6 @@
 // lcdi2c-lm35.ino
+// Display temperature readings on I2C 2004 LCD
+// not accurate, on the lower side
 
 #include <LiquidCrystal_I2C.h>
 
@@ -15,7 +17,7 @@ void setup()
   Serial.begin(9600);
 
   // INTERNAL was not declared in this scope
-  // analogReference(INTERNAL);                  // set reference of 1.1V
+  analogReference(INTERNAL);                  // set reference of 1.1V
   lcd.init();
   lcd.backlight();
 }
@@ -31,11 +33,12 @@ void loop()
   for (x=0; x<100 ; x++)
   {
     temptot += analogRead(A0);
+    // delay(50);
   }
 
   float  sensorValue = temptot/100;            // calculating average
   float voltage = sensorValue * (1100 / 1023); // convert sensor reading into milli volt
-  float temp = voltage*0.1;                    // convert milli volt to temperature degree Celsius 
+  float temp = voltage*0.1;                    // convert milli volt to Celsius 
   float tempf = 1.8 * temp + 32;               // converting Celsius to Fahrenheit  
   
   // Check for delay time

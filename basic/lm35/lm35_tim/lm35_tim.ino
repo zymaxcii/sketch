@@ -1,7 +1,17 @@
 // lm35_tim.ino
 // lm35 connected to A0
+// Display temperature readings in serial monitor
 
 // https://www.timdejong.nl/blog/get-accurate-temperature-lm35-arduino-correctly
+
+
+// My standard hardware setup
+// lm35
+// ====
+// Bottom facing flat side, right to left
+// 1 GND
+// 2 OUT A0
+// 3 VCC +5V
 
 
 float tempC;
