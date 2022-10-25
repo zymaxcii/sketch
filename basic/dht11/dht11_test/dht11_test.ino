@@ -1,10 +1,13 @@
+// dht11_test.ino
+
 /*
  * Created by ArduinoGetStarted.com
  *
  * This example code is in the public domain
  *
- * Tutorial page: https://arduinogetstarted.com/tutorials/arduino-temperature-humidity-sensor
+ * https://arduinogetstarted.com/tutorials/arduino-temperature-humidity-sensor
  */
+
 
 #include "DHT.h"
 #define DHTPIN 2
@@ -12,26 +15,35 @@
 
 DHT dht(DHTPIN, DHTTYPE);
 
-void setup() {
+
+void setup()
+{
   Serial.begin(9600);
-  dht.begin(); // initialize the sensor
+  dht.begin();         // initialize the sensor
 }
 
-void loop() {
-  // wait a few seconds between measurements.
+
+void loop()
+{
+  // wait a few seconds between measurements
   delay(2000);
 
   // read humidity
   float humi  = dht.readHumidity();
+  
   // read temperature as Celsius
   float tempC = dht.readTemperature();
+  
   // read temperature as Fahrenheit
   float tempF = dht.readTemperature(true);
 
   // check if any reads failed
-  if (isnan(humi) || isnan(tempC) || isnan(tempF)) {
+  if (isnan(humi) || isnan(tempC) || isnan(tempF))
+  {
     Serial.println("Failed to read from DHT sensor!");
-  } else {
+  }
+  else
+  {
     Serial.print("Humidity: ");
     Serial.print(humi);
     Serial.print("%");

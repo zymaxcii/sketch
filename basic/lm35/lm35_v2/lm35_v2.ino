@@ -1,3 +1,6 @@
+// lm35_v2.ino
+// Reading temperature version 2
+
 /*
  * Tutorial 1: Reading Temperature
  * 

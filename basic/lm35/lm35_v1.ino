@@ -1,8 +1,17 @@
 // lm35.ino
 // test LM35 temperature sensor
 
+// My standard hardware setup
+// lm35
+// ====
+// VCC +5V
+// GND GND
+// S   A0
+
+
 int val;
 int tempPin = A0;   // A0 or 0
+
 
 void setup()
 {
@@ -28,9 +37,9 @@ void loop()
   Serial.println();
   delay(1000);
   
-// uncomment this to get temperature in farenhite
-//  Serial.print("TEMPRATURE = ");
-//  Serial.print(farh);
-//  Serial.print("*F");
-//  Serial.println();
+// uncomment this to get temperature in fahrenheit
+  Serial.print("TEMPRATURE = ");
+  Serial.print(farh);
+  Serial.print("*F");
+  Serial.println();
 }

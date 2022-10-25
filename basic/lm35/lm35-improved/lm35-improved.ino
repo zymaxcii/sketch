@@ -1,7 +1,8 @@
 // lm35-improved.ino
 
 // https://www.makerguides.com/lm35-arduino-tutorial/
-/* LM35 analog temperature sensor with Arduino example code. More info: https://www.makerguides.com */
+/* LM35 analog temperature sensor with Arduino example code
+// More info: https://www.makerguides.com
 
 // hardware setup
 // lm35 : A0
@@ -21,19 +22,20 @@ void setup()
 
 void loop()
 {
-  // Get a reading from the temperature sensor:
+  // Get a reading from the temperature sensor
   int reading = analogRead(sensorPin);
 
-  // Convert the reading into voltage:
+  // Convert the reading into voltage
   float voltage = reading * (1100 / 1024.0);
 
-  // Convert the voltage into the temperature in degree Celsius:
+  // Convert the voltage into the temperature in degree Celsius
   float temperature = voltage / 10;
 
-  // Print the temperature in the Serial Monitor:
+  // Print the temperature in the Serial Monitor
   Serial.print(temperature);
-  Serial.print(" \xC2\xB0"); // shows degree symbol
+  
+  Serial.print(" \xC2\xB0");           // shows degree symbol
   Serial.println("C");
 
-  delay(1000);               // wait a second between readings
+  delay(1000);                         // wait a second between readings
 }

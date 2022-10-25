@@ -1,16 +1,21 @@
 // lm35-I2C.ino
+// Display temperature readings on I2C version of LCD 1602
+
 
 // https://www.makerguides.com/lm35-arduino-tutorial/
-// LM35 analog temperature sensor with I2C LCD and Arduino example code. More info: https://www.makerguides.com
+// LM35 analog temperature sensor with I2C LCD and Arduino example code
+// More info: https://www.makerguides.com
 
 // hardware setup
 // lm35 : A0
 // LCD 1602 I2C version
 
+
 #include <LiquidCrystal_I2C.h>
 
-// Create a new instance of the LiquidCrystal_I2C class:
+// Create a new instance of the LiquidCrystal_I2C class
 LiquidCrystal_I2C lcd(0x27, 16, 2);
+
 
 // Degree symbol
 byte Degree[] =
@@ -30,33 +35,35 @@ byte Degree[] =
 
 void setup()
 {
-  // Start the LCD and turn on the backlight:
+  // Start the LCD and turn on the backlight
   lcd.init();
   lcd.backlight();
 
-  // Create a custom character:
+  // Create a custom character
   lcd.createChar(0, Degree);
 }
 
 
 void loop()
 {
-  // Get a reading from the temperature sensor:
+  // Get a reading from the temperature sensor
   int reading = analogRead(sensorPin);
 
   // Convert the reading into voltage:
   float voltage = reading * (5000 / 1024.0);
 
-  // Convert the voltage into the temperature in degree Celsius:
+  // Convert the voltage into the temperature in degree Celsius
   float temperature = voltage / 10;
 
-  // Print the temperature on the LCD;
+  // Print the temperature on the LCD
   lcd.setCursor(0, 0);
   lcd.print("Temperature:");
+  
   lcd.setCursor(0, 1);
   lcd.print(temperature);
-  lcd.write(0); // print the custom character
+  
+  lcd.write(0);            // print the custom character
   lcd.print("C");
 
-  delay(1000); // wait a second between readings
+  delay(1000);             // wait a second between readings
 }

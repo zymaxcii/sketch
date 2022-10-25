@@ -3,9 +3,10 @@
 // https://www.makerguides.com/lm35-arduino-tutorial/
 
 
-/* LM35 analog temperature sensor with Arduino example code. More info: https://www.makerguides.com */
+// LM35 analog temperature sensor with Arduino example code
+// More info: https://www.makerguides.com
 
-// Define to which pin of the Arduino the output of the LM35 is connected
+// Define pin
 #define sensorPin A0
 
 
@@ -17,7 +18,7 @@ void setup()
 
 void loop()
 {
-  // Get a reading from the temperature sensor:
+  // Get a reading from the temperature sensor
   int reading = analogRead(sensorPin);
 
   // Convert the reading into voltage:
@@ -28,8 +29,8 @@ void loop()
 
   // Print the temperature in the Serial Monitor:
   Serial.print(temperature);
-  Serial.print(" \xC2\xB0"); // shows degree symbol
+  Serial.print(" \xC2\xB0");      // shows degree symbol
   Serial.println("C");
 
-  delay(1000); // wait a second between readings
+  delay(1000);                    // wait a second between readings
 }
