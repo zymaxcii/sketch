@@ -1,3 +1,6 @@
+// two_16_2_i2c_LCD.ino
+// What does it do?
+
 // http://electronoobs.com/eng_arduino_tut51.php
 
 /* i2c LCD control for 16x2. 
@@ -23,7 +26,8 @@ uint8_t cross[8] = {0x0, 0x1b, 0xe, 0x4, 0xe, 0x1b, 0x0};
 uint8_t retarrow[8] = {  0x1, 0x1, 0x5, 0x9, 0x1f, 0x8, 0x4};
 
 
-void setup() {
+void setup()
+{
   lcd.init();                 //Init the LCD
   lcd.backlight();            //Activate backlight   
 
@@ -51,8 +55,10 @@ void setup() {
   lcd2.home();
 }
 
-void loop() {
-  // Turn off the display:
+
+void loop()
+{
+  // Turn off the display
   lcd.clear();
   lcd.print("  ELECTRONOOBS  ");
   lcd2.clear();
@@ -99,7 +105,8 @@ void loop() {
   
   lcd.clear();
   lcd2.clear();
-  while(i<16)
+  
+  while (i<16)
   {
     lcd.setCursor(i,0);
     lcd.print("X");
@@ -112,44 +119,43 @@ void loop() {
 
   while(i<16)
   {
-    lcd.setCursor(i,1);
+    lcd.setCursor(i, 1);
     lcd.print("X");
-    lcd2.setCursor(i,1);
+    lcd2.setCursor(i, 1);
     lcd2.print("X");
     i = i + 1;
     delay(100);
   }
   i = 0;
 
-  lcd.setCursor(0,0);
+  lcd.setCursor(0, 0);
   lcd.print("   1234567890   ");
-  lcd2.setCursor(0,0);
+  lcd2.setCursor(0, 0);
   lcd2.print("   1234567890   ");
   
-  lcd.setCursor(0,1);
+  lcd.setCursor(0, 1);
   lcd.print("   0987654321   ");
-  lcd2.setCursor(0,1);
+  lcd2.setCursor(0, 1);
   lcd2.print("   0987654321   ");
   delay(2000);
 
-  lcd.setCursor(0,0);
+  lcd.setCursor(0, 0);
   lcd.print("   !$%&/()=?!   ");
-  lcd2.setCursor(0,0);
+  lcd2.setCursor(0, 0);
   lcd2.print("   !$%&/()=?!   ");
   
-  lcd.setCursor(0,1);
+  lcd.setCursor(0, 1);
   lcd.print("   |@#~!$%&/%   ");
-  lcd2.setCursor(0,1);
+  lcd2.setCursor(0, 1);
   lcd2.print("   |@#~!$%&/%   ");
   delay(2000);
 
   lcd.clear();
-  lcd.setCursor(0,1);
+  lcd.setCursor(0, 1);
   lcd.print("  This is LCD 2  ");
  
   lcd2.clear();
-  lcd2.setCursor(0,0);
+  lcd2.setCursor(0, 0);
   lcd2.print("  This is LCD 1  ");
   delay(3000);
-
 }

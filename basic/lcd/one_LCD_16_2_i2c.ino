@@ -1,3 +1,5 @@
+// one_LCD_16_2_I2C.ino
+
 // http://electronoobs.com/eng_arduino_tut51.php
 
 /* i2c LCD control for 16x2. 
@@ -9,6 +11,7 @@
 //LCD config
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
+
 LiquidCrystal_I2C lcd(0x3f,20,4);  //sometimes the LCD adress is not 0x3f. Change to 0x27 if it dosn't work.
 int i = 0;
 
@@ -22,7 +25,8 @@ uint8_t cross[8] = {0x0, 0x1b, 0xe, 0x4, 0xe, 0x1b, 0x0};
 uint8_t retarrow[8] = {  0x1, 0x1, 0x5, 0x9, 0x1f, 0x8, 0x4};
 
 
-void setup() {
+void setup()
+{
   lcd.init();                 //Init the LCD
   lcd.backlight();            //Activate backlight     
 
@@ -37,7 +41,9 @@ void setup() {
   lcd.home();  
 }
 
-void loop() {
+
+void loop()
+{
   // Turn off the display:
   lcd.clear();
   lcd.print("  ELECTRONOOBS  ");
@@ -67,18 +73,18 @@ void loop() {
 
   
   lcd.clear();
-  while(i<16)
+  while (i<16)
   {
-    lcd.setCursor(i,0);
+    lcd.setCursor(i, 0);
     lcd.print("X");
     i = i + 1;
     delay(100);
   }
   i = 0;
 
-  while(i<16)
+  while (i<16)
   {
-    lcd.setCursor(i,1);
+    lcd.setCursor(i, 1);
     lcd.print("X");   
     i = i + 1;
     delay(100);
@@ -98,9 +104,7 @@ void loop() {
   delay(2000);
 
   lcd.clear();
-  lcd.setCursor(0,1);
+  lcd.setCursor(0, 1);
   lcd.print("  This is LCD 2  ");
- 
-  
   delay(3000);  
 }
