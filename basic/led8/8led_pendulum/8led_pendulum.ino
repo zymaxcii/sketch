@@ -1,12 +1,22 @@
 // 8led_pendulum.ino
+
 // https://www.instructables.com/Arduino-led-pendulum/
 
-int led1 = 13;
-int led2 = 12;
-int led3 = 11;
-int led4 = 10;
-int led5 = 9;
-int led6 = 8;
+// with normal leds on breadboard
+// int led1 = 13;
+// int led2 = 12;
+// int led3 = 11;
+// int led4 = 10;
+// int led5 = 9;
+// int led6 = 8;
+
+// with the 8 led module and mega
+int led1 = 53;
+int led2 = 51;
+int led3 = 49;
+int led4 = 47;
+int led5 = 45;
+int led6 = 43;
 
 
 // the setup routine runs once when you press reset:

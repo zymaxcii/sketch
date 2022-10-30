@@ -1,7 +1,6 @@
-/*
-8led_brightness.ino
-Adafruit Arduino - Lesson 4. 8 LEDs and a Shift Register - Brightness
-*/
+// 8led_brightness.ino
+// Adafruit Arduino - Lesson 4. 8 LEDs and a Shift Register - Brightness
+// Requires pwm pins
 
 int latchPin = 5;
 int clockPin = 6;

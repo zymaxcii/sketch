@@ -35,10 +35,17 @@
 
 int potPin = A0;
 
-int led1 = 2;
-int led2 = 3;
-int led3 = 4;
-int led4 = 5;
+// with normal leds on breadboard
+// int led1 = 2;
+// int led2 = 3;
+// int led3 = 4;
+// int led4 = 5;
+
+// with the 8 led module and mega
+const int led1 = 39;
+const int led2 = 41;
+const int led3 = 43;
+const int led4 = 45;
 
 int potValue;
 int percent;

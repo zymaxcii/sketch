@@ -20,6 +20,8 @@
 
 // hardware setup
 // 10 leds: pins 4 to 13
+// code requires consecutive pins
+// cannot work with my 8 led module and mega
  
 int timer = 75; // Higher number = longer scan... adjust the meeting in middle to look in time if you change this number
 int indLED = 75; //This is the delay on the meet in the middle sequence, updated to use an integer function

@@ -21,6 +21,8 @@
  *
  */
 
+// Code requires leds to be connected to consecutive pins
+
 // The time in ms each LED stays on for
 // experiment with this number, the lower the number
 // the faster the LEDs change

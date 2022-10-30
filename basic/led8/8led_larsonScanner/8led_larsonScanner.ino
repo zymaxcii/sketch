@@ -12,7 +12,13 @@ int buttonState = 0;
 
 // my standard pin assignments for 8 leds on uno and nano: 6,7,8,9,10,11,12,13
 // pins 2,3,4,5 for switches; pin 2 with interrupt
-int leds[] = {6,7,8,9,10,11,12,13};
+// int leds[] = {6,7,8,9,10,11,12,13};
+
+// with the 8 led module and mega - no jumper wires no separate GND jumper
+int leds[] = {39,41,43,45,47,49,51,53};
+
+
+
 
 #define NUMBER_OF_LEDS (sizeof(leds)/sizeof(int))
 

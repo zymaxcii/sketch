@@ -3,9 +3,14 @@
 // Blink 3 leds on and off
 
 // 3 leds connected to D3, D4, D5
-const int LED1 = 3;
-const int LED2 = 4;
-const int LED3 = 5;
+// const int LED1 = 3;
+// const int LED2 = 4;
+// const int LED3 = 5;
+
+// with the 8 led module and mega
+const int LED1 = 39;
+const int LED2 = 41;
+const int LED3 = 43;
 
 // time delay intervals
 const int interval1 = 1000;
