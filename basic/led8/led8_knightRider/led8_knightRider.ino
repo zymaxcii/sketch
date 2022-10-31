@@ -1,3 +1,5 @@
+// led8_knightRider.ino
+
 /*
  * Tutorial 3b: LED Knight Rider
  * 
@@ -19,19 +21,26 @@
  * Derivative work from:
  * http://www.arduino.cc/en/Tutorial/ForLoop
  *
- */
+*/
 
 // Code requires leds to be connected to consecutive pins
 
 // The time in ms each LED stays on for
 // experiment with this number, the lower the number
 // the faster the LEDs change
-int timer = 100;
+int timer = 100;               // try 100, 50, 500
 
 void setup()
 {
     // use a for loop to initialize each pin as an output
-    for (int thisPin = 2; thisPin < 8; thisPin++)
+    // for (int thisPin = 2; thisPin < 8; thisPin++)
+    // {
+    //    pinMode(thisPin, OUTPUT);
+    // }
+    
+    // with the 8 led module that plugs directly into mega
+    // use a for loop to initialize each pin as an output
+    for (int thisPin = 39; thisPin < 53; thisPin = thisPin + 2)
     {
         pinMode(thisPin, OUTPUT);
     }
@@ -40,7 +49,8 @@ void setup()
 void loop()
 {
     // loop from the lowest pin to the highest
-    for (int thisPin = 2; thisPin < 8; thisPin++)
+    // for (int thisPin = 2; thisPin < 8; thisPin++)
+    for (int thisPin = 39; thisPin < 53; thisPin = thisPin + 2)
     {
         // turn the pin on
         digitalWrite(thisPin, HIGH);
@@ -51,7 +61,8 @@ void loop()
     }
 
     // loop from the highest pin to the lowest
-    for (int thisPin = 7; thisPin > 1; thisPin--)
+    // for (int thisPin = 7; thisPin > 1; thisPin--)
+    for (int thisPin = 53; thisPin > 39; thisPin = thisPin - 2)
     {
         // turn the pin on
         digitalWrite(thisPin, HIGH);

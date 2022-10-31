@@ -1,6 +1,5 @@
-// led_test3.ino
-// Test 3 leds
-// Blink 3 leds on and off
+// led8_blink3leds.ino
+// Test 3 leds by blinking them on and off
 
 // 3 leds connected to D3, D4, D5
 // const int LED1 = 3;
@@ -16,9 +15,9 @@ const int LED3 = 43;
 const int interval1 = 1000;
 const int interval2 = 1500;
 
-// active low leds
-#define ON LOW
-#define OFF HIGH
+// common cathode leds
+#define ON HIGH
+#define OFF LOW
 
 
 void setup()

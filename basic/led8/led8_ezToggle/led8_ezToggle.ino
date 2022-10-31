@@ -1,4 +1,5 @@
-// led_ez_toggle.ino
+// led8_ezToggle.ino
+// Turn ON/OFF led according to state of button
 
 /*
  * Created by ArduinoGetStarted.com
@@ -20,23 +21,27 @@
 // 2  LED1     D3 (active low)
 // 3  GND      GND
 
+// with the 8 led module and mega
+// switch D10
+// Led    D39
+
 
 #include <ezButton.h>
 #include <ezOutput.h>
 
-ezButton button(33);          // create Button object that attach to pin 7; switch s1
-ezOutput led(38);              // create ezOutput object that attach to pin 9; LED D4
+ezButton button(10);           // create Button object that attach to pin 7; switch s1
+ezOutput led(39);              // create ezOutput object that attach to pin 9; LED D4
 
 
 void setup()
 {
-  button.setDebounceTime(50); // set debounce time to 50 milliseconds
+  button.setDebounceTime(50);  // set debounce time to 50 milliseconds
 }
 
 
 void loop()
 {
-  button.loop();              // MUST call loop() function first
+  button.loop();               // MUST call loop() function first
 
   if (button.isPressed())
   {

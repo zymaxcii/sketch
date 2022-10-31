@@ -1,4 +1,5 @@
-// led_ez_singleBlinkWithoutDelay.ino
+// led8_ezSingleBlinkNoDelay.ino
+// Blinks an LED without using delay() function
 
 /*
  * Created by ArduinoGetStarted.com
@@ -23,12 +24,12 @@
 
 #include <ezOutput.h>
 
-ezOutput led(39);           // create ezOutput object that attach to pin 3; LED D3
+ezOutput led(39);          // create ezOutput object
                            // it sets pinMode() internally
 
 void setup()
 {
-  led.blink(3000, 1000);     // 500 milliseconds ON, 250 milliseconds OFF
+  led.blink(3000, 500);     // OFF then ON
 }
 
 
@@ -36,4 +37,3 @@ void loop()
 {
   led.loop();              // MUST call the led.loop() function in loop()
 }
-

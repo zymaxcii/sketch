@@ -1,7 +1,7 @@
-// led_pot.ino
+// led8_4ledByPot.ino
 // 4 leds controlled by a potentiometer
-// 25% each
-// uses 8led module
+// A potentiometer with 4 leds divided into 4 25% to light up
+// uses 8 led module
 
 // pot_led_4Lightup.ino
 // led_lightUpByPercent.ino
@@ -10,7 +10,7 @@
 // 4 leds controlled by a potentiometer
 
 // test_pot_leds.ino
-// A potentiometer with 4 leds divided into 4 25% to light up
+
 
 // Boards to run the sketch:
 // my general purpose LED board and a potentiometer

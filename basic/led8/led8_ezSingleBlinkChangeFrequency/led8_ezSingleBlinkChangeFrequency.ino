@@ -1,4 +1,5 @@
-// led_ez_singleBlinkChangeFrequency.ino
+// led_ezSingleBlinkChangeFrequency.ino
+// Blinks an LED with frequency changed according to the state of a button
 
 /*
  * Created by ArduinoGetStarted.com
@@ -13,7 +14,7 @@
      . if button is pressed, blink fast
  * + without using delay() function
  * This is a non-blocking example 
- */
+*/
 
 // Boards to run the sketch:
 // my own 2x8cm pcb 8 leds and 1 switch
@@ -28,8 +29,8 @@
 
 #include <ezOutput.h>                 // ezOutput library
 
-const int BUTTON_PIN = 33;            // switch s1
-ezOutput led(40);                     // create ezOutput object that attach to pin 3; LED D2
+const int BUTTON_PIN = 10;
+ezOutput led(39);                     // create ezOutput object
 
 
 void setup()
@@ -47,11 +48,11 @@ void loop()
   if (buttonState == HIGH)            // button is not pressed
   {
     // parameters: off then on
-    led.blink(1000, 1000);              // 500 milliseconds ON, 500 milliseconds OFF
+    led.blink(1000, 2000);              // OFF then ON
   }
   else
   {
    // button is pressed
-    led.blink(200, 200);              // 200 milliseconds ON, 200 milliseconds OFF
+    led.blink(100, 500);              // OFF then ON
   }
 }

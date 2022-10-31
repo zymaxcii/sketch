@@ -1,13 +1,12 @@
-// led_onOffSwitch.ino
+// led8_onOffBySwitch.ino
 // Turn led on or off with switches
 
-/*
-Adafruit Arduino - Lesson 6. Inputs
-*/
+// Adafruit Arduino - Lesson 6. Inputs
 
-int ledPin = 41;                // LED D1
-int buttonApin = 33;            // switch s1
-int buttonBpin = 32;            // switch s2
+// With the 8 led module and 4 switch module
+int ledPin = 39;
+int buttonApin = 10;
+int buttonBpin = 11;
 byte leds = 0;
 
 
@@ -25,6 +24,7 @@ void loop()
   {
     digitalWrite(ledPin, HIGH);
   }
+  
   //  else
   //  {
   //    digitalWrite(ledPin, LOW);
@@ -35,4 +35,3 @@ void loop()
     digitalWrite(ledPin, LOW);
   }
 }
-

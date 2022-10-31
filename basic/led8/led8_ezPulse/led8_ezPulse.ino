@@ -1,4 +1,5 @@
-// led_ez_pulse.ino
+// led8_ezPulse.ino
+// Create a high pulse when a button is pressed
 
 /*
    Created by ArduinoGetStarted.com
@@ -23,8 +24,8 @@
 #include <ezButton.h>
 #include <ezOutput.h>
 
-ezButton button(33);       // create Button object that attach to pin 2; switch s1
-ezOutput led(41);          // create ezOutput object that attach to pin 3; LED D1
+ezButton button(10);       // create Button object
+ezOutput led(39);          // create ezOutput object
 
 
 void setup()
