@@ -1,7 +1,7 @@
 // max7219_printText.ino
 
 // https://www.makerguides.com/max7219-led-dot-matrix-display-arduino-tutorial/
-
+// 
 
 /* Basic example code for MAX7219 LED dot matrix display with Arduino. More info: https://www.makerguides.com */
 
