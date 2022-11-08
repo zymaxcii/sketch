@@ -1,0 +1,258 @@
+// productionLineLiftArm.ino
+// fail to compile
+
+// Configure the motor drivers
+
+#include "CytronMotorDriver.h"
+
+#define MotorSpeed1 3
+#define MotorDirection1 4
+#define MotorSpeed2 11
+#define MotorDirection2 13
+
+CytronMD motor_lift(PWM_DIR, MotorSpeed1, MotorDirection1);    // Lift motion - full extension time = 12sec (12000ms)
+CytronMD motor_rotate(PWM_DIR, MotorSpeed2, MotorDirection2);  // Rotation motion - full extension time = 19sec (19000ms)
+
+//configure LCD
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27, 20, 4); // set the LCD address to 0x27 for a 16 chars and 2 line display
+
+// Push Switch Controls
+
+int GreenSwitch = 2; //Green switch for up & first rotation motion
+int YellowSwitch = 8; //Yellow switch for second rotation motion
+int BlackSwitch = 7; //Black switch for return position motion
+
+bool first_movement = true;
+bool second_movement = true;
+bool return_movement = false;
+bool engagement = false;
+
+int Step1;
+int Step2;
+int Step3;
+
+int EngageLimit = 10; //LH limit switch on lift arm
+int DisengageLimit = 12; //RH limit switch on lift arm
+
+// The setup routine runs once when you press reset.
+void setup()
+{
+
+  //Start Serial Connection
+  Serial.begin(9600);
+
+  //INPUT/OUTPUT setups
+  pinMode(GreenSwitch, INPUT_PULLUP);
+  pinMode(BlackSwitch, INPUT_PULLUP);
+  pinMode(YellowSwitch, INPUT_PULLUP);
+  pinMode(EngageLimit, INPUT_PULLUP);
+  pinMode(DisengageLimit, INPUT_PULLUP);
+  pinMode(MotorSpeed1, OUTPUT);
+  pinMode(MotorDirection1, OUTPUT);
+  pinMode(MotorSpeed2, OUTPUT);
+  pinMode(MotorDirection2, OUTPUT);
+
+  // initialize the lcd
+  lcd.init();
+  // Print a message to the LCD.
+  digitalWrite(MotorDirection2, HIGH);
+  motor_rotate.setSpeed(255);
+  digitalWrite(MotorDirection1, LOW);
+  motor_lift.setSpeed(-255);
+  lcd.backlight();
+  lcd.setCursor(7, 1);
+  lcd.print("HELLO!");
+  delay(1000);
+  lcd.setCursor(0, 0);
+  lcd.print("My Name is C.R.A.P.");
+  lcd.setCursor(0, 1);
+  lcd.print("The Condenser");
+  lcd.setCursor(0, 2);
+  lcd.print("Rotation And");
+  lcd.setCursor(0, 3);
+  lcd.print("Positioning Robot");
+  delay(3500);
+  lcd.clear();
+  lcd.setCursor(3, 0);
+  lcd.print("C.R.A.P. Robot");
+  lcd.setCursor(0, 2);
+  lcd.print("Wait for lift to");
+  lcd.setCursor(0, 3);
+  lcd.print("Setup");
+
+  //wait until lift fully reset)
+
+  delay(15000);
+  first_movement = false;
+  second_movement = false;
+  return_movement = true;
+  lcd.clear();
+  lcd.setCursor(3, 0);
+  lcd.print("C.R.A.P. Robot");
+  lcd.setCursor(0, 2);
+  lcd.print("Engage Unit to");
+  lcd.setCursor(0, 3);
+  lcd.print("Begin");
+}
+
+
+
+// The loop routine runs over and over again forever.
+void loop() {
+
+  {
+    switch (Step1)
+    {
+      case LOW:
+        if (digitalRead(GreenSwitch) == LOW && (EngageLimit) != HIGH && (first_movement) == false) { //Do nothing until unit is fully engaged
+          digitalWrite(MotorDirection2, LOW);
+          motor_rotate.setSpeed(0);
+          digitalWrite(MotorDirection1, LOW);
+          motor_lift.setSpeed(0);
+          digitalRead(GreenSwitch);
+          lcd.clear();
+          lcd.setCursor(3, 0);
+          lcd.print("C.R.A.P. Robot");
+          lcd.setCursor(0, 2);
+          lcd.print("Engage Unit to");
+          lcd.setCursor(0, 3);
+          lcd.print("Begin");
+          engagement = false;
+          while (digitalRead(EngageLimit) == LOW) {
+            digitalWrite(MotorDirection2, LOW);
+            motor_rotate.setSpeed(0);
+            digitalWrite(MotorDirection1, LOW);
+            motor_lift.setSpeed(0);
+            digitalRead(GreenSwitch);
+          }
+        }
+      case HIGH:
+        if (digitalRead(EngageLimit) == HIGH && (first_movement) == false) { //Wait until Green switch pressed
+          lcd.clear();
+          lcd.setCursor(3, 0);
+          lcd.print("C.R.A.P. Robot");
+          lcd.setCursor(0, 2);
+          lcd.print("Press Green Switch");
+          lcd.setCursor(0, 3);
+          lcd.print("to Begin");
+          engagement = true;
+          while (digitalRead(EngageLimit) == HIGH && (first_movement) == false) {
+            if (digitalRead(GreenSwitch) == HIGH) {
+              lcd.clear();
+              lcd.setCursor(3, 0);
+              lcd.print("C.R.A.P. Robot");
+              lcd.setCursor(0, 2);
+              lcd.print("Lifting in Progress");
+              digitalWrite(MotorDirection1, HIGH);
+              motor_lift.setSpeed(255);
+              delay(7000); //wait until lifting complete
+              digitalWrite(MotorDirection1, LOW); //stop lifting
+              motor_lift.setSpeed(0);
+              digitalWrite(MotorDirection2, LOW); //start rotation sequence
+              motor_rotate.setSpeed(-255);
+              delay(9500);
+              digitalWrite(MotorDirection2, LOW); //stop rotaion
+              motor_rotate.setSpeed(0);
+              delay(500);
+              first_movement = true;
+              digitalRead (second_movement);
+              lcd.clear();
+              lcd.setCursor(3, 0);
+              lcd.print("C.R.A.P. Robot");
+              lcd.setCursor(0, 2);
+              lcd.print("Press Yellow Button");
+              lcd.setCursor(0, 3);
+              lcd.print("to Complete Rotation");
+            }
+          }
+        }
+        break;
+    }
+  }
+  {
+    switch (Step2)
+    {
+      case LOW:
+        if (digitalRead(EngageLimit) == HIGH && (second_movement) == false && (YellowSwitch) == LOW) { //Wait until Yellow switch pressed --> This LOW code doesnt appear to work...
+          lcd.clear();
+          while (digitalRead(EngageLimit) == HIGH) {
+            lcd.setCursor(3, 0);
+            lcd.print("C.R.A.P. Robot");
+            lcd.setCursor(0, 2);
+            lcd.print("Press Yellow Button");
+            lcd.setCursor(0, 3);
+            lcd.print("to Complete Rotation");
+            digitalRead (YellowSwitch);
+          }
+        }
+      case HIGH:
+        if (digitalRead(YellowSwitch) == HIGH && (second_movement) == false && (first_movement) == true) { //When Yellow button pressed, rotation completes
+          lcd.clear();
+          lcd.setCursor(3, 0);
+          lcd.print("C.R.A.P. Robot");
+          lcd.setCursor(0, 2);
+          lcd.print("Lifting in Progress");
+          digitalWrite(MotorDirection2, LOW);
+          motor_rotate.setSpeed(-255);
+          delay(3000);
+          digitalWrite(MotorDirection1, LOW);
+          motor_lift.setSpeed(-255);
+          delay(7500);
+          second_movement = true;
+          return_movement = false;
+          digitalWrite(MotorDirection2, LOW);
+          motor_rotate.setSpeed(0);
+          digitalWrite(MotorDirection1, LOW);
+          motor_lift.setSpeed(0);
+          lcd.clear();
+          lcd.setCursor(3, 0);
+          lcd.print("C.R.A.P. Robot");
+          lcd.setCursor(0, 2);
+          lcd.print("Remove Unit onto");
+          lcd.setCursor(0, 3);
+          lcd.print("Test Trolley");
+          digitalRead (return_movement);
+        }
+        break;
+    }
+  }
+  {
+    switch (Step3)
+    {
+      case LOW:
+        if (digitalRead(DisengageLimit) == LOW && (return_movement) == false) {
+          lcd.clear();
+          while (digitalRead(BlackSwitch) == LOW) {
+            lcd.setCursor(3, 0);
+            lcd.print("C.R.A.P. Robot");
+            lcd.setCursor(0, 2);
+            lcd.print("Press Black Button");
+            lcd.setCursor(0, 3);
+            lcd.print("to Return to Start");
+            digitalRead (DisengageLimit);
+            engagement = false;
+          }
+        }
+
+      case HIGH:
+        if (digitalRead(BlackSwitch) == HIGH && (engagement) == false && (return_movement) == false) {   //Return Switch after full lift and rotation
+          lcd.clear();
+          lcd.setCursor(3, 0);
+          lcd.print("C.R.A.P. Robot");
+          lcd.setCursor(0, 2);
+          lcd.print("Lifting in Progress");
+          digitalWrite(MotorDirection2, HIGH);
+          motor_rotate.setSpeed(255);
+          digitalWrite(MotorDirection1, LOW);
+          motor_lift.setSpeed(-255);
+          delay(19500);
+          first_movement = false;
+          second_movement = false;
+          return_movement = true;
+        }
+      default:
+        ;
+    }
+  }
+}
