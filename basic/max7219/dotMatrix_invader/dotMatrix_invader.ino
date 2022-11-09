@@ -14,8 +14,13 @@
  no special digital pin requirement: DIN,CS,CLK
 */
 
+//                       DIN, CLK, CS
+LedControl lc = LedControl(11,13,10,1); // 1 unit 
+
+
+
 // my standard connection to match physical pins
-LedControl lc=LedControl(8, 10, 9, 1);
+// LedControl lc=LedControl(8, 10, 9, 1);
 // last parameter: 1 display only
 
 int a[5], k=0, rno=0;

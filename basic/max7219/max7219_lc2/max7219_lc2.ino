@@ -6,7 +6,7 @@
 #include "LedControl.h"                  // need the library
 
 //                       DIN, CLK, CS
-LedControl lc = LedControl(11,13,10,4);  // 1 unit 
+LedControl lc = LedControl(11,13,10,1);  // 1 unit 
 
 // pin 12 is connected to the MAX7219 pin 1
 // pin 11 is connected to the CLK pin 13

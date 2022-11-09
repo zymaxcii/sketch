@@ -12,7 +12,7 @@ LedControl mydisplay = LedControl(11,13,10,1); // 1 unit
 void setup()
 {
   mydisplay.shutdown(0, false);         // turns on display
-  mydisplay.setIntensity(0, 15);        // 15 = brightest
+  mydisplay.setIntensity(0, 1);        // 15 = brightest
   
   mydisplay.setDigit(0, 0, 9, false);
   mydisplay.setDigit(0, 1, 8, false);

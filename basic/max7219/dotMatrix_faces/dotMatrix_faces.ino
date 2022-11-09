@@ -18,8 +18,12 @@
  no special digital pin requirement: DIN,CS,CLK
 */
 
+//                       DIN, CLK, CS
+LedControl lc = LedControl(11,13,10,1); // 1 unit 
+
+
 // my standard connection to match physical pins
-LedControl lc=LedControl(8, 10, 9, 1);
+// LedControl lc=LedControl(8, 10, 9, 1);
 // last parameter: 1 display only
 
 // delay time between faces
@@ -69,7 +73,7 @@ void setup()
 {
   lc.shutdown(0, false);
   // Set brightness to a medium value
-  lc.setIntensity(0, 8);
+  lc.setIntensity(0, 1);
   // Clear the display
   lc.clearDisplay(0);  
 }

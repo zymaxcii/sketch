@@ -16,7 +16,7 @@ void setup()
 {
   // the zero refers to the MAX7219 number, it is zero for 1 chip
   lc.shutdown(0,false);                  // turn off power saving, enables display
-  lc.setIntensity(0,8);                  // sets brightness (0~15 possible values)
+  lc.setIntensity(0,1);                  // sets brightness (0~15 possible values)
   lc.clearDisplay(0);                    // clear screen
 }
 

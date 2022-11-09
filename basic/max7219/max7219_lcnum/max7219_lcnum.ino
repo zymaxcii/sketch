@@ -8,7 +8,7 @@
 #include "LedControl.h"               //  need the library
 
 //                       DIN, CLK, CS
-LedControl lc = LedControl(11,13,10,4); // 1 unit 
+LedControl lc = LedControl(11,13,10,1); // 1 unit 
 
 // pin 12 is connected to the MAX7219 pin 1
 // pin 11 is connected to the CLK pin 13
@@ -20,7 +20,7 @@ void setup()
 {
   // the zero refers to the MAX7219 number, it is zero for 1 chip
   lc.shutdown(0, false);                 // turn off power saving, enables display
-  lc.setIntensity(0, 8);                 // sets brightness (0~15 possible values)
+  lc.setIntensity(0, 1);                 // sets brightness (0~15 possible values)
   lc.clearDisplay(0);                    // clear screen
 }
 
