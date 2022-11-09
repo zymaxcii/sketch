@@ -1,6 +1,7 @@
 // max7219_clock1.ino
 // using DS3231 RTC and max7219
 // cannot figure out how many max7219 used
+// Not using any MAX7219 library?
 
 //////////////// Code by Digital Electronics Circuits Lab //////////////////////////////
 
