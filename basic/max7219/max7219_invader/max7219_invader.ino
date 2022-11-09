@@ -1,8 +1,16 @@
-// dotMatrix_invader.ino
+// max7219_invader.ino
 // A0 is to detect movement of backpack
 
 // invader.ino
 // https://maker.pro/arduino/projects/dot-matrix-display-hackpack
+
+// My standard hardware setup
+// DIN D11
+// CLK D13
+// CS  D10
+// Using hardware SPI DIN and CLK are fixed at D11 and D13 respectively
+// So the only choice to make is CS to D10
+
 
 #include "LedControl.h"
 

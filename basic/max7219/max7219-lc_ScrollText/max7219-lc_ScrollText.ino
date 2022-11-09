@@ -1,22 +1,30 @@
-// max7219_lc3.ino
-// fail to compile
+// max7219-lc_ScrollText.ino
+// Scroll text using LedControl library
 // https://tronixstuff.com/2013/10/11/tutorial-arduino-max7219-led-display-driver-ic/
 
 // based on an orginal sketch by Arduino forum member "danigom"
 // http://forum.arduino.cc/index.php?action=profile;u=188950
 
+// My standard hardware setup
+// DIN D11
+// CLK D13
+// CS  D10
+// Using hardware SPI DIN and CLK are fixed at D11 and D13 respectively
+// So the only choice to make is CS to D10
+
+
 #include <avr/pgmspace.h>
 #include <LedControl.h>
 
-const int numDevices = 1;          // number of MAX7219s used
+const int numDevices = 4;          // number of MAX7219s used
 const long scrollDelay = 75;       // adjust scrolling speed
 
 unsigned long bufferLong [14] = {0}; 
 
 //                       DIN, CLK, CS
-LedControl lc = LedControl(11,13,10,numDevices);      // 2 unit 
+LedControl lc = LedControl(11,13,10,numDevices);      // 4 units 
 
-prog_uchar scrollText[] PROGMEM =
+const unsigned char scrollText[] PROGMEM =
 {
     "  THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG 1234567890 the quick brown fox jumped over the lazy dog   "
 };
@@ -24,10 +32,10 @@ prog_uchar scrollText[] PROGMEM =
 
 void setup()
 {
-  for (int x=0; x<numDevices; x++)
+  for (int x = 0; x < numDevices; x++)
   {
     lc.shutdown(x, false);       // The MAX72XX is in power-saving mode on startup
-    lc.setIntensity(x, 8);       // Set the brightness to default value
+    lc.setIntensity(x, 1);       // Set the brightness to default value
     lc.clearDisplay(x);          // clear the display
   }
 }
@@ -39,7 +47,9 @@ void loop()
     scrollFont();
 }
 
-prog_uchar font5x7 [] PROGMEM = 
+// older IDE
+// prog_uchar font5x7 [] PROGMEM = 
+const unsigned char font5x7 [] PROGMEM =
 {
   // Numeric Font Matrix (Arranged as 7x font data + 1x kerning data)
   B00000000,	// Space (Char 0x20)
@@ -919,7 +929,7 @@ void scrollFont()
 
 
 // Scroll Message
-void scrollMessage(prog_uchar * messageString)
+void scrollMessage(const unsigned char * messageString)
 {
   int counter = 0;
   int myChar = 0;
@@ -987,18 +997,18 @@ void rotateBufferLong()
 // Display Buffer on LED matrix
 void printBufferLong()
 {
-  for (int a=0;a<7;a++)
+  for (int a = 0; a < 7; a++)
   {
     // Loop 7 times for a 5x7 font
-    unsigned long x = bufferLong [a*2+1];   // Get high buffer entry
-    byte y = x;                             // Mask off first character
-    lc.setRow(3,a,y);                       // Send row to relevent MAX7219 chip
-    x = bufferLong [a*2];                   // Get low buffer entry
-    y = (x>>24);                            // Mask off second character
-    lc.setRow(2,a,y);                       // Send row to relevent MAX7219 chip
-    y = (x>>16);                            // Mask off third character
-    lc.setRow(1,a,y);                       // Send row to relevent MAX7219 chip
-    y = (x>>8);                             // Mask off forth character
-    lc.setRow(0,a,y);                       // Send row to relevent MAX7219 chip
+    unsigned long x = bufferLong [a*2+1];     // Get high buffer entry
+    byte y = x;                               // Mask off first character
+    lc.setRow(3, a, y);                       // Send row to relevent MAX7219 chip
+    x = bufferLong [a*2];                     // Get low buffer entry
+    y = (x>>24);                              // Mask off second character
+    lc.setRow(2, a, y);                       // Send row to relevent MAX7219 chip
+    y = (x>>16);                              // Mask off third character
+    lc.setRow(1, a, y);                       // Send row to relevent MAX7219 chip
+    y = (x>>8);                               // Mask off forth character
+    lc.setRow(0, a, y);                       // Send row to relevent MAX7219 chip
   }
 }
