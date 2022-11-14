@@ -1,19 +1,25 @@
-// eeprom_read.ino
+// eeprom_write.ino
+// Write a byte to eeprom and then read back
 // http://electronoobs.com/eng_arduino_tut167.php
 
-#include <EEPROM.h> //include the library
 
-int brightness;         //Create an empty integer variable
+#include <EEPROM.h>
 
-void setup() {
-  Serial.begin(9600); 	//Start serial monitor 
-  EEPROM.write(0, 1);  // write value 25 on address 0
-  //Value must be between 0 and 255
+int brightness;
+
+
+void setup()
+{
+  Serial.begin(9600); 
+  EEPROM.write(0, 2);      // write a byte on address 0
+                            // Value must be between 0 and 255
 }
 
-void loop() {
-  // read a byte from the address "0" of the EEPROM
+
+void loop()
+{
+  // read a byte from address "0" of EEPROM
   brightness = EEPROM.read(0);
-  Serial.println(brightness);	//Print it to the monitor
+  Serial.println(brightness);
   delay(500);
 }
