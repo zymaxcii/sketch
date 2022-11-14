@@ -7,7 +7,7 @@ int brightness;         //Create an empty integer variable
 
 void setup() {
   Serial.begin(9600); 	//Start serial monitor 
-  EEPROM.write(0, 25);  // write value 25 on address 0
+  EEPROM.write(0, 1);  // write value 25 on address 0
   //Value must be between 0 and 255
 }
 

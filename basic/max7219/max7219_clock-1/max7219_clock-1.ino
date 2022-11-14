@@ -2,6 +2,7 @@
 // using DS3231 RTC and max7219
 // cannot figure out how many max7219 used
 // Not using any MAX7219 library?
+// not working yet
 
 //////////////// Code by Digital Electronics Circuits Lab //////////////////////////////
 
@@ -13,14 +14,21 @@
  * Visit my website www.digitaleclab.com for more projects and tutorials.
 */
 
+// My standard hardware setup
+// DIN D11
+// CLK D13
+// CS  D10
+// Using hardware SPI DIN and CLK are fixed at D11 and D13 respectively
+// So the only choice to make is CS to D10
+
 
 #include <RTClib.h>
 
 RTC_DS3231 rtc;
 
-#define MAX7219_DIN 12
-#define MAX7219_CS  11
-#define MAX7219_SCK 10
+#define MAX7219_DIN 11
+#define MAX7219_CS  10
+#define MAX7219_SCK 13
 
 #define DISPLAY_MODE 0x0F
 #define SDN_MODE     0x0C
@@ -55,7 +63,7 @@ void initialise()
   out(DISPLAY_MODE, 0x00, DISPLAY_MODE, 0x00);
   out(SDN_MODE, 0x01, SDN_MODE, 0x01);
   out(DECODE_MODE, 0xff, DECODE_MODE, 0xff);
-  out(INTENSITY, 0x0f, INTENSITY, 0x0f);              // change the hex values to adjust brightness. 0x00 is minimum and 0x0f is maximum.
+  out(INTENSITY, 0x0f, INTENSITY, 0x01);              // change the hex values to adjust brightness. 0x00 is minimum and 0x0f is maximum.
   out(SCAN_LIMIT, 0x07, SCAN_LIMIT, 0x07);
 }
 

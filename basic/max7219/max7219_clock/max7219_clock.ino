@@ -1,6 +1,10 @@
 // max7219_clock.ino
 // matrix_Clock.ino
 // using 4 matrix display and DS3231 RTC
+// uses Real Time Clock Module Ds3231 and prints time in led display
+// Hold Two Buttons together for time setting
+// Use one button for increment and another to Set
+// Can also set time via serial monitor but still cannot figure out how it works
 
 // https://drive.google.com/file/d/1Nz4apvgg7oXS3Eafj7kWprBKA1WIexfp/view
 // https://abidcg.blogspot.com/2019/05/hello-welcome-to-abid-cg-creator-blog.html
@@ -10,6 +14,15 @@ Name:    ArduinoMatrixClock.ino
 Created:  12.06.2018  20:56:49 
 Author:  mylms.cz
 */
+
+// My standard hardware setup
+// DIN D11
+// CLK D13
+// CS  D10
+// Using hardware SPI DIN and CLK are fixed at D11 and D13 respectively
+// So the only choice to make is CS to D10
+
+
 
 /*
 https://www.mylms.cz/text-arduino-hod iny-s-maticovym-displejem/
@@ -32,7 +45,11 @@ GND common for all modules
 
 // Matrix display
 byte devices = 4;
-LedControl lc = LedControl(4, 5,6, devices);                  // DIN, CLK, CS, count of displays
+
+//                       DIN, CLK, CS
+LedControl lc = LedControl(11, 13, 10, devices); // 1 unit 
+
+// LedControl lc = LedControl(4, 5,6, devices);                  // DIN, CLK, CS, count of displays
 
 //RTC DS3231
 #define DS3231_I2C_ADDRESS 0x68                                 // address of DS3231 module
@@ -167,7 +184,8 @@ void setup()
   pinMode(BTN1, INPUT_PULLUP);
   pinMode(BTN2, INPUT_PULLUP);
 
-  bright = EEPROM.read(0);     // load light intensity from EEPROM
+  bright = 1;                     // temp debug setting
+  // bright = EEPROM.read(0);     // load light intensity from EEPROM
   delay(10);
 
   // Set all displays
@@ -179,8 +197,8 @@ void setup()
   }
 
   // Init time setting
-  //SetRtc(15, 41, 8, 6, 30, 3, 18);      //sec, min, hour, dayOfWeek, dayOfMonth, month, year
-  //Intro();  // show LMS!
+  // SetRtc(00, 17, 11, 6, 11, 11, 22);      // sec, min, hour, dayOfWeek, dayOfMonth, month, year
+  Intro();  // show LMS!
 }
 
 
@@ -486,6 +504,7 @@ byte bcdToDec(byte val) {
 }
 
 
+// Don't understand this code yet
 // Serial communication with PC
 // set time via PC
 void SerialComm()
