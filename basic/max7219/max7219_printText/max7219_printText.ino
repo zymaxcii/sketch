@@ -5,6 +5,14 @@
 
 /* Basic example code for MAX7219 LED dot matrix display with Arduino. More info: https://www.makerguides.com */
 
+// My standard hardware setup
+// DIN D11
+// CLK D13
+// CS  D10
+// Using hardware SPI DIN and CLK are fixed at D11 and D13 respectively
+// So the only choice to make is CS to D10
+
+
 // Include the required Arduino libraries:
 #include <MD_Parola.h>
 #include <MD_MAX72xx.h>
