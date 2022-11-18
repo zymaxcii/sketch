@@ -1,5 +1,6 @@
 // max7219_demo3.ino
 // 
+// Can compile with or without uiswitch library
 
 // https://miliohm.com/how-to-use-max7219-led-matrix-running-text-display-sensor-data-add-more-led-matrix-with-arduino/
 // https://www.youtube.com/watch?v=TaqSaYI0aLI

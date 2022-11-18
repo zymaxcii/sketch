@@ -1,5 +1,7 @@
-// max7219-dht22.ino
-//
+// max7219-dht11.ino
+// Display temperature and humidity reading obtained from a DHT11 sensor
+// Number of max7219 devices can be set before compilation
+// Also can compile with or without uiswitch library
 
 // https://miliohm.com/how-to-use-max7219-led-matrix-running-text-display-sensor-data-add-more-led-matrix-with-arduino/
 // https://www.youtube.com/watch?v=TaqSaYI0aLI
@@ -19,7 +21,7 @@
 // scroll direction switch D2
 // invert text switch D3
 //
-// DHT22 D4
+// DHT211 D6
 
 
 #include <MD_Parola.h>
@@ -27,8 +29,8 @@
 #include <SPI.h>
 #include "DHT.h"
 
-#define DHTPIN 4
-#define DHTTYPE DHT11   // DHT 11
+#define DHTPIN 6
+#define DHTTYPE DHT11          // DHT 11
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -37,7 +39,7 @@ float t;
 char text;
 
 // set to 1 if we are implementing the user interface pot, switch, etc
-#define USE_UI_CONTROL 0
+#define USE_UI_CONTROL 1
 
 #if USE_UI_CONTROL
 #include <MD_UISwitch.h>

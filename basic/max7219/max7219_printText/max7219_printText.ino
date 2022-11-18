@@ -20,7 +20,7 @@
 
 // Define hardware type, size, and output pins:
 #define HARDWARE_TYPE MD_MAX72XX::FC16_HW
-#define MAX_DEVICES 1
+#define MAX_DEVICES 4
 #define CS_PIN 10
 
 // Create a new instance of the MD_Parola class with hardware SPI connection:
