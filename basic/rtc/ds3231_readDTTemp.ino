@@ -1,18 +1,38 @@
 // ds3231_readDTTemp.ino
+// Read date, time and temperature
 // https://lastminuteengineers.com/ds3231-rtc-arduino-tutorial/
+
+// My standard hardware setup
+// ds3231 rtc module:
+// A4 RTC module, pin SDA
+// A5 RTC module, pin SCL
+// VCC
+// GND
 
 
 #include "Arduino.h"
 #include "uRTCLib.h"
 
+
 // uRTCLib rtc;
 uRTCLib rtc(0x68);
 
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+char daysOfTheWeek[7][12] =
+{
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday"
+};
 
-void setup() {
+
+void setup()
+{
   Serial.begin(9600);
-  delay(3000); // wait for console opening
+  delay(3000);                        // wait for console opening
 
   URTCLIB_WIRE.begin();
 
@@ -24,7 +44,9 @@ void setup() {
   // set day of week (1=Sunday, 7=Saturday)
 }
 
-void loop() {
+
+void loop()
+{
   rtc.refresh();
 
   Serial.print("Current Date & Time: ");

@@ -1,5 +1,16 @@
 // ds3231_urtclibEeprom.ino
+// Write and read back to internal eeprom of ds3231 rtc module
+// Message displayed in serial monitor
+// can run on my max7219 setup which has a ds3231 rtc module in it
 // https://lastminuteengineers.com/ds3231-rtc-arduino-tutorial/
+
+// My standard hardware setup
+// ds3231 rtc module:
+// A4 RTC module, pin SDA
+// A5 RTC module, pin SCL
+// VCC
+// GND
+
 
 #include "Arduino.h"
 #include "Wire.h"
@@ -8,7 +19,9 @@
 // uEEPROMLib eeprom;
 uEEPROMLib eeprom(0x57);
 
-void setup() {
+
+void setup()
+{
   Serial.begin(9600);
   delay(2500);
 
@@ -23,30 +36,43 @@ void setup() {
   Serial.println("Writing into memory...");
   
   // Write single char at address 
-  if (!eeprom.eeprom_write(8, chartmp)) {
-  Serial.println("Failed to store char.");
-  } else {
-  Serial.println("char was stored correctly.");
+  if (!eeprom.eeprom_write(8, chartmp))
+  {
+    Serial.println("Failed to store char.");
+  }
+  else
+  {
+    Serial.println("char was stored correctly.");
   }
 
-  // Write a long string of chars FROM position 33 which isn't aligned to the 32 byte pages of the EEPROM
-  if (!eeprom.eeprom_write(33, (byte *) c_string, strlen(c_string))) {
-  Serial.println("Failed to store string.");
-  } else {
-  Serial.println("string was stored correctly.");
+  // Write a long string of chars FROM position 33 which
+  // isn't aligned to the 32 byte pages of the EEPROM
+  if (!eeprom.eeprom_write(33, (byte *) c_string, strlen(c_string)))
+  {
+    Serial.println("Failed to store string.");
+  }
+  else
+  {
+    Serial.println("string was stored correctly.");
   }
 
   // Write an int
-  if (!eeprom.eeprom_write(0, inttmp)) {
+  if (!eeprom.eeprom_write(0, inttmp))
+  {
     Serial.println("Failed to store int.");
-  } else {
+  }
+  else
+  {
     Serial.println("int was stored correctly.");
   }
 
   // write a float
-  if (!eeprom.eeprom_write(4, floattmp)) {
+  if (!eeprom.eeprom_write(4, floattmp))
+  {
     Serial.println("Failed to store float.");
-  } else {
+  }
+  else
+  {
     Serial.println("float was stored correctly.");
   }
 
@@ -72,5 +98,4 @@ void setup() {
   Serial.println();
 }
 
-void loop() {
-}
+void loop() { }
