@@ -12,7 +12,7 @@
 
 // Define hardware type, size, and output pins:
 #define HARDWARE_TYPE MD_MAX72XX::FC16_HW
-#define MAX_DEVICES 1
+#define MAX_DEVICES 12
 #define CS_PIN 10
 
 // Create a new instance of the MD_Parola class with hardware SPI connection:
@@ -32,7 +32,7 @@ void setup()
   myDisplay.setIntensity(0);
   // Clear the display:
   myDisplay.displayClear();
-  myDisplay.displayText("Scrolling text", PA_CENTER, 100, 0, PA_SCROLL_LEFT, PA_SCROLL_LEFT);
+  myDisplay.displayText("Singapore welcomes you home", PA_CENTER, 100, 0, PA_SCROLL_LEFT, PA_SCROLL_LEFT);
 }
 
 

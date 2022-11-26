@@ -18,7 +18,7 @@
 #include <avr/pgmspace.h>
 #include <LedControl.h>
 
-const int numDevices = 4;          // number of MAX7219s used
+const int numDevices = 12;          // number of MAX7219s used
 const long scrollDelay = 150;       // adjust scrolling speed, 75
 
 unsigned long bufferLong [14] = {0}; 
