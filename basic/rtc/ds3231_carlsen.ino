@@ -1,4 +1,6 @@
 // ds3231_carlsen.ino
+// Set date, time optionally and print date, time to serial monitor
+// Why no library added?
 // https://howtomechatronics.com/tutorials/arduino/arduino-ds3231-real-time-clock-tutorial/
 
 
@@ -6,22 +8,21 @@
 
 void setup()
 {
-  // Setup Serial connection
-  Serial.begin(115200);
+  Serial.begin(9600);
   // Uncomment the next line if you are using an Arduino Leonardo
-  //while (!Serial) {}
+  // while (!Serial) {}
   
   // Initialize the rtc object
   rtc.begin();
   
   // The following lines can be uncommented to set the date and time
-  //rtc.setDOW(WEDNESDAY);     // Set Day-of-Week to SUNDAY
-  //rtc.setTime(12, 0, 0);     // Set the time to 12:00:00 (24hr format)
-  //rtc.setDate(1, 1, 2014);   // Set the date to January 1st, 2014
+  // rtc.setDOW(WEDNESDAY);     // Set Day-of-Week to SUNDAY
+  // rtc.setTime(12, 0, 0);     // Set the time to 12:00:00 (24hr format)
+  // rtc.setDate(1, 1, 2014);   // Set the date to January 1st, 2014
 }
 
-// Code from the Demo Example of the DS3231 Library
 
+// Code from the Demo Example of the DS3231 Library
 void loop()
 {
   // Send Day-of-Week
@@ -38,4 +39,3 @@ void loop()
   // Wait one second before repeating
   delay (1000);
 }
-

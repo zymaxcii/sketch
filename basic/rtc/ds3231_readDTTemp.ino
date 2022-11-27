@@ -1,5 +1,5 @@
 // ds3231_readDTTemp.ino
-// Read date, time and temperature
+// Read date, time and temperature using uRTCLib library
 // https://lastminuteengineers.com/ds3231-rtc-arduino-tutorial/
 
 // My standard hardware setup
@@ -68,7 +68,7 @@ void loop()
 
   Serial.print("Temperature: ");
   Serial.print(rtc.temp()  / 100);
-  Serial.print("\xC2\xB0");   //shows degrees character
+  Serial.print("\xC2\xB0");          // shows degrees character
   Serial.println("C");
 
   Serial.println();
