@@ -2,7 +2,11 @@
 // using DS3231 RTC and max7219
 // cannot figure out how many max7219 used
 // Not using any MAX7219 library?
+<<<<<<< Updated upstream
 // not working yet
+=======
+// rtc has built-in temperature sensor?
+>>>>>>> Stashed changes
 
 //////////////// Code by Digital Electronics Circuits Lab //////////////////////////////
 
@@ -48,8 +52,8 @@ void setup()
   
   if (rtc.lostPower())
   {
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));   // to set current date and time from PC
-    // rtc.adjust(DateTime(YYYY, MM, DD, hh, mm, ss)) // use this line to set time and date manually
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));       // to set current date and time from PC
+    // rtc.adjust(DateTime(YYYY, MM, DD, hh, mm, ss))     // use this line to set time and date manually
   }
 }
 
@@ -60,11 +64,19 @@ void initialise()
   pinMode(MAX7219_DIN, OUTPUT);
   pinMode(MAX7219_CS, OUTPUT);
   pinMode(MAX7219_SCK, OUTPUT);
+  
   out(DISPLAY_MODE, 0x00, DISPLAY_MODE, 0x00);
+<<<<<<< Updated upstream
   out(SDN_MODE, 0x01, SDN_MODE, 0x01);
   out(DECODE_MODE, 0xff, DECODE_MODE, 0xff);
   out(INTENSITY, 0x0f, INTENSITY, 0x01);              // change the hex values to adjust brightness. 0x00 is minimum and 0x0f is maximum.
   out(SCAN_LIMIT, 0x07, SCAN_LIMIT, 0x07);
+=======
+  out(SDN_MODE,     0x01, SDN_MODE, 0x01);
+  out(DECODE_MODE,  0xff, DECODE_MODE, 0xff);
+  out(INTENSITY,    0x0f, INTENSITY, 0x0f);     // brightness. 0x00 is minimum and 0x0f is maximum.
+  out(SCAN_LIMIT,   0x07, SCAN_LIMIT, 0x07);
+>>>>>>> Stashed changes
 }
 
 
@@ -94,34 +106,46 @@ void loop()
     my_str[1] = now.hour() % 10;
   }
   
-  if (now.minute() < 10) {
+  if (now.minute() < 10)
+  {
     my_str[2] = 0;
     my_str[3] = now.minute();
-  } else {
+  }
+  else
+  {
     my_str[2] = now.minute() / 10;
     my_str[3] = now.minute() % 10;
   }
 
-  if (now.second() < 10) {
+  if (now.second() < 10)
+  {
     my_str[4] = 0;
     my_str[5] = now.second();
-  } else {
+  }
+  else
+  {
     my_str[4] = now.second() / 10;
     my_str[5] = now.second() % 10;
   }
 
-  if (now.day() < 10) {
+  if (now.day() < 10)
+  {
     my_str[6] = 0;
     my_str[7] = now.day();
-  } else {
+  }
+  else
+  {
     my_str[6] = now.day() / 10;
     my_str[7] = now.day() % 10;
   }
   
-  if (now.month() < 10) {
+  if (now.month() < 10)
+  {
     my_str[8] = 0;
     my_str[9] = now.month();
-  } else {
+  }
+  else
+  {
     my_str[8] = now.month() / 10;
     my_str[9] = now.month() % 10;
   }
@@ -153,30 +177,39 @@ int digits(int x)
     case 0:
       digit_code = 0x00;
       break;
+  
     case 1:
       digit_code = 0x01;
       break;
+    
     case 2:
       digit_code = 0x02;
       break;
+    
     case 3:
       digit_code = 0x03;
       break;
+    
     case 4:
       digit_code = 0x04;
       break;
+    
     case 5:
       digit_code = 0x05;
       break;
+    
     case 6:
       digit_code = 0x06;
       break;
+    
     case 7:
       digit_code = 0x07;
       break;
+    
     case 8:
       digit_code = 0x08;
       break;
+    
     case 9:
       digit_code = 0x09;
       break;

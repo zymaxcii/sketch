@@ -1,5 +1,9 @@
 // max7219_lcnum2.ino
+<<<<<<< Updated upstream
 // Work on max7219 8-digit 7-segment display
+=======
+// This code will work correctly on max7219-based 4-digit display
+>>>>>>> Stashed changes
 
 // https://www.pjrc.com/teensy/td_libs_LedControl.html
 

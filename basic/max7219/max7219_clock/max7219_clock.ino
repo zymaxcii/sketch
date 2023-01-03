@@ -29,9 +29,11 @@ https://www.mylms.cz/text-arduino-hod iny-s-maticovym-displejem/
 
 D2 BTN 1 (set internal_pullup)
 D3 BTN 2 (set internal_pullup)
+
 D4 matrix display, pin DIN
 D5 matrix display, pin CLK
 D6 matrix display, pin CS
+
 A4 RTC module, pin SDA
 A5 RTC module, pin SCL
 GND common for all modules
@@ -45,21 +47,25 @@ GND common for all modules
 
 // Matrix display
 byte devices = 4;
+<<<<<<< Updated upstream
 
 //                       DIN, CLK, CS
 LedControl lc = LedControl(11, 13, 10, devices); // 1 unit 
 
 // LedControl lc = LedControl(4, 5,6, devices);                  // DIN, CLK, CS, count of displays
+=======
+LedControl lc = LedControl(4, 5, 6, devices);                   // DIN, CLK, CS, count of displays
+>>>>>>> Stashed changes
 
-//RTC DS3231
+// RTC DS3231
 #define DS3231_I2C_ADDRESS 0x68                                 // address of DS3231 module
 byte second, minute, hour, dayOfWeek, dayOfMonth, month, year;  // global variables
 
-//Timing
+// Timing
 unsigned long presentTime;
 unsigned long displayTime;                                      // drawing
 
-//IO
+// IO
 #define BTN1 2
 #define BTN2 3
 
@@ -180,7 +186,7 @@ void setup()
   Wire.begin();                // start I2C communication
   Serial.begin(9600);
 
-  //IO
+  // IO
   pinMode(BTN1, INPUT_PULLUP);
   pinMode(BTN2, INPUT_PULLUP);
 
@@ -191,7 +197,7 @@ void setup()
   // Set all displays
   for (byte address = 0; address < devices; address++)
   {
-    lc.shutdown(address, false);       // powersaving
+    lc.shutdown(address, false);       // power saving
     lc.setIntensity(address, bright);  // set light intensity 0 - min, 15 - max
     lc.clearDisplay(address);          // clear display
   }
@@ -218,7 +224,7 @@ void loop()
     if (presentTime - displayTime >= 500)
     {
       displayTime = presentTime;
-      GetRtc();    // get actual time
+      GetRtc();     // get actual time
       WriteTime();  // write actual time to matrix display
     }
 
@@ -226,18 +232,17 @@ void loop()
     {
       delay(20);
       systemState = 1;
-      // go to "pre"menu
+      // go to "pre" menu
     }
     break;
 
   case 1:
     if (presentInput1 && presentInput2)
     {
-           delay(20);
-       systemState = 2;             // Go to menu
-      
+       delay(20);
+       systemState = 2;              // Go to menu
        DrawSymbol(1, 0, 0);          // space
-       DrawSymbol(0, 72 - 32, 0);  // H
+       DrawSymbol(0, 72 - 32, 0);    // H
     }
     break;
 
@@ -250,26 +255,27 @@ void loop()
     {
       // change detected BTN1
             delay(20);
+            
       if (presentInput1)
       {
-              delay(20);
-              // rising edge detected
-              systemState = 3;
-
+        delay(20);
+        // rising edge detected
+        systemState = 3;
         DrawSymbol(3, 77 - 32, 0);  // M
-        DrawSymbol(2, 0, 0);      // space
+        DrawSymbol(2, 0, 0);        // space
       }
     }
 
     if (presentInput2 != lastInput2)
     {
       // change detected BTN2
-          delay(20);
+      delay(20);
       if (presentInput2)
       {
-        //rising edge detected
-        //add hour
+        // rising edge detected
+        // add hour
         hour++;
+        
         if (hour > 23)
         {
           hour = 0;
@@ -279,28 +285,30 @@ void loop()
     break;
 
   case 3:
-    //menu 2
-    //set minutes
+    // menu 2
+    // set minutes
     WriteTime();
 
-    if (presentInput1 != lastInput1) {
+    if (presentInput1 != lastInput1)
+    {
       delay(20);
-      //change detected BTN1
-      if (presentInput1) {
-        //rising edge detected
+      // change detected BTN1
+      if (presentInput1)
+      {
+        // rising edge detected
         systemState = 4;
 
-        DrawSymbol(3, 66 - 32, 0);  //B
-        DrawSymbol(2, 0, 0);  //space
-        DrawSymbol(0, (bright % 10) + 16, 1);  //actual light intensity
-        DrawSymbol(1, (bright / 10) + 16, 1);  //actual light intensity
+        DrawSymbol(3, 66 - 32, 0);             // B
+        DrawSymbol(2, 0, 0);                   // space
+        DrawSymbol(0, (bright % 10) + 16, 1);  // actual light intensity
+        DrawSymbol(1, (bright / 10) + 16, 1);  // actual light intensity
       }
     }
 
     if (presentInput2 != lastInput2)
     {
       delay(20);
-      //change detected BTN2
+      // change detected BTN2
       if (presentInput2)
       {
         // rising edge detected
@@ -315,8 +323,8 @@ void loop()
     break;
 
   case 4:
-    //menu 3
-    //set brightnes
+    // menu 3
+    // set brightnes
     if (presentInput1 != lastInput1)
     {
       // change detected BTN1
@@ -326,10 +334,10 @@ void loop()
         // rising edge detected
         systemState = 5;
 
-        DrawSymbol(3, 83 - 32, 0);   //S
-        DrawSymbol(2, 116 - 32, 0);  //t
-        DrawSymbol(1, 114 - 32, 0);  //r
-        DrawSymbol(0, 116 - 32, 0);  //t
+        DrawSymbol(3, 83 - 32, 0);   // S
+        DrawSymbol(2, 116 - 32, 0);  // t
+        DrawSymbol(1, 114 - 32, 0);  // r
+        DrawSymbol(0, 116 - 32, 0);  // t
       }
     }
 
@@ -339,55 +347,54 @@ void loop()
       delay(20);
       if (presentInput2)
       {
-        //rising edge detected
-        //add hour
+        // rising edge detected
+        // add hour
         bright++;
         if (bright > 15)
         {
           bright = 0;      
         }
 
-        DrawSymbol(0, (bright % 10) + 16, 1);  //actual light intensity
-        DrawSymbol(1, (bright / 10) + 16, 1);  //actual light intensity
+        DrawSymbol(0, (bright % 10) + 16, 1);  // actual light intensity
+        DrawSymbol(1, (bright / 10) + 16, 1);  // actual light intensity
 
-        for (byte address = 0; address<devices; address++)
+        for (byte address = 0; address < devices; address++)
         {
-          lc.setIntensity(address, bright);  //set light intensity 0 - min, 15 - max
+          lc.setIntensity(address, bright);    // set light intensity 0 - min, 15 - max
         }
       }
     }
     break;
 
   case 5:
-    //menu 4
+    // menu 4
     if (presentInput1 != lastInput1)
     {
       // change detected BTN1
       delay(20);
       if (presentInput1)
       {
-        //rising edge detected
-        SetRtc(0, minute, hour, dayOfWeek, dayOfMonth, month, year);  //set time and zero second
-        EEPROM.write(0, bright);  //store actual light intensity to addr 0
+        // rising edge detected
+        SetRtc(0, minute, hour, dayOfWeek, dayOfMonth, month, year);        // set time and zero second
+        EEPROM.write(0, bright);                                            // store actual light intensity to addr 0
         systemState = 0;
       }
     }
     break;
   }
 
-  lastInput1 = presentInput1; //save current state to last state
-  lastInput2 = presentInput2; //save current state to last state
-
-  SerialComm();  //read data from PC
+  lastInput1 = presentInput1;           // save current state to last state
+  lastInput2 = presentInput2;           // save current state to last state
+  SerialComm();                         // read data from PC
 }
 
 
 void GetButton()
 {
-  DrawSymbol(3, 76 - 32, 0);  //L
-  DrawSymbol(2, 77 - 32, 0);  //M
-  DrawSymbol(1, 83 - 32, 0);  //S
-  DrawSymbol(0, 1, 0);    //!
+  DrawSymbol(3, 76 - 32, 0);            // L
+  DrawSymbol(2, 77 - 32, 0);            // M
+  DrawSymbol(1, 83 - 32, 0);            // S
+  DrawSymbol(0, 1, 0);                  // !
 }
 
 
@@ -396,7 +403,7 @@ void WriteTime()
   // write time to matrix display
   if (systemState == 0 || systemState == 2)
   {
-   uint8_t hour12 = hour%12 == 0? 12 : hour%12;
+   uint8_t hour12 = hour % 12 == 0 ? 12 : hour % 12;
     DrawSymbol(2, (hour12 % 10) + 16, 0);
     DrawSymbol(3, (hour12 / 10) + 16, 0);
   }
@@ -408,20 +415,20 @@ void WriteTime()
   }
   
   // blinking dots on display
-  lc.setLed(2, 1, 7, showDots);  //addr, row, column
+  lc.setLed(2, 1, 7, showDots);  // addr, row, column
   lc.setLed(2, 2, 7, showDots);
   lc.setLed(2, 5, 7, showDots);
   lc.setLed(2, 6, 7, showDots);
-
   showDots = !showDots;
 }
 
 
-void Intro() {
-  DrawSymbol(3, 76-32, 0);  //L
-  DrawSymbol(2, 77-32, 0);  //M
-  DrawSymbol(1, 83-32, 0);  //S
-  DrawSymbol(0, 1, 0);    //!
+void Intro()
+{
+  DrawSymbol(3, 76-32, 0);      // L
+  DrawSymbol(2, 77-32, 0);      // M
+  DrawSymbol(1, 83-32, 0);      // S
+  DrawSymbol(0, 1, 0);          // !
   delay(2000);
 }
 
@@ -462,27 +469,27 @@ byte ByteRevers(byte in)
 void SetRtc(byte second, byte minute, byte hour, byte dayOfWeek, byte dayOfMonth, byte month, byte year)
 {
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
-  Wire.write(0); //set 0 to first register
+  Wire.write(0);                               // set 0 to first register
 
-  Wire.write(decToBcd(second)); //set second
-  Wire.write(decToBcd(minute)); //set minutes 
-  Wire.write(decToBcd(hour)); //set hours
-  Wire.write(decToBcd(dayOfWeek)); //set day of week (1=su, 2=mo, 3=tu) 
-  Wire.write(decToBcd(dayOfMonth)); //set day of month
-  Wire.write(decToBcd(month)); //set month
-  Wire.write(decToBcd(year)); //set year
+  Wire.write(decToBcd(second));                // set second
+  Wire.write(decToBcd(minute));                // set minutes 
+  Wire.write(decToBcd(hour));                  // set hours
+  Wire.write(decToBcd(dayOfWeek));             // set day of week (1=su, 2=mo, 3=tu) 
+  Wire.write(decToBcd(dayOfMonth));            // set day of month
+  Wire.write(decToBcd(month));                 // set month
+  Wire.write(decToBcd(year));                  // set year
   Wire.endTransmission();
 }
 
 
-//read RTC
+// read RTC
 void GetRtc()
 {
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
-  Wire.write(0); //write "0"
+  Wire.write(0);                               // write "0"
   Wire.endTransmission();
 
-  Wire.requestFrom(DS3231_I2C_ADDRESS, 7);  //request - 7 bytes from RTC
+  Wire.requestFrom(DS3231_I2C_ADDRESS, 7);     // request - 7 bytes from RTC
   second = bcdToDec(Wire.read() & 0x7f);
   minute = bcdToDec(Wire.read());
   hour = bcdToDec(Wire.read() & 0x3f);
@@ -493,13 +500,15 @@ void GetRtc()
 }
 
 
-//conversion Dec to BCD 
-byte decToBcd(byte val) {
+// conversion Dec to BCD 
+byte decToBcd(byte val)
+{
   return((val / 10 * 16) + (val % 10));
 }
 
-//conversion BCD to Dec 
-byte bcdToDec(byte val) {
+// conversion BCD to Dec 
+byte bcdToDec(byte val)
+{
   return((val / 16 * 10) + (val % 16));
 }
 
@@ -520,59 +529,59 @@ void SerialComm()
     if (receivedCommand < 90)
     {
       // received data is less than 90 (letter Z)
-      delay(10);  // wait for second letter
+      delay(10);                      // wait for second letter
 
       byte receivedData;
       receivedData = Serial.read();
-      receivedData -= 32;  //shift - 32 -> 32 = space
+      receivedData -= 32;             // shift - 32 -> 32 = space
 
       switch (receivedCommand)
       {
       case 65:
         // year 65 = A
         year = receivedData;
-        lc.setLed(3, 7, 0, true);  // show setting dot
+        lc.setLed(3, 7, 0, true);     // show setting dot
         break;
       
       case 66:
         // month 66 = B
         month = receivedData;
-        lc.setLed(3, 7, 1, true);  //show setting dot
+        lc.setLed(3, 7, 1, true);     // show setting dot
         break;
       
       case 67:
         //dayOfMonth 67 = C
         dayOfMonth = receivedData;
-        lc.setLed(3, 7, 2, true);  //show setting dot
+        lc.setLed(3, 7, 2, true);     // show setting dot
         break;
       case 68:
         // hour 68 = D
         hour = receivedData;
-        lc.setLed(3, 7, 3, true);  //show setting dot
+        lc.setLed(3, 7, 3, true);     // show setting dot
         break;
       
       case 69:
         // minute 69 = E
         minute = receivedData;
-        lc.setLed(3, 7, 4, true);  //show setting dot
+        lc.setLed(3, 7, 4, true);     // show setting dot
         break;
       
       case 70:
-        //second 70 = F
+        // second 70 = F
         second = receivedData;
-        lc.setLed(3, 7, 5, true);  //show setting dot
+        lc.setLed(3, 7, 5, true);     // show setting dot
         break;
       
       case 71:
-        //dayofWeek 71 = G
+        // dayofWeek 71 = G
         dayOfWeek = receivedData;
-        lc.setLed(3, 7, 6, true);  //show setting dot
+        lc.setLed(3, 7, 6, true);     // show setting dot
         break;
       }
       SetRtc(second, minute, hour, dayOfWeek, dayOfMonth, month, year);
     }
 
-    //spl chnout buffer do hajzlu
+    // spl chnout buffer do hajzlu
     Serial.flush();
   }
 }
