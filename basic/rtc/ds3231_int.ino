@@ -3,7 +3,7 @@
 // https://forum.arduino.cc/t/which-library-is-best-for-ds3231-rtc/980510/6
 
 // DS3231_RTC.ino - for DS3231 real time clock - set time and alarm every minute
-//  interrupt on alarm - connect INT/SQW to pin2
+// interrupt on alarm - connect INT/SQW to pin 2
 
 // Arduino Nano connections
 // GND - GND
@@ -45,7 +45,7 @@ void setup()
   
   // set the initial time here:
   // DS3231 seconds, minutes, hours, day, date, month, year
-  //setDS3231time(30,13,19, 7, 20,1,17);
+  // setDS3231time(30,13,19, 7, 20,1,17);
 }
 
 
@@ -55,7 +55,7 @@ void setDS3231time(byte second, byte minute, byte hour, byte dayOfWeek, byte
 {
   // sets time and date data to DS3231
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
-  Wire.write(0);                   // set next input to start at the seconds register
+  Wire.write(0);                   // set next input to start at seconds register
   Wire.write(decToBcd(second));    // set seconds
   Wire.write(decToBcd(minute));    // set minutes
   Wire.write(decToBcd(hour));      // set hours
@@ -72,7 +72,7 @@ void setDS3231alarm(byte second, byte minute, byte hour, byte dayOfMonth)
 {
   // sets time and date data to DS3231
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
-  Wire.write(7);                    // set next input to start at the seconds register
+  Wire.write(7);                    // set next input to start at seconds register
   Wire.write(decToBcd(second));     // set seconds
   Wire.write(decToBcd(minute));     // set minutes
   Wire.write(decToBcd(hour));       // set hours
@@ -82,11 +82,10 @@ void setDS3231alarm(byte second, byte minute, byte hour, byte dayOfMonth)
 
 
 // read time or alarm
-void readDS3231time(int alarm, byte *second, byte *minute, byte *hour, byte *dayOfWeek,
-                     byte *dayOfMonth, byte *month, byte *year)
+void readDS3231time(int alarm, byte *second, byte *minute, byte *hour, byte                           *dayOfWeek, byte *dayOfMonth, byte *month, byte *year)
 {
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
-  if(!alarm) Wire.write(0);         // set DS3231 register pointer to 00h
+  if (!alarm) Wire.write(0);         // set DS3231 register pointer to 00h
   else  Wire.write(0x07);
   Wire.endTransmission();
   Wire.requestFrom(DS3231_I2C_ADDRESS, 7);
@@ -242,7 +241,7 @@ void loop()
 {
   static int setAlarm = 1;              // set alarm on first call to loop()
   
-  if(setAlarm)
+  if (setAlarm)
   {
     Serial.println("\n\nresetting alarm for 1 minute");
     setAlarm=0;
@@ -253,7 +252,8 @@ void loop()
     readDS3231time(0, &second, &minute, &hour, &dayOfWeek, &dayOfMonth, &month,  &year);
     minute+=1;       // alarm in one minute - A1F should go high
     if(minute>60)    // if minute overflow reset
-       { hour+=1; minute-=60; }  // need to allow for 24 hour overflow etc etc!!
+    {
+      hour+=1; minute-=60; }  // need to allow for 24 hour overflow etc etc!!
     setDS3231alarm(second, minute, hour,  dayOfMonth);
     
     // set up for alarm 1 to interrupt on pin 2
