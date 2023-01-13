@@ -1,0 +1,199 @@
+EESchema Schematic File Version 4
+LIBS:555 Timer LED Flasher-cache
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "555 Timer LED Flasher"
+Date "2020-05-24"
+Rev "V1.0"
+Comp "www.ArnabKumarDas.com"
+Comment1 "Open Source Project"
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L 555-Timer-LED-Flasher-rescue:NE555D-Timer U1
+U 1 1 5F178B6F
+P 5600 3850
+F 0 "U1" H 5600 4750 50  0000 C CNN
+F 1 "NE555D" H 5600 4650 50  0000 C CNN
+F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 6450 3450 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/ne555.pdf" H 6450 3450 50  0001 C CNN
+	1    5600 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R3
+U 1 1 5F178BEF
+P 6250 3650
+F 0 "R3" V 6040 3650 50  0000 C CNN
+F 1 "1K" V 6133 3650 50  0000 C CNN
+F 2 "Resistor_SMD:R_01005_0402Metric" V 6180 3650 50  0001 C CNN
+F 3 "~" H 6250 3650 50  0001 C CNN
+	1    6250 3650
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:CP C1
+U 1 1 5F178CCD
+P 4000 4350
+F 0 "C1" H 4121 4397 50  0000 L CNN
+F 1 "CP" H 4121 4304 50  0000 L CNN
+F 2 "Capacitor_SMD:CP_Elec_4x3" H 4038 4200 50  0001 C CNN
+F 3 "~" H 4000 4350 50  0001 C CNN
+	1    4000 4350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D1
+U 1 1 5F178D4B
+P 6550 3650
+F 0 "D1" H 6542 3389 50  0000 C CNN
+F 1 "LED" H 6542 3482 50  0000 C CNN
+F 2 "LED_SMD:LED_0805_2012Metric" H 6550 3650 50  0001 C CNN
+F 3 "~" H 6550 3650 50  0001 C CNN
+	1    6550 3650
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R R1
+U 1 1 5F178DCF
+P 4000 3750
+F 0 "R1" H 4070 3797 50  0000 L CNN
+F 1 "1K" H 4070 3704 50  0000 L CNN
+F 2 "Resistor_SMD:R_01005_0402Metric" V 3930 3750 50  0001 C CNN
+F 3 "~" H 4000 3750 50  0001 C CNN
+	1    4000 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R2
+U 1 1 5F178DF7
+P 4000 4050
+F 0 "R2" H 4070 4097 50  0000 L CNN
+F 1 "470K" H 4070 4004 50  0000 L CNN
+F 2 "Resistor_SMD:R_01005_0402Metric" V 3930 4050 50  0001 C CNN
+F 3 "~" H 4000 4050 50  0001 C CNN
+	1    4000 4050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5100 4050 4650 4050
+Wire Wire Line
+	4650 4050 4650 3450
+Wire Wire Line
+	4650 3450 5600 3450
+$Comp
+L Device:Battery_Cell BT1
+U 1 1 5F178F0A
+P 7300 4000
+F 0 "BT1" H 7421 4097 50  0000 L CNN
+F 1 "Battery_Cell" H 7421 4004 50  0000 L CNN
+F 2 "Battery:BatteryHolder_LINX_BAT-HLD-012-SMT" V 7300 4060 50  0001 C CNN
+F 3 "~" V 7300 4060 50  0001 C CNN
+	1    7300 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Battery_Cell BT2
+U 1 1 5F178F51
+P 7300 4300
+F 0 "BT2" H 7421 4397 50  0000 L CNN
+F 1 "Battery_Cell" H 7421 4304 50  0000 L CNN
+F 2 "Battery:BatteryHolder_LINX_BAT-HLD-012-SMT" V 7300 4360 50  0001 C CNN
+F 3 "~" V 7300 4360 50  0001 C CNN
+	1    7300 4300
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR04
+U 1 1 5F178FBE
+P 7300 4400
+F 0 "#PWR04" H 7300 4150 50  0001 C CNN
+F 1 "GND" H 7305 4223 50  0000 C CNN
+F 2 "" H 7300 4400 50  0001 C CNN
+F 3 "" H 7300 4400 50  0001 C CNN
+	1    7300 4400
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:VCC #PWR03
+U 1 1 5F17900C
+P 7300 3800
+F 0 "#PWR03" H 7300 3650 50  0001 C CNN
+F 1 "VCC" H 7315 3977 50  0000 C CNN
+F 2 "" H 7300 3800 50  0001 C CNN
+F 3 "" H 7300 3800 50  0001 C CNN
+	1    7300 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:VCC #PWR01
+U 1 1 5F179056
+P 5600 3450
+F 0 "#PWR01" H 5600 3300 50  0001 C CNN
+F 1 "VCC" H 5615 3627 50  0000 C CNN
+F 2 "" H 5600 3450 50  0001 C CNN
+F 3 "" H 5600 3450 50  0001 C CNN
+	1    5600 3450
+	1    0    0    -1  
+$EndComp
+Connection ~ 5600 3450
+$Comp
+L power:GND #PWR02
+U 1 1 5F179071
+P 5600 4250
+F 0 "#PWR02" H 5600 4000 50  0001 C CNN
+F 1 "GND" H 5605 4073 50  0000 C CNN
+F 2 "" H 5600 4250 50  0001 C CNN
+F 3 "" H 5600 4250 50  0001 C CNN
+	1    5600 4250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5600 4250 6700 4250
+Wire Wire Line
+	6700 4250 6700 3650
+Connection ~ 5600 4250
+Wire Wire Line
+	6100 4050 6400 4050
+Wire Wire Line
+	6400 4050 6400 4600
+Wire Wire Line
+	6400 4600 4950 4600
+Wire Wire Line
+	4950 4600 4950 4200
+Wire Wire Line
+	4950 3650 5100 3650
+Wire Wire Line
+	4000 4200 4950 4200
+Connection ~ 4000 4200
+Connection ~ 4950 4200
+Wire Wire Line
+	4950 4200 4950 3650
+Wire Wire Line
+	4000 4500 5350 4500
+Wire Wire Line
+	5350 4500 5350 4250
+Wire Wire Line
+	5350 4250 5600 4250
+Wire Wire Line
+	4000 3900 3700 3900
+Wire Wire Line
+	3700 3900 3700 4750
+Wire Wire Line
+	3700 4750 6600 4750
+Wire Wire Line
+	6600 4750 6600 3850
+Wire Wire Line
+	6600 3850 6100 3850
+Connection ~ 4000 3900
+Wire Wire Line
+	4000 3600 4000 3450
+Wire Wire Line
+	4000 3450 4650 3450
+Connection ~ 4650 3450
+$EndSCHEMATC
