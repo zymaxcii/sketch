@@ -451,7 +451,7 @@
   (gr_text "Stop Light" (at 68.58 146.05) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
-  (gr_line (start 27.94 163.83) (end 87.63 163.51) (layer Edge.Cuts) (width 0.15) (tstamp 63CDB6AF))
+  (gr_line (start 27.94 163.51) (end 87.63 163.51) (layer Edge.Cuts) (width 0.15) (tstamp 63CDB6AF))
   (gr_line (start 87.63 143.51) (end 87.63 163.51) (layer Edge.Cuts) (width 0.15) (tstamp 63CDA9CC))
   (gr_line (start 27.94 143.51) (end 27.94 163.51) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 27.94 143.51) (end 87.63 143.51) (layer Edge.Cuts) (width 0.15) (tstamp 63CD9F60))
