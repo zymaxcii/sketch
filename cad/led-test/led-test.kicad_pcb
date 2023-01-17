@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 4)
+    (drawings 9)
     (tracks 4)
     (zones 0)
     (modules 3)
@@ -87,7 +87,7 @@
       (mirror false)
       (drillshape 0)
       (scaleselection 1)
-      (outputdirectory "./"))
+      (outputdirectory "./gerber/"))
   )
 
   (net 0 "")
@@ -248,14 +248,30 @@
     )
   )
 
-  (gr_line (start 118.11 -1062.99) (end 118.11 -1078.23) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 144.78 -1062.99) (end 118.11 -1062.99) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 144.78 -1078.23) (end 144.78 -1062.99) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 118.11 -1078.23) (end 144.78 -1078.23) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 118.11 -1075.69) (end 129.54 -1084.58) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 116.84 -1065.53) (end 118.11 -1075.69) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 121.92 -1062.99) (end 116.84 -1065.53) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 142.24 -1064.26) (end 121.92 -1062.99) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 144.78 -1066.8) (end 142.24 -1064.26) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 144.78 -1073.15) (end 144.78 -1066.8) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 142.24 -1078.23) (end 144.78 -1073.15) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 138.43 -1082.04) (end 142.24 -1078.23) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 129.54 -1084.58) (end 138.43 -1082.04) (layer Edge.Cuts) (width 0.15))
 
   (segment (start 139.7 -1074.42) (end 139.7 -1069.34) (width 0.25) (layer F.Cu) (net 1))
-  (segment (start 130.81 -1069.34) (end 130.81 -1074.42) (width 0.25) (layer F.Cu) (net 2))
-  (segment (start 130.81 -1074.42) (end 134.62 -1074.42) (width 0.25) (layer F.Cu) (net 2))
-  (segment (start 139.7 -1066.8) (end 130.81 -1066.8) (width 0.25) (layer F.Cu) (net 3))
+  (segment (start 130.81 -1069.34) (end 133.35 -1069.34) (width 0.25) (layer F.Cu) (net 2))
+  (segment (start 133.35 -1069.34) (end 134.62 -1070.61) (width 0.25) (layer F.Cu) (net 2))
+  (segment (start 134.62 -1070.61) (end 134.62 -1074.42) (width 0.25) (layer F.Cu) (net 2))
 
+  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 0) (hatch edge 0.508)
+    (connect_pads (clearance 0.508))
+    (min_thickness 0.254)
+    (keepout (tracks not_allowed) (vias not_allowed) (copperpour allowed))
+    (fill (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
+    (polygon
+      (pts
+        (xy 122.81554 -1077.363784) (xy 122.81554 -1076.093784) (xy 129.16554 -1073.553784) (xy 129.16554 -1078.633784) (xy 127.89554 -1078.633784)
+      )
+    )
+  )
 )

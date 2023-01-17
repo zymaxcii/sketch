@@ -2,8 +2,8 @@
 
   (general
     (thickness 1.6)
-    (drawings 4)
-    (tracks 4)
+    (drawings 9)
+    (tracks 0)
     (zones 0)
     (modules 3)
     (nets 4)
@@ -83,11 +83,11 @@
       (plotinvisibletext false)
       (padsonsilk false)
       (subtractmaskfromsilk false)
-      (outputformat 1)
+      (outputformat 4)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory ""))
+      (outputdirectory "./"))
   )
 
   (net 0 "")
@@ -177,7 +177,7 @@
   )
 
   (module LED_THT:LED_D3.0mm (layer F.Cu) (tedit 587A3A7B) (tstamp 63C85A3C)
-    (at 139.7 -1069.34 270)
+    (at 137.16 -1069.34 270)
     (descr "LED, diameter 3.0mm, 2 pins")
     (tags "LED diameter 3.0mm 2 pins")
     (path /63BBC307)
@@ -248,14 +248,14 @@
     )
   )
 
-  (gr_line (start 118.11 -1062.99) (end 118.11 -1078.23) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 144.78 -1062.99) (end 118.11 -1062.99) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 144.78 -1078.23) (end 144.78 -1062.99) (layer Edge.Cuts) (width 0.15))
-  (gr_line (start 118.11 -1078.23) (end 144.78 -1078.23) (layer Edge.Cuts) (width 0.15))
-
-  (segment (start 139.7 -1074.42) (end 139.7 -1069.34) (width 0.25) (layer F.Cu) (net 1))
-  (segment (start 130.81 -1069.34) (end 130.81 -1074.42) (width 0.25) (layer F.Cu) (net 2))
-  (segment (start 130.81 -1074.42) (end 134.62 -1074.42) (width 0.25) (layer F.Cu) (net 2))
-  (segment (start 139.7 -1066.8) (end 130.81 -1066.8) (width 0.25) (layer F.Cu) (net 3))
+  (gr_line (start 118.11 -1075.69) (end 124.46 -1079.5) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 116.84 -1065.53) (end 118.11 -1075.69) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 121.92 -1062.99) (end 116.84 -1065.53) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 142.24 -1064.26) (end 121.92 -1062.99) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 144.78 -1066.8) (end 142.24 -1064.26) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 144.78 -1073.15) (end 144.78 -1066.8) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 142.24 -1078.23) (end 144.78 -1073.15) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 135.89 -1079.5) (end 142.24 -1078.23) (layer Edge.Cuts) (width 0.15))
+  (gr_line (start 124.46 -1079.5) (end 135.89 -1079.5) (layer Edge.Cuts) (width 0.15))
 
 )
