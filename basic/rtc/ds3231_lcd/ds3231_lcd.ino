@@ -1,6 +1,7 @@
 // ds3231_lcd.ino
 // DIsplay date, time on LCD1602 non-i2c version
 // https://howtomechatronics.com/tutorials/arduino/arduino-ds3231-real-time-clock-tutorial/
+// compile error
 
 // My standard hardware setup
 // ds3231 rtc module:

@@ -47,7 +47,7 @@ void setup ()
   Serial.println("RTC lost power, lets set the time!");
   
   // following line sets the RTC to the date & time this sketch was compiled
-  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   
   // This line sets the RTC with an explicit date & time, for example to set
   // January 21, 2014 at 3am you would call:
@@ -103,6 +103,5 @@ void loop ()
   Serial.println();
  
   Serial.println();
-  delay(3000);
+  delay(5000);
 }
-

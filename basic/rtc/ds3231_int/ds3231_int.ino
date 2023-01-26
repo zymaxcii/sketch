@@ -273,5 +273,5 @@ void loop()
      { Serial.println("\nAlarm gone off!!"); setAlarm=1; }
   if(interrupt) 
      { Serial.println("alarm timer interrupt!!!!"); interrupt=0; }
-  delay(1000); // every second
+  delay(5000); // every second
 }

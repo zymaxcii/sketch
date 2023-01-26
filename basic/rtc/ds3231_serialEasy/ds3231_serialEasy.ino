@@ -2,7 +2,7 @@
 // Set date, time and then send them to serial monitor
 // Will work on my max7219 setup which has a ds3231 rtc in it
 // https://www.instructables.com/Real-time-clock-using-DS3231-EASY/
-
+// compile error
 
 // DS3231_Serial_Easy
 // Copyright (C)2015 Rinky-Dink Electronics, Henning Karlsen. All right reserved

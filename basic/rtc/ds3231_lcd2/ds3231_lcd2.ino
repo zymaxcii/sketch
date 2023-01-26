@@ -1,7 +1,7 @@
 // ds3231_lcd.ino
 // Set and display date, time to LCD
 // https://circuitdigest.com/microcontroller-projects/interfacing-ds3231-rtc-with-arduino-and-diy-digital-clock
-
+// can compile
 
 #include <Wire.h>
 #include <LiquidCrystal.h>

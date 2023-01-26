@@ -3,9 +3,10 @@
 
 
 #include <Wire.h>
-#include <ds3231.h>
+#include <DS3231.h>  // ds3231?
  
 struct ts t; 
+
  
 void setup()
 {
@@ -16,12 +17,12 @@ void setup()
   /*----------------------------------------------------------------------------
   In order to synchronise your clock module, insert timetable values below !
   ----------------------------------------------------------------------------*/
-  t.hour = 12; 
-  t.min  = 30;
+  t.hour = 15; 
+  t.min  = 00;
   t.sec  = 0;
-  t.mday = 25;
-  t.mon  = 12;
-  t.year = 2019;
+  t.mday = 26;
+  t.mon  = 1;
+  t.year = 2023;
   DS3231_set(t); 
 }
 
@@ -35,6 +36,7 @@ void loop()
   Serial.print(t.mon);
   Serial.print("/");
   Serial.print(t.year);
+
   Serial.print("\t Hour : ");
   Serial.print(t.hour);
   Serial.print(":");

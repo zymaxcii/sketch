@@ -1,5 +1,7 @@
-// ds3231_readDTTemp.ino
-// Read date, time and temperature using uRTCLib library
+// ds3231_urtclib.ino
+// Display date, time and temperature in serial monitor
+// can also work on my max7219 setup because it has a ds3231 in it
+// working
 // https://lastminuteengineers.com/ds3231-rtc-arduino-tutorial/
 
 // My standard hardware setup
@@ -12,7 +14,6 @@
 
 #include "Arduino.h"
 #include "uRTCLib.h"
-
 
 // uRTCLib rtc;
 uRTCLib rtc(0x68);
@@ -32,14 +33,14 @@ char daysOfTheWeek[7][12] =
 void setup()
 {
   Serial.begin(9600);
-  delay(3000);                        // wait for console opening
+  delay(3000);                     // wait for console opening
 
   URTCLIB_WIRE.begin();
 
-  // Comment out below line once you set the date & time.
+  // Comment out below line once you set the date & time
   // Following line sets the RTC with an explicit date & time
   // for example to set January 13 2022 at 12:56 you would call:
-   rtc.set(0, 56, 12, 5, 13, 1, 22);
+  // rtc.set(0, 56, 12, 5, 13, 1, 22);
   // rtc.set(second, minute, hour, dayOfWeek, dayOfMonth, month, year)
   // set day of week (1=Sunday, 7=Saturday)
 }
@@ -64,13 +65,13 @@ void loop()
   Serial.print(':');
   Serial.print(rtc.minute());
   Serial.print(':');
-  Serial.println(rtc.second());
+  Serial.print(rtc.second());
 
-  Serial.print("Temperature: ");
+  Serial.print("  Temperature: ");
   Serial.print(rtc.temp()  / 100);
-  Serial.print("\xC2\xB0");          // shows degrees character
+  Serial.print("\xC2\xB0");             // shows degrees character
   Serial.println("C");
 
-  Serial.println();
-  delay(1000);
+  // Serial.println();
+  delay(5000);
 }
