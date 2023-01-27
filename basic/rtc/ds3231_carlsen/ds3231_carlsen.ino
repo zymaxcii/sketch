@@ -3,13 +3,18 @@
 // Why no library added?
 // https://howtomechatronics.com/tutorials/arduino/arduino-ds3231-real-time-clock-tutorial/
 
+#include <Wire.h>
+#include <DS3231.h>
+
+RTClib rtc;
 
 // Code from the Demo Example of the DS3231 Library
+
 
 void setup()
 {
   Serial.begin(9600);
-  // Uncomment the next line if you are using an Arduino Leonardo
+  // Uncomment next line if using Arduino Leonardo
   // while (!Serial) {}
   
   // Initialize the rtc object

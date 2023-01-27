@@ -1,3 +1,5 @@
+// ds1302_demo2.ino
+
 // rtc_1302b.ino
 
 /*
@@ -14,7 +16,8 @@
  https://github.com/msparks/arduino-ds1302
 */ 
 
-#include "DS1302.h" // include the DS1302 RTC library
+
+#include "DS1302.h"      // include the DS1302 RTC library
      
 const int ResetPin = 2;  // reset Pin
 const int DataPin = 3;   // data Pin
@@ -37,7 +40,8 @@ String dayAsString(const Time::Day day)
   }
   return "(unknown day)";
 }
-     
+
+
 char * readTime()
 { 
   // reads time from chip and returns it in a character array

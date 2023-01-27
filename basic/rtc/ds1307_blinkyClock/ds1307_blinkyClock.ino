@@ -1,3 +1,5 @@
+// ds1307_blinkyClock.ino
+
 // blinky_Clock.ino
 // using RTC DS1307 and 3 leds
 
@@ -17,7 +19,7 @@
 #define DS1307_I2C_ADDRESS 0x68
 
 // 3 leds
-int red   = 9;     // LEDs connected to PWM pins as you might want to PWM them to alter brightness
+int red   = 9;     // PWM pins as you might want to PWM them to alter brightness
 int green = 10;
 int blue  = 11;
 
@@ -53,7 +55,9 @@ void setDateDs1307(byte second,        // 0-59
   Wire.write(decToBcd(dayOfMonth));
   Wire.write(decToBcd(month));
   Wire.write(decToBcd(year));
-  Wire.write(0x10);                    // sends 0x10 (hex) 00010000 (binary) to control register - turns on square wave
+  
+  // sends 0x10 (hex) 00010000 (binary) to control register - turns on square wave
+  Wire.write(0x10);               
   Wire.endTransmission();
 }
 

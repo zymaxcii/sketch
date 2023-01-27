@@ -1,3 +1,5 @@
+// ds1302_alarmClock.ino
+
 // rtc_alarmClock.ino
 // using DS1302 RTC
 // fail to compile: missing library
@@ -6,10 +8,11 @@
 
 
 // This code is to use with DS1302 RTC module + 4*4 Keypad + LCD i2c + Arduino + Buzzer
-// After wiring the modules, the LCD will show the default date and time or the one set before
+// After wiring the modules, LCD will show the default date and time or the one set before
 // The objective of this project is that you can set the RTC module from the keypad, and sure it will stay stored
 // Then show it on the screen and after you can set your alarm.
 // Refer to https://www.surtrtech.com or SurtrTech youtube channel for more information
+
 
 #include <Keypad.h>
 #include <virtuabotixRTC.h>
