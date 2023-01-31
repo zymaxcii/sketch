@@ -9,8 +9,14 @@
  * Version 1.0 November 2015
  * Original Author: AnalysIR - IR software & modules for Makers & Pros, visit http://www.AnalysIR.com
  */
+#include <Arduino.h>
 
-#include <IRremote.h>
+//#define EXCLUDE_EXOTIC_PROTOCOLS // saves around 240 bytes program memory if IrSender.write is used
+//#define SEND_PWM_BY_TIMER
+//#define USE_NO_SEND_PWM
+//#define NO_LED_FEEDBACK_CODE // saves 566 bytes program memory
+
+#include <IRremote.hpp>
 
 // Function declarations for non Arduino IDE's
 void dumpHeader();
@@ -25,16 +31,14 @@ void dumpArduinoIDE();
 void dumpDebugMode();
 void dumpProtocols();
 void dumpFooter();
-void printSendEnabled(int flag);
-void printDecodeEnabled(int flag);
 
 void setup() {
     Serial.begin(115200);
-#if defined(__AVR_ATmega32U4__)
-    while (!Serial); //delay for Leonardo, but this loops forever for Maple Serial
+#if defined(__AVR_ATmega32U4__) || defined(SERIAL_PORT_USBVIRTUAL) || defined(SERIAL_USB) /*stm32duino*/|| defined(USBCON) /*STM32_stm32*/|| defined(SERIALUSB_PID) || defined(ARDUINO_attiny3217)
+    delay(4000); // To be able to connect Serial monitor after reset or power up and before first print out. Do not wait for an attached Serial Monitor!
 #endif
     // Just to know which program is running on my Arduino
-    Serial.println(F("START " __FILE__ " from " __DATE__));
+    Serial.println(F("START " __FILE__ " from " __DATE__ "\r\nUsing library version " VERSION_IRREMOTE));
 
     //Runs only once per restart of the Arduino.
     dumpHeader();
@@ -61,36 +65,36 @@ void dumpRAW_BUFFER_LENGTH() {
 }
 
 void dumpTIMER() {
-    boolean flag = false;
-#ifdef IR_USE_TIMER1
+    bool flag = false;
+#if defined(IR_USE_TIMER1)
     Serial.print(F("Timer defined for use: "));
     Serial.println(F("Timer1"));
     flag = true;
 #endif
-#ifdef IR_USE_TIMER2
+#if defined(IR_USE_TIMER2)
     Serial.print(F("Timer defined for use: "));
     Serial.println(F("Timer2"));
     flag = true;
 #endif
-#ifdef IR_USE_TIMER3
+#if defined(IR_USE_TIMER3)
   Serial.print(F("Timer defined for use: ")); Serial.println(F("Timer3")); flag = true;
 #endif
-#ifdef IR_USE_TIMER4
+#if defined(IR_USE_TIMER4)
   Serial.print(F("Timer defined for use: ")); Serial.println(F("Timer4")); flag = true;
 #endif
-#ifdef IR_USE_TIMER5
+#if defined(IR_USE_TIMER5)
   Serial.print(F("Timer defined for use: ")); Serial.println(F("Timer5")); flag = true;
 #endif
-#ifdef IR_USE_TIMER4_HS
+#if defined(IR_USE_TIMER4_HS)
   Serial.print(F("Timer defined for use: ")); Serial.println(F("Timer4_HS")); flag = true;
 #endif
-#ifdef IR_USE_TIMER_CMT
+#if defined(IR_USE_TIMER_CMT)
   Serial.print(F("Timer defined for use: ")); Serial.println(F("Timer_CMT")); flag = true;
 #endif
-#ifdef IR_USE_TIMER_TPM1
+#if defined(IR_USE_TIMER_TPM1)
   Serial.print(F("Timer defined for use: ")); Serial.println(F("Timer_TPM1")); flag = true;
 #endif
-#ifdef IR_USE_TIMER_TINY0
+#if defined(IR_USE_TIMER_TINY0)
   Serial.print(F("Timer defined for use: ")); Serial.println(F("Timer_TINY0")); flag = true;
 #endif
 
@@ -101,13 +105,19 @@ void dumpTIMER() {
 }
 
 void dumpTimerPin() {
-    Serial.print(F("IR Tx Pin: "));
+    Serial.print(F("IR Send Pin: "));
+#if defined(IR_SEND_PIN)
     Serial.println(IR_SEND_PIN);
+#else
+    Serial.println(IrSender.sendPin);
+#endif
 }
 
 void dumpClock() {
+#if defined(F_CPU)
     Serial.print(F("MCU Clock: "));
     Serial.println(F_CPU);
+#endif
 }
 
 void dumpPlatform() {
@@ -183,13 +193,13 @@ void dumpPulseParams() {
     ;
     Serial.println(F(" uSecs"));
     Serial.print(F("Measurement tolerance: "));
-    Serial.print(TOLERANCE);
+    Serial.print(TOLERANCE_FOR_DECODERS_MARK_OR_SPACE_MATCHING);
     Serial.println(F("%"));
 }
 
 void dumpSignalParams() {
     Serial.print(F("Minimum Gap between IR Signals: "));
-    Serial.print(_GAP);
+    Serial.print(RECORD_GAP_MICROS);
     Serial.println(F(" uSecs"));
 }
 
@@ -222,79 +232,92 @@ void dumpProtocols() {
     Serial.print(F("======== "));
     Serial.println(F("========"));
     Serial.print(F("RC5:          "));
-    printSendEnabled(SEND_RC5);
-    printDecodeEnabled(DECODE_RC6);
+#if defined(DECODE_RC5)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
 
     Serial.print(F("RC6:          "));
-    printSendEnabled(SEND_RC6);
-    printDecodeEnabled(DECODE_RC5);
+#if defined(DECODE_RC6)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
 
     Serial.print(F("NEC:          "));
-    printSendEnabled(SEND_NEC);
-    printDecodeEnabled(DECODE_NEC);
+#if defined(DECODE_NEC)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
 
     Serial.print(F("SONY:         "));
-    printSendEnabled(SEND_SONY);
-    printDecodeEnabled(DECODE_SONY);
+#if defined(DECODE_SONY)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
 
     Serial.print(F("PANASONIC:    "));
-    printSendEnabled(SEND_PANASONIC);
-    printDecodeEnabled(DECODE_PANASONIC);
+#if defined(DECODE_PANASONIC)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
 
     Serial.print(F("JVC:          "));
-    printSendEnabled(SEND_JVC);
-    printDecodeEnabled(DECODE_JVC);
+#if defined(DECODE_JVC)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
 
     Serial.print(F("SAMSUNG:      "));
-    printSendEnabled(SEND_SAMSUNG);
-    printDecodeEnabled(DECODE_SAMSUNG);
-
-    Serial.print(F("WHYNTER:      "));
-    printSendEnabled(SEND_WHYNTER);
-    printDecodeEnabled(DECODE_WHYNTER);
-
-    Serial.print(F("AIWA_RC_T501: "));
-    printSendEnabled(SEND_AIWA_RC_T501);
-    printDecodeEnabled(DECODE_AIWA_RC_T501);
+#if defined(DECODE_SAMSUNG)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
 
     Serial.print(F("LG:           "));
-    printSendEnabled(SEND_LG);
-    printDecodeEnabled(DECODE_LG);
-
-    Serial.print(F("SANYO:        "));
-    printSendEnabled(SEND_SANYO);
-    printDecodeEnabled(DECODE_SANYO);
-
-    Serial.print(F("MITSUBISHI:   "));
-    printSendEnabled(SEND_MITSUBISHI);
-    printDecodeEnabled(DECODE_MITSUBISHI);
-
-    Serial.print(F("DISH:         "));
-    printSendEnabled(SEND_DISH);
-    printDecodeEnabled(DECODE_DISH);
-
-    Serial.print(F("SHARP:        "));
-    printSendEnabled(SEND_SHARP);
-    printDecodeEnabled(DECODE_SHARP);
-    Serial.print(F("SHARP_ALT:    "));
-    printSendEnabled(SEND_SHARP_ALT);
-    printDecodeEnabled(DECODE_SHARP_ALT);
+#if defined(DECODE_LG)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
 
     Serial.print(F("DENON:        "));
-    printSendEnabled(SEND_DENON);
-    printDecodeEnabled(DECODE_DENON);
+#if defined(DECODE_DENON)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
+
+#if !defined(EXCLUDE_EXOTIC_PROTOCOLS) // saves around 2000 bytes program memory
+
+    Serial.print(F("BANG_OLUFSEN: "));
+#if defined(DECODE_BEO)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
 
     Serial.print(F("BOSEWAVE:     "));
-    printSendEnabled(SEND_BOSEWAVE);
-    printDecodeEnabled(DECODE_BOSEWAVE);
-}
+#if defined(DECODE_BOSEWAVE)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
 
-void printSendEnabled(int flag) {
-    if (flag) {
-        Serial.print(F("Enabled  "));
-    } else {
-        Serial.print(F("Disabled "));
-    }
+    Serial.print(F("WHYNTER:      "));
+#if defined(DECODE_WHYNTER)
+    Serial.println(F("Enabled"));
+#else
+    Serial.println(F("Disabled"));
+#endif
+
+#endif
 }
 
 void printDecodeEnabled(int flag) {
