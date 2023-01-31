@@ -1,4 +1,4 @@
-// ds3231_urtclibEeprom.ino
+// ds3231_urtclib_Eeprom.ino
 // Write and read back to internal eeprom of ds3231 rtc module
 // Message displayed in serial monitor
 // can run on my max7219 setup which has a ds3231 rtc module in it
