@@ -1,3 +1,6 @@
+// lcdi2c_LiquidCrystal_I2C_flashScroll.ino
+// status: working
+
 // lcdi2c_demo.ino
 // Flash backlight and scroll
 

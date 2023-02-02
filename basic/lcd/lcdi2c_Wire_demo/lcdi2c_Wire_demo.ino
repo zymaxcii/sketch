@@ -1,18 +1,19 @@
+// lcdi2c_Wire_demo.ino
+// status: compile and upload ok but did not work properly
+// need to study the code
+
 // https://forum.crystalfontz.com/threads/connect-a-cfa-634-a-seeeduino-arduino-using-i2c-with-example-sketch.5784/
 
 
 //============================================================================
 // This is an example use of the Crystalfontz CFA634 I2C 20x4 LCD, driven by
 // an Arduino Uno or Seeeduino v4.2 set to 5v.
-//
-// The demonstration shows menus (stored in flash / PROGMEM) and bar graphs.
+// The demonstration shows menus (stored in flash / PROGMEM) and bar graphs
 // 
 // Wiring information is available in our forum:
-//
 //  https://forum.crystalfontz.com/showthread.php/7483
 //
 // There is a video of the operation in action on YouTube:
-//
 //  https://www.youtube.com/watch?v=lsuUchaF-FM
 //
 //  2018 - 11 - 01 Brent A. Crosby / Crystalfontz
@@ -45,15 +46,18 @@
 //
 //For more information, please refer to <http://unlicense.org/>
 //============================================================================
+
+
 #include <Arduino.h>
-#include <Wire.h>  //I2C library
+#include <Wire.h>  // I2C library
+
 //============================================================================
 //   ARD      | Port | LCD           | Color | Note
 // -----------+------+---------------|-------|----------------------------
 //  SCL       |  PC5 | I2C SCL Clock | Blue  | (5K resistor pull up to 5v)
 //  SDA       |  PC4 | I2C SDA Data  | Green | (5K resistor pull up to 5v)
 //============================================================================
-#define CFA_634_I2C_ADDRESS  (42)
+#define CFA_634_I2C_ADDRESS  (0x27)      // try 0x27; was 42
 
 #define USE_PRINTF //Saves ~1600 bytes
 //============================================================================
@@ -73,37 +77,37 @@ void SerPrintFF(const __FlashStringHelper *fmt, ... )
   }
 #endif
 //----------------------------------------------------------------------------
+
 // ref http://scott.dd.com.au/wiki/Arduino_Static_Strings
 void SerialPrint_P(const char flash_string[])
   {
-  uint8_t
-    c;
-  for(;0x00 != (c = pgm_read_byte(flash_string)); flash_string++)
+  uint8_t c;
+  for (;0x00 != (c = pgm_read_byte(flash_string)); flash_string++)
     {
     Serial.write(c);
     }
   }
 //============================================================================
-//This does not depend on printf so it is small
-void I2C_String_XY(uint8_t col, uint8_t row,
-                   const __FlashStringHelper *flash_string )
-  {
-   //Start the I2C transaction
+
+// This does not depend on printf so it is small
+void I2C_String_XY(uint8_t col, uint8_t row, const __FlashStringHelper *flash_string )
+{
+  // Start the I2C transaction
   Wire.beginTransmission(CFA_634_I2C_ADDRESS);
-  //Move the cursor to col,row
+  
+  // Move the cursor to col,row
   Wire.write(17);
   Wire.write(col);
   Wire.write(row);
-  //Pipe out the string, up to but not incuding the null terminator
-  uint8_t
-    this_character;
-  //Get an editable copy of the flash string pointer
-  const char
-    *ptr;
-  ptr=(const char *)flash_string;
-  //Grab the next character from the flash string. If it is not
-  //null, send it out.
-  while(0 != (this_character=pgm_read_byte(ptr)))
+  
+  // Pipe out the string, up to but not incuding the null terminator
+  uint8_t this_character;
+  // Get an editable copy of the flash string pointer
+  const char *ptr;
+  ptr = (const char *)flash_string;
+  // Grab the next character from the flash string. If it is not
+  // null, send it out.
+  while (0 != (this_character=pgm_read_byte(ptr)))
     {
     Wire.write(this_character);
     //Point to the next character in RAM
@@ -537,6 +541,8 @@ void Menu_Demo(void)
       }
     }  //for updates
   }
+  
+  
 //============================================================================
 void setup()
   {
@@ -592,6 +598,8 @@ void setup()
   //Give it time to clear
   delay(5);
   }
+  
+  
 //============================================================================
 void loop()
   {

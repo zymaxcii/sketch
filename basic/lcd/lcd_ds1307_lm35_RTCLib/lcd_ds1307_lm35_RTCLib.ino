@@ -1,6 +1,9 @@
+// lcd_ds1307_lm35_RTCLib.ino
+// status: compile ok
+
 // https://cheaphousetek.blogspot.com/2012/06/freeduinoarduino-real-time-clock-sensor.html
 
-
+// lcdShield_clock.ino
 // Date and time functions using a DS1307 RTC connected via I2C and Wire lib
 // 2010-02-04 <jcw@equi4.com> http://opensource.org/licenses/mit-license.php
 // $Id: ds1307.pde 4773 2010-02-04 14:09:18Z jcw $
@@ -12,13 +15,16 @@
 #include <Wire.h>
 #include <RTClib.h>
 #include <LiquidCrystal.h>
+
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 RTC_DS1307 RTC;
+
 int potPin = 3;
 float temperature = 0;
 
-void setup () {
+void setup ()
+{
     Serial.begin(9600);
     Wire.begin();
     RTC.begin();
@@ -29,7 +35,9 @@ void setup () {
     // RTC.adjust(DateTime(__DATE__, __TIME__));
 }
 
-void printTenths(long value) {
+
+void printTenths(long value)
+{
   // prints a value of 123 as 12.3
   Serial.print(value / 10);
   Serial.print('.');
@@ -43,7 +51,9 @@ void printTenths(long value) {
   lcd.print(value % 10);
 }
 
-void loop () {
+
+void loop ()
+{
     DateTime now = RTC.now();
     int span = 10;
     long aRead = 0;
@@ -58,7 +68,8 @@ void loop () {
     lcd.print("-");
     
     tmp = now.month();
-    if (now.month() < 10) {
+    if (now.month() < 10)
+    {
       Serial.print('0');
       Serial.print(now.month(), DEC);
       lcd.setCursor(5, 0);
@@ -66,17 +77,20 @@ void loop () {
       lcd.setCursor(6, 0);
       lcd.print(tmp);
     }
-    else {
+    else
+    {
       Serial.print(now.month(), DEC);
       lcd.setCursor(5, 0);
       lcd.print(tmp);
     }
+    
     Serial.print('/');
     lcd.setCursor(7, 0);
     lcd.print('-');
     
     tmp = now.day();
-    if (now.day() < 10) {
+    if (now.day() < 10)
+    {
       Serial.print('0');
       Serial.print(now.day());
       lcd.setCursor(8, 0);
@@ -84,7 +98,8 @@ void loop () {
       lcd.setCursor(9, 0);
       lcd.print(tmp);
     }
-    else {
+    else
+    {
       Serial.print(now.day(), DEC);
       lcd.setCursor(8, 0);
       lcd.print(tmp);
@@ -92,7 +107,8 @@ void loop () {
     Serial.print(' ');
     
     tmp = now.hour();
-    if (now.hour() < 10) {
+    if (now.hour() < 10)
+    {
       Serial.print('0');
       Serial.print(now.hour(), DEC);
       lcd.setCursor(0, 1);
@@ -100,17 +116,20 @@ void loop () {
       lcd.setCursor(1, 1);
       lcd.print(tmp);
     }
-    else {
+    else
+    {
       Serial.print(now.hour(), DEC);
       lcd.setCursor(0, 1);
       lcd.print(tmp);
     }
+    
     Serial.print(':');
     lcd.setCursor(2, 1);
     lcd.print(':');
     
     tmp = now.minute();
-    if (now.minute() < 10) {
+    if (now.minute() < 10)
+    {
       Serial.print('0');
       Serial.print(now.minute(), DEC);
       lcd.setCursor(3, 1);
@@ -118,17 +137,20 @@ void loop () {
       lcd.setCursor(4, 1);
       lcd.print(tmp);
     }
-    else {
+    else
+    {
       Serial.print(now.minute(), DEC);
       lcd.setCursor(3, 1);
       lcd.print(tmp);
     }
+    
     Serial.print(':');
     lcd.setCursor(5, 1);
     lcd.print(':');
     
     tmp = now.second();
-    if (now.second() < 10) {
+    if (now.second() < 10)
+    {
       Serial.print('0');
       Serial.print(now.second(), DEC);
       lcd.setCursor(6, 1);
@@ -136,33 +158,37 @@ void loop () {
       lcd.setCursor(7, 1);
       lcd.print(tmp);
     }
-    else {
+    else
+    {
       Serial.print(now.second(), DEC);
       lcd.setCursor(6, 1);
       lcd.print(tmp);
     }
+    
     Serial.print (' ');
     lcd.setCursor(8, 1);
     lcd.print(' ');
     // Serial.println();
     
-    for (int i=0;i<span;i++) {
+    for (int i=0; i<span; i++)
+    {
       aRead = aRead + analogRead(potPin);
       // Serial.print(aRead);
       // Serial.print(' ');
     }
+    
     // aRead = aRead / span;
     temperature = (aRead / span * 500.0 / 1024.0);
     // Serial.print(aRead);
     // Serial.print(' ');
     // Serial.print(temperature);
     // Serial.print(' ');
+    
     printTenths(long (temperature * 10));
     lcd.setCursor(14, 1);
     lcd.print(char(223));
     lcd.setCursor(15, 1);
     lcd.print('C');
-        
     delay(968);
     
     // Serial.print(" since 2000 = ");

@@ -1,6 +1,11 @@
 // lcd_fromSerial.ino
 // Display input from serial monitor to lcd
 // Non I2C version
+// status: 
+
+// filename: non-I2C assumes to use LiquidCrystal library
+// I2C assumes to use LiquidCrystal_I2C
+// If using Wire directly appends Wire to filename
 
 // My standard hardware setup
 // lcd pins:  RS EN D4 D5 D6 D7

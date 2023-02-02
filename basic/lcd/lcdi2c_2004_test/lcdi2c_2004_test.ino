@@ -1,8 +1,9 @@
-// one_LCD_16_2_I2C.ino
+// lcdi2c_test.ino
+// Print test messages on i2c-based LCD 2004
 
-// http://electronoobs.com/eng_arduino_tut51.php
+// http://electronoobs.com/eng_arduino_tut51.php// 
 
-/* i2c LCD control for 16x2. 
+/* i2c LCD control for 20x4. 
  * Tutorial: http://www.electronoobs.com/eng_arduino_tut51.php
  * Tutorial: http://www.electronoobs.com/eng_arduino_tut51_sch1.php
  */
@@ -12,7 +13,8 @@
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x3f,20,4);  //sometimes the LCD adress is not 0x3f. Change to 0x27 if it dosn't work.
+LiquidCrystal_I2C lcd(0x27, 20, 4);      // sometimes LCD adress is not 0x3f. Change to 0x27 if it dosn't work
+
 int i = 0;
 
 uint8_t bell[8]  = {0x4, 0xe, 0xe, 0xe, 0x1f, 0x0, 0x4};
@@ -27,8 +29,8 @@ uint8_t retarrow[8] = {  0x1, 0x1, 0x5, 0x9, 0x1f, 0x8, 0x4};
 
 void setup()
 {
-  lcd.init();                 //Init the LCD
-  lcd.backlight();            //Activate backlight     
+  lcd.init();                 // Init the LCD
+  lcd.backlight();            // Activate backlight   
 
   lcd.createChar(0, bell);
   lcd.createChar(1, note);
@@ -38,15 +40,16 @@ void setup()
   lcd.createChar(5, check);
   lcd.createChar(6, cross);
   lcd.createChar(7, retarrow);
-  lcd.home();  
+  lcd.home();
 }
 
 
 void loop()
 {
-  // Turn off the display:
+  // Turn off the display
   lcd.clear();
-  lcd.print("  ELECTRONOOBS  ");
+  lcd.print("    ELECTRONOOBS    ");  
+  delay(2000);
   
   lcd.clear();
   lcd.setCursor(0,0);
@@ -59,52 +62,88 @@ void loop()
   lcd.write(7);    
   delay(3000);
   
-  lcd.noDisplay();
-  delay(500);
-  // Turn on the display:
-  lcd.display();
-  delay(500);
-
-  lcd.noDisplay();
-  delay(500);
-  // Turn on the display:
-  lcd.display();
-  delay(500);
-
   
+  lcd.noDisplay();  
+  delay(500);
+  
+  // Turn on the display:
+  lcd.display();  
+  delay(500);
+
+  lcd.noDisplay();  
+  delay(500);
+  
+  // Turn on the display:
+  lcd.display();
+  delay(500);
+
   lcd.clear();
-  while (i<16)
+  
+  while (i < 20)
   {
     lcd.setCursor(i, 0);
-    lcd.print("X");
+    lcd.print("X");    
     i = i + 1;
-    delay(100);
+    delay(50);
   }
   i = 0;
 
-  while (i<16)
+  while( i < 20 )
   {
     lcd.setCursor(i, 1);
-    lcd.print("X");   
+    lcd.print("X");    
     i = i + 1;
-    delay(100);
+    delay(50);
   }
   i = 0;
 
-  lcd.setCursor(0,0);
-  lcd.print("   1234567890   ");    
-  lcd.setCursor(0,1);
-  lcd.print("   0987654321   ");  
+  while( i < 20)
+  {
+    lcd.setCursor(i, 2);
+    lcd.print("X");    
+    i = i + 1;
+    delay(50);
+  }
+  i = 0;
+
+  while(i<20)
+  {
+    lcd.setCursor(i, 3);
+    lcd.print("X");    
+    i = i + 1;
+    delay(50);
+  }
+  i = 0;
+  
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("     1234567890     ");
+  
+  lcd.setCursor(0, 1);
+  lcd.print("     0987654321     ");
+  
+  lcd.setCursor(0, 2);
+  lcd.print("     1234567890     ");  
+  
+  lcd.setCursor(0, 3);
+  lcd.print("     0987654321     "); 
   delay(2000);
 
   lcd.setCursor(0,0);
-  lcd.print("   !$%&/()=?!   ");  
+  lcd.print("     !$%&/()=?!     ");  
+
   lcd.setCursor(0,1);
-  lcd.print("   |@#~!$%&/%   ");  
+  lcd.print("     |@#~!$%&/%     ");  
+
+  lcd.setCursor(0,2);
+  lcd.print("     !$%&/()=?!     ");  
+
+  lcd.setCursor(0,3);
+  lcd.print("     |@#~!$%&/%     ");  
   delay(2000);
 
   lcd.clear();
-  lcd.setCursor(0, 1);
-  lcd.print("  This is LCD 2  ");
-  delay(3000);  
+  lcd.setCursor(0,1);
+  lcd.print("    This is LCD 1    ");  
+  delay(3000);
 }
