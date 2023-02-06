@@ -365,7 +365,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "specctra_dsn": "",
+      "specctra_dsn": "555-blinker.dsn",
       "step": "",
       "vrml": ""
     },

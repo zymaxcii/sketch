@@ -372,7 +372,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "IO_Board.net",
-      "specctra_dsn": "",
+      "specctra_dsn": "GR_IO_Board.dsn",
       "step": "",
       "vrml": ""
     },
