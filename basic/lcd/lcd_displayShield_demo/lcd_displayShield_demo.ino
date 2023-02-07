@@ -1,5 +1,6 @@
-// lcdDisplayShield_demo.ino
+// lcd_DisplayShield_demo.ino
 // lcd-button-demo.ino
+// status: compile ok
 
 // https://dronebotworkshop.com/lcd-displays-arduino/
 

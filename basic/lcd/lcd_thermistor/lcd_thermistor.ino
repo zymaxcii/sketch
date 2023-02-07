@@ -1,11 +1,13 @@
 // lcd-thermistor.ino
 // Display thermistor's temperature in lcd
+// status: compile ok, upload ok
 
 // My standard hardware setup
 // lcd pins:  RS EN D4 D5 D6 D7
 // to MCU:    D8 D9 D4 D5 D6 D7
 //
 // thermistor: pin A0
+
 
 #include <LiquidCrystal.h>
 

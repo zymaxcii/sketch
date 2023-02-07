@@ -1,5 +1,6 @@
 // lcd_helloArduino.ino
 // Print hello Arduino message to lcd
+// status: compile ok, upload ok
 
 // lcd2004_b.ino
 
@@ -66,8 +67,8 @@ void setup()
   Serial.begin(9600);
   Serial.println("Testing in progress...\n");
   
-  lcd.init();                                // initialize lcd
-  lcd.backlight();
+  // lcd.init();                                // initialize lcd; i2c only
+  // lcd.backlight();
                                              // (col, row) please note
   lcd.setCursor(0, 0);                       // move cursor to   (0, 0)
   lcd.print("Arduino");                      // print message at (0, 0)
@@ -76,7 +77,7 @@ void setup()
   lcd.setCursor(0, 2);
   lcd.print("Wonderful world of");
   lcd.setCursor(0, 3);
-  lcd.print("Arduino!!!!!!");
+  lcd.print("Arduino!!!!!!");                // for 2004 actually
   
 }
 

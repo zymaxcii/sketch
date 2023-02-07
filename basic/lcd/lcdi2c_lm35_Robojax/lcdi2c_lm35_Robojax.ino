@@ -1,6 +1,7 @@
-// lcdi2c-lm35_Robojax.ino
+// lcdi2c_lm35_Robojax.ino
 // Display temperature from lm35 on a I2C 2004 LCD
 // temperature readings are very accurate
+// status: compile ok, upload ok
 
 // http://robojax.com/node/1162
 

@@ -1,7 +1,7 @@
 // lcd_scanOven.ino
 // Simulate oven alarm system
 // Non I2C version
-// This sketch is not working. To debug further
+// status: compile ok, upload ok but logic incorrect. To debug further
 
 /*
   LiquidCrystal Library - display() and noDisplay()

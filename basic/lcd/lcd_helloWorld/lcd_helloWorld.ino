@@ -1,5 +1,6 @@
 // lcd_helloWorld.ino
 // Print Hello World and the time passed in seconds
+// status: compile ok
 
 /*
  * Tutorial 8: Using the LCD

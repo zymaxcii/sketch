@@ -1,4 +1,5 @@
 // lcdi2c_1602_test.ino
+// status: compile ok, upload ok
 
 // one_LCD_16_2_I2C.ino
 // http://electronoobs.com/eng_arduino_tut51.php

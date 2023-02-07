@@ -1,6 +1,7 @@
 // lcdi2c-lm35.ino
 // Display temperature readings on I2C 2004 LCD
 // not accurate, on the lower side
+// status: compile ok, upload ok
 
 #include <LiquidCrystal_I2C.h>
 

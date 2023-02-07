@@ -1,6 +1,7 @@
 // lcdi2c_scanOven.ino
 // Simulate oven alarm system using i2c version of lcd 2004A
 // logic not working yet
+// status: compile ok, upload ok
 
 // My standard hardware setup
 // Uno: pins sda, scl; gnd and vcc

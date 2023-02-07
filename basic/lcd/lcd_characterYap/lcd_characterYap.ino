@@ -1,4 +1,5 @@
-// lcd_LiquidCrystal_characterYap.ino
+// lcd_characterYap.ino
+// status: compile ok
 
 // lcd_yap.ino
 // Display characters "Yap" in Chinese to lcd

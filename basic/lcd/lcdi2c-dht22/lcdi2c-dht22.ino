@@ -1,5 +1,6 @@
 // lcdi2c-dht22.ino
 // Display temperature and humidity from dht22 sensor
+// status: compile ok, upload ok but temperature NAN
 
 // https://dronebotworkshop.com/lcd-displays-arduino/
 
@@ -21,7 +22,7 @@
 const int i2c_addr = 0x27;
 
 // DHT-22
-#define DHTPIN 7            // DHT-22 Output Pin connection
+#define DHTPIN 6            // DHT-22 Output Pin connection
 #define DHTTYPE DHT22       // DHT Type is DHT 22 (AM2302)
 
 LiquidCrystal_I2C lcd(i2c_addr, 20, 4);

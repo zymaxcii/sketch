@@ -1,5 +1,7 @@
+// i2c_scanAddress.ino
 // lcdi2c_scanAddress.ino
 // I2C address scanner program
+// status: compile ok
 
 // My standard hardware setup
 // Uno: pins sda, scl; gnd and vcc of lcd

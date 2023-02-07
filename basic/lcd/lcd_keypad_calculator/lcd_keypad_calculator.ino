@@ -1,3 +1,6 @@
+// lcd_keypad_calculator.ino
+// status: compile ok
+
 // calculator.ino
 
 #include <LiquidCrystal.h>

@@ -1,4 +1,5 @@
 // lcdi2c_1602Two_test.ino
+// status: compile ok, upload ok
 
 // two_16_2_i2c_LCD.ino
 // What does it do?

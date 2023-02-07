@@ -1,3 +1,6 @@
+// lcd_menuTemplate.ino
+// status: compile ok
+
 // https://www.cohesivecomputing.co.uk/hackatronics/arduino-lcd-menu-library/
 // https://www.youtube.com/watch?v=PUM0xqLgVrU&list=WL&index=19
 

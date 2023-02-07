@@ -1,5 +1,6 @@
-// lcdi2c_test.ino
+// lcdi2c_2004_test.ino
 // Print test messages on i2c-based LCD 2004
+// status: compile ok, upload ok
 
 // http://electronoobs.com/eng_arduino_tut51.php// 
 
