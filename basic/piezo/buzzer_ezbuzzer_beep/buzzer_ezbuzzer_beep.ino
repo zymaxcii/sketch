@@ -1,5 +1,6 @@
-// buzzer_ez_beep.ino
-// not working
+// buzzer_ezbuzzer_beep.ino
+// status: compile ok
+// cannot hear it; not working?
 
 /*
    Created by ArduinoGetStarted.com
@@ -14,19 +15,19 @@
 
 #include <ezBuzzer.h>          // ezBuzzer library
 
-const int BUTTON_PIN = 2;
+const int BUTTON_PIN = 10;
 const int BUZZER_PIN = 3;
 
 int lastButtonState = HIGH;    // the previous state from the input pin
-
 ezBuzzer buzzer(BUZZER_PIN);   // create ezBuzzer object that attach to a pin
 
 
 void setup()
 {
   Serial.begin(9600);
-  pinMode(BUTTON_PIN, INPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
 }
+
 
 void loop()
 {

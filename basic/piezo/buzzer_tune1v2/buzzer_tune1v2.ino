@@ -1,11 +1,14 @@
-// buzzer_2.ino
+// buzzer_tune1v2.ino
+// status: compile ok, upload ok
 
 const int buzzPin = 3;
 
+
 void setup()
 {
-pinMode(buzzPin, OUTPUT);
+  pinMode(buzzPin, OUTPUT);
 }
+
 
 void loop()
 {
@@ -14,7 +17,7 @@ void loop()
 
   for (int i = 0; i < 10; i++)
   {
-    tone(buzzPin, notes[i]);    // accesses spots on the array
+    tone(buzzPin, notes[i]);
     delay(1000);
   }
 }

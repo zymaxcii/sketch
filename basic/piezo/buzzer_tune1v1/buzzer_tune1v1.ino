@@ -1,5 +1,8 @@
-// buzzer_1.ino
+// buzzer_tune1v1.ino
+// status: compile ok, upload ok
+// what melody is this?
 
+// buzzer module: VCC, I/O, GND
 const int buzzPin = 3;
 
 
@@ -7,6 +10,7 @@ void setup()
 {
   pinMode(buzzPin, OUTPUT);          // buzzer
 }
+
 
 void loop()
 {
@@ -40,4 +44,3 @@ void loop()
   tone(buzzPin, 440); // A
   delay(1000);
 }
-

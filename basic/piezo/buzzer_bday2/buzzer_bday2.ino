@@ -1,15 +1,17 @@
 // buzzer_bday2.ino
-
+// status: compile ok, upload ok
+// Reading of switch state is by polling; misses are highly possible
+// must press down the switch to be effective
 // https://www.mrelectrouino.com/2019/06/buzzer-tutorial-using-arduino-play.html
 
 
-// 1 buzzer
-const int speakerPin = 2;
+// 1 buzzer module
+const int speakerPin = 3;
 
 // 3 leds
-const int led1 = 5;
-const int led2 = 6;
-const int led3 = 7;
+const int led1 = 53;    // Mega board
+const int led2 = 51;
+const int led3 = 49;
 
 // 1 switch
 const int button = 12;
@@ -18,7 +20,7 @@ int buttonState = 0;
 int length = 28;          // the number of notes
 
 char notes[] = "GGAGcB GGAGdc GGxecBA yyecdc";
-int beats[] = { 2, 2, 8, 8, 8, 16, 1, 2, 2, 8, 8,8, 16, 1, 2,2,8,8,8,8,16, 1,2,2,8,8,8,16 };
+int beats[] = { 2,2,8,8,8,16,1,2,2,8,8,8,16,1,2,2,8,8,8,8,16, 1,2,2,8,8,8,16 };
 int tempo = 150;
 
 
@@ -37,9 +39,15 @@ void playTone(int tone, int duration)
 
 void playNote(char note, int duration)
 {
-  char names[] = {'C', 'D', 'E', 'F', 'G', 'A', 'B', 'c', 'd', 'e', 'f', 'g', 'a', 'b', 'x', 'y' };
+  char names[] =
+  {
+    'C', 'D', 'E', 'F', 'G', 'A', 'B', 'c', 'd', 'e', 'f', 'g', 'a', 'b', 'x', 'y'
+  };
 
-  int tones[] = { 1915, 1700, 1519, 1432, 1275, 1136, 1014, 956,  834,  765,  593,  468,  346,  224, 655 , 715 };
+  int tones[] = 
+  {
+    1915,1700,1519,1432,1275,1136,1014,956,834,765,593,468,346,224,655,715
+  };
 
   int SPEE = 5;
 
@@ -57,7 +65,9 @@ void playNote(char note, int duration)
 
 void setup()
 {
-  pinMode(button, INPUT);
+  Serial.begin(9600);
+  
+  pinMode(button, INPUT_PULLUP);
   pinMode(speakerPin, OUTPUT);
   
   pinMode(led1, OUTPUT);
@@ -69,10 +79,11 @@ void setup()
 void loop()
 {
   buttonState = digitalRead(button);
-
+  Serial.println(buttonState);
+  
   if (buttonState == HIGH)
   {
-    for(int k =0; k< 2; k++ )
+    for (int k =0; k< 2; k++ )
     {
       digitalWrite(led1, HIGH);
       digitalWrite(led2, HIGH);
