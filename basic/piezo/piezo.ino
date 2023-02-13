@@ -8,40 +8,46 @@
 const byte ROWS = 4;
 const byte COLS = 3;
 const byte PINLENGTH = 4;
-char keys[ROWS][COLS] = {
+
+char keys[ROWS][COLS] =
+{
   {'1','2','3'},
   {'4','5','6'},
   {'7','8','9'},
   {'*','0','#'}
 };
+
 byte rowPins[ROWS] = {5, 4, 3, 2};
 byte colPins[COLS] = {8, 7, 6};
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
 char PIN[PINLENGTH]={'2','5','8','0'};
-char attempt[PINLENGTH]={0,0,0,0};
+char attempt[PINLENGTH] = {0,0,0,0};
 int z=0;
 
 Servo lock;
-int pos=0;
+int pos = 0;
 
-int pinSpeaker=11;
+int pinSpeaker = 11;
 
 int redLED = 12;
 int grnLED = 13;
 boolean armed = true;
+
 
 void setup()
 {
   pinMode(pinSpeaker, OUTPUT);
   pinMode(redLED, OUTPUT);
   pinMode(grnLED, OUTPUT);
+  
   Serial.begin(9600);
   resetLock();
   Serial.println("* SYSTEM ARMED *");
   Serial.println("  Ready...");
 }
+
 
 void resetLock()
 {
@@ -54,6 +60,7 @@ void resetLock()
   lock.detach();
 }
 
+
 void closeLock()
 {
   lock.attach(9);
@@ -64,6 +71,7 @@ void closeLock()
   }
   lock.detach();
 }
+
 
 void openLock()
 {
@@ -76,35 +84,43 @@ void openLock()
   lock.detach();
 }
 
+
 void correctPIN()
 {
-  armed=false;
+  armed = false;
   playTone(750, 2500);
   openLock();
   Serial.println("* SYSTEM DISARMED *");
   Serial.println("  Ready...");
 }
 
+
 void incorrectPIN()
 {
   playTone(750, 1000);
   Serial.println(" * Incorrect PIN *");
-  z=0;
+  z = 0;
   Serial.println("  Ready...");
 }
 
+
 void checkPIN()
 {
-  int correct=0;
-  for (int q=0; q<PINLENGTH; q++) {
-    if (attempt[q]==PIN[q]) {
+  int correct = 0;
+  for (int q=0; q<PINLENGTH; q++)
+  {
+    if (attempt[q]==PIN[q])
+    {
       correct++;
     }
   }
 
-  if (correct==PINLENGTH) {
+  if (correct==PINLENGTH)
+  {
     correctPIN();
-  } else {
+  }
+  else
+  {
     incorrectPIN();
   }
 
@@ -114,6 +130,7 @@ void checkPIN()
   }
 }
 
+
 void readKeypad()
 {
   char key = keypad.getKey();
@@ -122,7 +139,8 @@ void readKeypad()
     switch(key)
     {
     case '*':
-      if(armed==false){
+      if(armed==false)
+      {
         armed=true;
         playTone(750, 1000);
         closeLock();
@@ -131,15 +149,19 @@ void readKeypad()
       }
       z=0;
       break;
+      
     case '#':
-      if(armed==true){
+      if(armed==true)
+      {
         Serial.print("\n");
         delay(100);
         checkPIN();
       }
       break;
+      
     default:
-      if(armed==true){
+      if(armed==true)
+      {
         playTone(250, 2000);
         Serial.print(key);
         attempt[z]=key;
@@ -149,12 +171,14 @@ void readKeypad()
   }
 }
 
+
 void playTone(long duration, int freq)
 {
   duration *=1000;
   int period = (1.0 / freq) * 1000000;
   long elapsed_time = 0;
-  while(elapsed_time < duration)
+  
+  while (elapsed_time < duration)
   {
     digitalWrite(pinSpeaker, HIGH);
     delayMicroseconds(period / 2);
@@ -163,13 +187,16 @@ void playTone(long duration, int freq)
   }
 }
 
+
 void loop()
 {
   if(armed==true)
   {
     digitalWrite(grnLED, LOW);
     digitalWrite(redLED, HIGH);
-  } else {
+  }
+  else
+  {
     digitalWrite(redLED, LOW);
     digitalWrite(grnLED, HIGH);
   }
