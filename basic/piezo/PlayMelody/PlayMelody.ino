@@ -25,7 +25,8 @@
  */
 
 int ledPin = 13;
-int speakerOut = 7;               
+int speakerOut = 3;    // original D7
+               
 byte names[] = {'c', 'd', 'e', 'f', 'g', 'a', 'b', 'C'};  
 int tones[] = {1915, 1700, 1519, 1432, 1275, 1136, 1014, 956};
 byte melody[] = "2d2a1f2c2d2a2d2c2f2d2a2c2d2a1f2c2d2a2a2g2p8p8p8p";
@@ -37,25 +38,35 @@ int count3 = 0;
 int MAX_COUNT = 24;
 int statePin = LOW;
 
-void setup() {
- pinMode(ledPin, OUTPUT); 
- pinMode(speakerOut, OUTPUT);
+
+void setup()
+{
+  pinMode(ledPin, OUTPUT); 
+  pinMode(speakerOut, OUTPUT);
 }
 
-void loop() {
+
+void loop()
+{
   digitalWrite(speakerOut, LOW);     
-  for (count = 0; count < MAX_COUNT; count++) {
+  for (count = 0; count < MAX_COUNT; count++)
+  {
     statePin = !statePin;
     digitalWrite(ledPin, statePin);
-    for (count3 = 0; count3 <= (melody[count*2] - 48) * 30; count3++) {
-      for (count2=0;count2<8;count2++) {
-        if (names[count2] == melody[count*2 + 1]) {       
+
+    for (count3 = 0; count3 <= (melody[count*2] - 48) * 30; count3++)
+    {
+      for (count2=0;count2<8;count2++)
+      {
+        if (names[count2] == melody[count*2 + 1])
+        {       
           digitalWrite(speakerOut,HIGH);
           delayMicroseconds(tones[count2]);
           digitalWrite(speakerOut, LOW);
           delayMicroseconds(tones[count2]);
         } 
-        if (melody[count*2 + 1] == 'p') {
+        if (melody[count*2 + 1] == 'p')
+        {
           // make a pause of a certain size
           digitalWrite(speakerOut, 0);
           delayMicroseconds(500);

@@ -1,6 +1,7 @@
-// piezo.ino
-
+// safe.ino
 // https://electronics.stackexchange.com/questions/37525/piezo-barely-audible
+// status: compile ok, upload ?
+
 
 #include <Servo.h>
 #include <Keypad.h>
@@ -22,7 +23,7 @@ byte colPins[COLS] = {8, 7, 6};
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
-char PIN[PINLENGTH]={'2','5','8','0'};
+char PIN[PINLENGTH]={'2','5','8','0'};    // pin no to unlock
 char attempt[PINLENGTH] = {0,0,0,0};
 int z=0;
 

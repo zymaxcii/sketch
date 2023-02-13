@@ -1,5 +1,6 @@
 // speaker_sd.ino
 // https://create.arduino.cc/projecthub/HUNMAN/speaker-with-arduino-and-micro-sd-f238b8?ref=similar&ref_id=318552&offset=3
+// status: compile ok, upload ?
 
 
 #include <SD.h>                           // include SD module library

@@ -1,10 +1,12 @@
 // copCar.ino
 // https://github.com/8483/notes/blob/master/topics/arduino.md
+// status: compile ok, upload ?
 
 
 int LED_RED = 12;
 int LED_BLUE = 13;
-int BUZZER = 10;
+int BUZZER = 3;
+
 
 void setup()
 {
