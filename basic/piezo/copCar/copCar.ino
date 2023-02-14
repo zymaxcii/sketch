@@ -1,5 +1,6 @@
 // copCar.ino
 // https://github.com/8483/notes/blob/master/topics/arduino.md
+// http://thezhut.com/?page_id=510 for 2N2222 to drive the speaker
 // status: compile ok, upload ok
 
 
