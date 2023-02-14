@@ -1,3 +1,8 @@
+// buzzer_forceSensor2.ino
+// status: compile ok, upload ok
+// but don't know how it works
+
+
 /* Piezo Knock
  * -----------
  * Turn a standard piezo buzzer into a force sensor
@@ -9,35 +14,44 @@
 
 
 int ledPin = 13;
-int piezoPin = 2;
+int piezoPin = 3;
 
 int THRESHOLD = 100;  // set minimum value that indicates a knock
 
-int val = 0;       // variable to store the value coming from the sensor
-int t = 0;         // the "time" measured for how long the knock lasts
+int val = 0;          // variable to store the value coming from the sensor
+int t = 0;            // "time" measured for how long the knock lasts
+
 
 void setup()
 {
   pinMode(ledPin, OUTPUT);
-  Serial.begin(19200);
+  Serial.begin(9600);
   Serial.println("ready");      // indicate we're waiting
 }
+
 
 void loop()
 {
   digitalWrite(ledPin,LOW);     // indicate we're waiting
 
   val = analogRead(piezoPin);   // read piezo
-  if( val > THRESHOLD ) {      // is it bigger than our minimum?
+  
+  if ( val > THRESHOLD )
+  {
+    // is it bigger than our minimum?
     digitalWrite(ledPin, HIGH); // tell the world
     t = 0;
-    while(analogRead(piezoPin) > THRESHOLD) {
+   
+    while (analogRead(piezoPin) > THRESHOLD)
+    {
       t++;
     } // wait for it to go LOW  (with a little hysteresis)
-    if(t>100) {  // cut off the low values because they're noise
+    
+    if (t>100)
+    {
+      // cut off the low values because they're noise
       Serial.print("knock! ");
       Serial.println(t);
     }
   }
 }
- 

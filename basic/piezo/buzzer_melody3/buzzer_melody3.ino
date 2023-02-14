@@ -1,7 +1,11 @@
+// buzzer_melody3.ino
+// Play a melody once
+// status: compile ok, upload ok
+
 /*
  * Tutorial 4a: Melody
  * 
- * Plays a melody through a speaker.
+ * Plays a melody through a speaker
  *
  * The circuit:
  *  - 8-ohm speaker conected to digital pin 8 through a 100 ohm resistor
@@ -19,14 +23,15 @@
  *
  */
 
+
 // include our list of note pitches
 #include "pitches.h"
 
 // the pin the speaker is attached to
-int speakerPin = 8;
+int speakerPin = 3;
 
 // the notes in our melody and their duration in fractions of a second
-// e.g. quarter note = 4, eighth note = 8, etc.
+// e.g. quarter note = 4, eighth note = 8, etc
 const int melody[][2] = 
 {
     {NOTE_C4, 4},
@@ -38,6 +43,7 @@ const int melody[][2] =
     {NOTE_B3, 4},
     {NOTE_C4, 4}
 };
+
 
 void setup()
 {
@@ -57,14 +63,15 @@ void setup()
         // play the note
         tone(speakerPin, thisNoteTone, noteDurationMS);
 
-        // to distinguish the notes, set a minimum time between them.
-        // the note's duration + 30% seems to work well:
+        // to distinguish the notes, set a minimum time between them
+        // the note's duration + 30% seems to work well
         delay(noteDurationMS * 1.30);
     }
 }
 
+
 void loop()
 {
-    // no need to repeat the melody.
+    // no need to repeat the melody
     // do nothing
 }

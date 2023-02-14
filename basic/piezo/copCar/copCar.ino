@@ -1,16 +1,17 @@
 // copCar.ino
 // https://github.com/8483/notes/blob/master/topics/arduino.md
-// status: compile ok, upload ?
+// status: compile ok, upload ok
 
 
-int LED_RED = 12;
-int LED_BLUE = 13;
+// my traffic light led module
+int LED_RED  = 13;
+int LED_BLUE = 11;
 int BUZZER = 3;
 
 
 void setup()
 {
-  pinMode(LED_RED, OUTPUT);
+  pinMode(LED_RED,  OUTPUT);
   pinMode(LED_BLUE, OUTPUT);
   pinMode(BUZZER, OUTPUT);
 }

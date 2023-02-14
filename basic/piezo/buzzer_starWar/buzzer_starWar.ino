@@ -1,4 +1,7 @@
 // buzzer_starWar.ino
+// Play the tune from Star War
+// status: compile ok, upload ok
+
 
 const int c = 261;
 const int d = 294;
@@ -21,11 +24,12 @@ const int gSH = 830;
 const int aH = 880;
  
 const int buzzerPin = 3;
-const int ledPin1 = 12;
+const int ledPin1 = 12;    // my traffic light led module
 const int ledPin2 = 13;
  
 int counter = 0;
- 
+
+
 void setup()
 {
   // Setup pin modes
@@ -79,8 +83,8 @@ void beep(int note, int duration)
   if (counter % 2 == 0)
   {
     digitalWrite(ledPin1, HIGH);
-   delay(duration);
-   digitalWrite(ledPin1, LOW);
+    delay(duration);
+    digitalWrite(ledPin1, LOW);
   }
   else
   {
@@ -146,4 +150,3 @@ void secondSection()
   beep(cH, 250); 
   delay(350);
 }
-

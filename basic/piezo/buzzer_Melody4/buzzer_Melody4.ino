@@ -1,3 +1,6 @@
+// buzzer_Melody4.ino
+// status: compile ok, upload ok
+
 /* Play Melody
  * -----------
  *
@@ -24,15 +27,19 @@
  * (cleft) 2005 D. Cuartielles for K3
  */
 
-int ledPin = 13;
-int speakerOut = 3;    // original D7
+
+int ledPin = 13;          // my traffic light led module
+int speakerOut = 3;       // piezo module
                
-byte names[] = {'c', 'd', 'e', 'f', 'g', 'a', 'b', 'C'};  
+byte names[] = {'c', 'd', 'e', 'f', 'g', 'a', 'b', 'C'};
+
 int tones[] = {1915, 1700, 1519, 1432, 1275, 1136, 1014, 956};
+
 byte melody[] = "2d2a1f2c2d2a2d2c2f2d2a2c2d2a1f2c2d2a2a2g2p8p8p8p";
+
 // count length: 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0
 //                                10                  20                  30
-int count = 0;
+int count  = 0;
 int count2 = 0;
 int count3 = 0;
 int MAX_COUNT = 24;
@@ -48,7 +55,8 @@ void setup()
 
 void loop()
 {
-  digitalWrite(speakerOut, LOW);     
+  digitalWrite(speakerOut, LOW);
+  
   for (count = 0; count < MAX_COUNT; count++)
   {
     statePin = !statePin;
@@ -64,7 +72,8 @@ void loop()
           delayMicroseconds(tones[count2]);
           digitalWrite(speakerOut, LOW);
           delayMicroseconds(tones[count2]);
-        } 
+        }
+        
         if (melody[count*2 + 1] == 'p')
         {
           // make a pause of a certain size
@@ -75,4 +84,3 @@ void loop()
     }
   }
 }
-

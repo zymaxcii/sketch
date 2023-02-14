@@ -1,6 +1,7 @@
 // speaker_sd.ino
 // https://create.arduino.cc/projecthub/HUNMAN/speaker-with-arduino-and-micro-sd-f238b8?ref=similar&ref_id=318552&offset=3
-// status: compile ok, upload ?
+// status: compile ok, upload ok
+// but additional SD module is needed
 
 
 #include <SD.h>                           // include SD module library
@@ -24,8 +25,8 @@ void setup()
   }
   
   tmrpcm.setVolume(6);                    // 0 to 7. Set volume level
-  tmrpcm.play("1.wav");                   // the sound file "1" will play each time the arduino powers up, or is reset
+  tmrpcm.play("1.wav");
 }
 
 
-void loop(){}
+void loop(){ }
