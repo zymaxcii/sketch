@@ -1,6 +1,6 @@
 // buzzer_melody2.ino
 // https://create.arduino.cc/projecthub/Rad_Silviu/speaker-with-arduino-be454c
-// status: compile ok, upload ?
+// status: compile ok, upload ok
 
 #include "pitches.h"
 
@@ -75,10 +75,10 @@ void setup()
   for (int thisNote = 0; melody[thisNote]!=-1; thisNote++)
   {
     int noteDuration = speed*noteDurations[thisNote];
-    tone(9, melody[thisNote], noteDuration*.95);
+    tone(3, melody[thisNote], noteDuration*.95);
     Serial.println(melody[thisNote]);
     delay(noteDuration);
-    noTone(9);
+    noTone(3);
   }
 }
 

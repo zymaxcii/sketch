@@ -2,6 +2,7 @@
 // status: compile ok, upload ok
 // but cannot hear a thing
 
+
 //Audio Output Pin = D3 (see text)
 // original is D11
 
