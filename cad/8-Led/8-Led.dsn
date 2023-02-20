@@ -1,0 +1,209 @@
+(pcb "/home/mty/sketch/cad/8-Led/8-Led/8-Led.dsn"
+  (parser
+    (string_quote ")
+    (space_in_quoted_tokens on)
+    (host_cad "KiCad's Pcbnew")
+    (host_version "6.0.11")
+  )
+  (resolution um 10)
+  (unit um)
+  (structure
+    (layer F.Cu
+      (type signal)
+      (property
+        (index 0)
+      )
+    )
+    (layer B.Cu
+      (type signal)
+      (property
+        (index 1)
+      )
+    )
+    (boundary
+      (path pcb 0  116940 -172720  85190 -172720  85190 -121920  116940 -121920
+            116940 -172720)
+    )
+    (via "Via[0-1]_800:400_um")
+    (rule
+      (width 250)
+      (clearance 200.1)
+      (clearance 200.1 (type default_smd))
+      (clearance 50 (type smd_smd))
+    )
+  )
+  (placement
+    (component Resistor_SMD:R_0201_0603Metric
+      (place R8 107950.000000 -165100.000000 front 0.000000 (PN 330))
+    )
+    (component Resistor_SMD:R_0201_0603Metric::1
+      (place R7 107950.000000 -161290.000000 front 0.000000 (PN 330))
+      (place R6 107950.000000 -156210.000000 front 0.000000 (PN 330))
+      (place R5 107950.000000 -149860.000000 front 0.000000 (PN 330))
+      (place R4 107950.000000 -144780.000000 front 0.000000 (PN 330))
+      (place R3 107950.000000 -139700.000000 front 0.000000 (PN 330))
+      (place R2 107950.000000 -134120.000000 front 0.000000 (PN 330))
+      (place R1 107950.000000 -128090.000000 front 0.000000 (PN 330))
+    )
+    (component "TerminalBlock:TerminalBlock_bornier-2_P5.08mm"
+      (place J1 97790.000000 -146050.000000 front 90.000000 (PN Screw_Terminal_01x02))
+    )
+    (component LED_SMD:LED_0201_0603Metric
+      (place D8 114055.000000 -165100.000000 front 0.000000 (PN LED))
+    )
+    (component LED_SMD:LED_0201_0603Metric::1
+      (place D7 114055.000000 -161290.000000 front 0.000000 (PN LED))
+      (place D6 114055.000000 -156210.000000 front 0.000000 (PN LED))
+      (place D5 114055.000000 -149860.000000 front 0.000000 (PN LED))
+      (place D4 114055.000000 -144780.000000 front 0.000000 (PN LED))
+      (place D3 114055.000000 -139700.000000 front 0.000000 (PN LED))
+      (place D2 114055.000000 -133770.000000 front 0.000000 (PN LED))
+      (place D1 114055.000000 -128090.000000 front 0.000000 (PN LED))
+    )
+  )
+  (library
+    (image Resistor_SMD:R_0201_0603Metric
+      (outline (path signal 100  300 -150  -300 -150))
+      (outline (path signal 100  -300 150  300 150))
+      (outline (path signal 100  300 150  300 -150))
+      (outline (path signal 100  -300 -150  -300 150))
+      (outline (path signal 50  700 -350  -700 -350))
+      (outline (path signal 50  -700 350  700 350))
+      (outline (path signal 50  700 350  700 -350))
+      (outline (path signal 50  -700 -350  -700 350))
+      (pin RoundRect[T]Pad_460x400_100.381_um_0.000000_0 2 320 0)
+      (pin RoundRect[T]Pad_460x400_100.381_um_0.000000_0 1 -320 0)
+    )
+    (image Resistor_SMD:R_0201_0603Metric::1
+      (outline (path signal 50  -700 -350  -700 350))
+      (outline (path signal 50  700 350  700 -350))
+      (outline (path signal 50  -700 350  700 350))
+      (outline (path signal 50  700 -350  -700 -350))
+      (outline (path signal 100  -300 -150  -300 150))
+      (outline (path signal 100  300 150  300 -150))
+      (outline (path signal 100  -300 150  300 150))
+      (outline (path signal 100  300 -150  -300 -150))
+      (pin RoundRect[T]Pad_460x400_100.381_um_0.000000_0 1 -320 0)
+      (pin RoundRect[T]Pad_460x400_100.381_um_0.000000_0 2 320 0)
+    )
+    (image "TerminalBlock:TerminalBlock_bornier-2_P5.08mm"
+      (outline (path signal 120  -2540 3810  -2540 -3810))
+      (outline (path signal 120  7620 -3810  7620 3810))
+      (outline (path signal 120  7620 -2540  -2540 -2540))
+      (outline (path signal 120  -2540 -3810  7620 -3810))
+      (outline (path signal 120  7620 3810  -2540 3810))
+      (outline (path signal 50  7790 -4000  7790 4000))
+      (outline (path signal 50  -2710 4000  -2710 -4000))
+      (outline (path signal 50  -2710 4000  7790 4000))
+      (outline (path signal 50  7790 -4000  -2710 -4000))
+      (outline (path signal 100  7540 3750  -2460 3750))
+      (outline (path signal 100  -2460 3750  -2460 -3750))
+      (outline (path signal 100  -2460 -3750  7540 -3750))
+      (outline (path signal 100  7540 -3750  7540 3750))
+      (outline (path signal 100  -2410 -2550  7490 -2550))
+      (pin Rect[A]Pad_3000x3000_um 1 0 0)
+      (pin Round[A]Pad_3000_um 2 5080 0)
+    )
+    (image LED_SMD:LED_0201_0603Metric
+      (outline (path signal 100  -200 -150  -200 150))
+      (outline (path signal 100  300 -150  -300 -150))
+      (outline (path signal 100  -300 -150  -300 150))
+      (outline (path signal 100  -300 150  300 150))
+      (outline (path signal 100  300 150  300 -150))
+      (outline (path signal 100  -100 -150  -100 150))
+      (outline (path signal 50  -700 -350  -700 350))
+      (outline (path signal 50  700 -350  -700 -350))
+      (outline (path signal 50  -700 350  700 350))
+      (outline (path signal 50  700 350  700 -350))
+      (outline (path signal 100  -810 0  -821.698 -32.139  -851.318 -49.24  -885 -43.301
+            -906.985 -17.101  -906.985 17.101  -885 43.301  -851.318 49.24
+            -821.698 32.139  -810 0))
+      (pin RoundRect[T]Pad_460x400_100.381_um_0.000000_0 2 320 0)
+      (pin RoundRect[T]Pad_460x400_100.381_um_0.000000_0 1 -320 0)
+    )
+    (image LED_SMD:LED_0201_0603Metric::1
+      (outline (path signal 100  -810 0  -821.698 -32.139  -851.318 -49.24  -885 -43.301
+            -906.985 -17.101  -906.985 17.101  -885 43.301  -851.318 49.24
+            -821.698 32.139  -810 0))
+      (outline (path signal 50  700 350  700 -350))
+      (outline (path signal 50  -700 350  700 350))
+      (outline (path signal 50  700 -350  -700 -350))
+      (outline (path signal 50  -700 -350  -700 350))
+      (outline (path signal 100  -100 -150  -100 150))
+      (outline (path signal 100  300 150  300 -150))
+      (outline (path signal 100  -300 150  300 150))
+      (outline (path signal 100  -300 -150  -300 150))
+      (outline (path signal 100  300 -150  -300 -150))
+      (outline (path signal 100  -200 -150  -200 150))
+      (pin RoundRect[T]Pad_460x400_100.381_um_0.000000_0 1 -320 0)
+      (pin RoundRect[T]Pad_460x400_100.381_um_0.000000_0 2 320 0)
+    )
+    (padstack Round[A]Pad_3000_um
+      (shape (circle F.Cu 3000))
+      (shape (circle B.Cu 3000))
+      (attach off)
+    )
+    (padstack RoundRect[T]Pad_460x400_100.381_um_0.000000_0
+      (shape (polygon F.Cu 0  -230.381 100  -222.74 138.414  -200.98 170.98  -168.414 192.74
+            -129.999 200.38  130 200.381  168.414 192.74  200.98 170.98
+            222.74 138.414  230.38 99.999  230.381 -100  222.74 -138.414
+            200.98 -170.98  168.414 -192.74  129.999 -200.38  -130 -200.381
+            -168.414 -192.74  -200.98 -170.98  -222.74 -138.414  -230.38 -99.999
+            -230.381 100))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_3000x3000_um
+      (shape (rect F.Cu -1500 -1500 1500 1500))
+      (shape (rect B.Cu -1500 -1500 1500 1500))
+      (attach off)
+    )
+    (padstack "Via[0-1]_800:400_um"
+      (shape (circle F.Cu 800))
+      (shape (circle B.Cu 800))
+      (attach off)
+    )
+  )
+  (network
+    (net GND
+      (pins J1-2 D8-1 D7-1 D6-1 D5-1 D4-1 D3-1 D2-1 D1-1)
+    )
+    (net "Net-(D1-Pad2)"
+      (pins R1-2 D1-2)
+    )
+    (net "Net-(D2-Pad2)"
+      (pins R2-2 D2-2)
+    )
+    (net "Net-(D3-Pad2)"
+      (pins R3-2 D3-2)
+    )
+    (net "Net-(D4-Pad2)"
+      (pins R4-2 D4-2)
+    )
+    (net "Net-(D5-Pad2)"
+      (pins R5-2 D5-2)
+    )
+    (net "Net-(D6-Pad2)"
+      (pins R6-2 D6-2)
+    )
+    (net "Net-(D7-Pad2)"
+      (pins R7-2 D7-2)
+    )
+    (net "Net-(D8-Pad2)"
+      (pins R8-2 D8-2)
+    )
+    (net VCC
+      (pins R8-1 R7-1 R6-1 R5-1 R4-1 R3-1 R2-1 R1-1 J1-1)
+    )
+    (class kicad_default
+      (circuit
+        (use_via Via[0-1]_800:400_um)
+      )
+      (rule
+        (width 250)
+        (clearance 200.1)
+      )
+    )
+  )
+  (wiring
+  )
+)
