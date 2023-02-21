@@ -2,8 +2,12 @@
 // status: compile ok, upload ok
 // basically it is working but has lots of room for improvement
 // https://sg.cytron.io/tutorial/calculator-using-i2c-lcd-and-4x4-keypad-on-arduino?r=1
-// wrong matching brackets!!
-// to re-paste
+// Lacking many features of a cheap calculator
+// where to find a sketch that can do everything a cheap calculator does?
+// must press "clear" each time to start a new calculation
+// cannot take expressions
+// only do integer operations
+
 
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 20, 4);      // LCD 2004 at address 0x27
@@ -38,6 +42,7 @@ void setup()
 {
   lcd.init();                      
   lcd.backlight();
+
   lcd.setCursor(3,0);
   lcd.print("Maker UNO");
   lcd.setCursor(3,1);
@@ -70,75 +75,48 @@ void loop()
       final = true;
     }
   }
-  else
-  {  
-    if (presentValue == false && key != NO_KEY && (key == '/' || key == '*' || key == '-' || key == '+'))
-    {
-      if (presentValue == false)
-      {
-        int numLength = num1.length();
-        presentValue = true;
-        op = key;
-        lcd.setCursor(0 + numLength, 0);
-        lcd.print(op);
-      }
-    
-      else
-      {
-        if (final == true && key != NO_KEY && key == '=')
-        {
-          if (op == '+')
-          {
-            answer = num1.toInt() + num2.toInt();
-          }
-          else
-          {
-            if (op == '-')
-            {
-              answer = num1.toInt() - num2.toInt();
-            }
-            else
-            {
-              if (op == '*')
-              {
-                answer = num1.toInt() * num2.toInt();
-              }
-              else
-              {
-                if (op == '/')
-                {
-                  answer = num1.toInt() / num2.toInt();
-                            
-                }
-              }
-            }
-       
-          }
-        }
-          
-      }
-      
-                          
-      lcd.clear();
-      lcd.setCursor(16, 1);
-      lcd.autoscroll();
-      lcd.print(answer);
-      lcd.noAutoscroll();
-    }
 
-    else
+  else if (presentValue == false && key != NO_KEY && (key == '/' || key == '*' || key == '-' || key == '+'))
+  {
+    if (presentValue == false)
     {
-      if (key != NO_KEY && key == 'C')
-      {
-        lcd.clear();
-        presentValue = false;
-        final = false;
-        num1 = "";
-        num2 = "";
-        answer = 0;
-        op = ' ';
-      }
+      int numLength = num1.length();
+      presentValue = true;
+      op = key;
+      lcd.setCursor(0 + numLength, 0);
+      lcd.print(op);
     }
   }
+
+  else if (final == true && key != NO_KEY && key == '=') {
+      
+    if (op == '+') {
+      answer = num1.toInt() + num2.toInt();
+    }
+    else if (op == '-') {
+      answer = num1.toInt() - num2.toInt();
+    }
+    else if (op == '*') {
+      answer = num1.toInt() * num2.toInt();
+    }
+    else if (op == '/') {
+      answer = num1.toInt() / num2.toInt();
+    }
+    lcd.clear();
+    lcd.setCursor(16, 1);
+    lcd.autoscroll();
+    lcd.print(answer);
+    lcd.noAutoscroll();
+    
+  }
+  else if (key != NO_KEY && key == 'C')
+       {
+         lcd.clear();
+         presentValue = false;
+         final = false;
+         num1 = "";
+         num2 = "";
+         answer = 0;
+         op = ' ';
+       }
 }
-  

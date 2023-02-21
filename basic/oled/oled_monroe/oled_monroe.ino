@@ -1,6 +1,8 @@
 // oled_monroe.ino
 // Display a bitmap of Marilyn Monroe on oled screen
+// status: compile ok, upload ok
 
+// i2c-based oled screen
 // oled_bitmap.ino
 // https://lastminuteengineers.com/oled-display-arduino-tutorial/
 // http://javl.github.io/image2cpp/

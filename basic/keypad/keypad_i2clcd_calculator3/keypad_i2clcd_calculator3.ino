@@ -1,5 +1,10 @@
+// keypad_i2clcd_calculator3.ino
+// status: compile ok, upload ok
+// code is cleaner than the others
+// but still far from a cheap calculator
+
 // https://www.youtube.com/watch?v=JUmno7PdRic
-// 
+
 
 #include "LiquidCrystal_I2C.h"
 #include "Keypad.h"
@@ -15,11 +20,12 @@ char keys[ROW_NUM][COLUMN_NUM] =
   {'C','0','=', '/'}          
 };
 
-byte pin_rows[ROW_NUM] = {9, 8, 7, 6}; //connect to the row pinouts of the keypad
-byte pin_column[COLUMN_NUM] = {5, 4, 3, 2}; //connect to the column pinouts of the keypad
+byte pin_rows[ROW_NUM]      = {22, 23, 24, 25};    // L1 to L4
+byte pin_column[COLUMN_NUM] = {26, 27, 28, 29};   // R1 to R4
 
 Keypad keypad = Keypad( makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_NUM );
-LiquidCrystal_I2C lcd(0x27,20,4);
+
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 String input;
 int counter;
@@ -31,14 +37,15 @@ void setup()
 {
   lcd.init();
   lcd.backlight();
-
   Reset();
 }
+
 
 void loop() 
 {
   char key = keypad.getKey();
-  if(key)
+
+  if (key)
   {
     if(IsNumber(key))
     {
@@ -59,6 +66,7 @@ void loop()
   }
 }
 
+
 void ClearScreen()
 {
   lcd.setCursor(0,0);
@@ -68,6 +76,7 @@ void ClearScreen()
   lcd.print("                  ");
 }
 
+
 void Reset()
 {
   counter = 0;
@@ -76,29 +85,28 @@ void Reset()
   ClearScreen();
 }
 
+
 void ProcessNumber(char key)
 {
-  if(counter >= maxLength)
+  if (counter >= maxLength)
   return;
   
   counter++;
   input += key;
   
-  if(op == ' ')  
+  if (op == ' ')  
    lcd.setCursor(2,0);
-   else
+  else
     lcd.setCursor(2,1);
-
-   lcd.print(input);
+    lcd.print(input);
 }
+
 
 void ProcessOperator(char key)
 {
-  if(input.length() <= 0)
-  return;
+  if (input.length() <= 0) return;
 
-  if(op != ' ')
-  return;
+  if (op != ' ') return;
 
   counter = 0;
   op = key;
@@ -110,10 +118,10 @@ void ProcessOperator(char key)
   input.remove(0);
 }
 
+
 void Calculate(char key)
 {
-  if(input.length() <= 0)
-  return;
+  if (input.length() <= 0) return;
 
   long sn = input.toInt();
   long result = DoOperation(op,fn,sn);
@@ -123,33 +131,28 @@ void Calculate(char key)
   lcd.print(result);
 }
 
+
 bool IsNumber(char key)
 {
-  if(key >= '0' && key <= '9')
-   return true;
-
-   return false;
-}
-
-bool IsOperator(char key)
-{
-  if(key == '+' || key == '-' || key == '*'||key == '/' )
-    return true;
-
+  if (key >= '0' && key <= '9') return true;
   return false;
 }
 
+
+bool IsOperator(char key)
+{
+  if (key == '+' || key == '-' || key == '*'||key == '/' ) return true;
+  return false;
+}
+
+
 long DoOperation(char key , long a ,long b)
 {
- if(key == '+')
-   return a + b;
+  if (key == '+') return a + b;
 
- if(key == '-')
-   return a - b;
+  if (key == '-') return a - b;
 
-  if(key == '*')
-   return a * b;
+  if (key == '*') return a * b;
 
-  if(key == '/')
-   return a / b;
+  if (key == '/') return a / b;
 }
