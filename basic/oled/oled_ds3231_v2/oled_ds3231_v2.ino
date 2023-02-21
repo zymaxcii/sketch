@@ -1,13 +1,13 @@
 // https://www.youtube.com/watch?v=ai4xqzTVGUM
 
 #include <Wire.h>
-#include <DS3231.h>
+#include "DS3231.h"
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
 int pause=1000;
 
-DS3231 clock;
+DS3231 myClock;
 RTCDateTime dt;
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -19,7 +19,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 void setup() {
 Serial.begin(9600);
-    clock.begin();
+    myClock.begin();
   // Set sketch compiling time
     // clock.setDateTime(__DATE__, __TIME__);
  
@@ -91,7 +91,7 @@ String CurrentTime(uint8_t h, uint8_t i ){
 }
 
 void loop() {
-  dt = clock.getDateTime();
+  dt = myClock.getDateTime();
 
   display.fillRect(0,0,128,16,SSD1306_WHITE);
   display.fillRect(0,16,128,28,SSD1306_WHITE);
@@ -128,11 +128,11 @@ void loop() {
   display.setTextColor(SSD1306_BLACK); 
   display.println("Tempreture : ");
 
-  clock.forceConversion();
+  myClock.forceConversion();
   display.setCursor(75,55); 
   display.setTextSize(1);
 display.setTextColor(SSD1306_BLACK); 
-display.print(clock.readTemperature());
+display.print(myClock.readTemperature());
 display.setCursor(105,53); 
 display.setTextSize(1);
 display.print("o");

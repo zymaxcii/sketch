@@ -6,7 +6,7 @@
 #include <Wire.h>
 
 
-#include <DS3231.h>
+#include "DS3231.h"
 // #include <Arduino-DS3231-master>
 
 #include <Adafruit_GFX.h>
@@ -16,7 +16,7 @@ int pause=1000;
 
 DS3231 myClock;
 // RTCDateTime dt;
-DateTime dt;
+RTCDateTime dt;
 
 #define SCREEN_WIDTH 128     // OLED display width, in pixels
 #define SCREEN_HEIGHT 64     // OLED display height, in pixels
@@ -31,7 +31,7 @@ void setup()
   Serial.begin(9600);
   // myClock.begin();
   // Set sketch compiling time
-  // clock.setDateTime(__DATE__, __TIME__);
+  myClock.setDateTime(__DATE__, __TIME__);
  
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
@@ -113,9 +113,8 @@ String CurrentTime(uint8_t h, uint8_t i )
 
 void loop()
 {
-  // dt = myClock.getDateTime();
-  dt = myClock.getDate();
-
+  dt = myClock.getDateTime();
+  
 
   display.fillRect(0,0,128,16,SSD1306_WHITE);
   display.fillRect(0,16,128,28,SSD1306_WHITE);
