@@ -1,7 +1,8 @@
 // oled_ds3231_v4.ino
 // https://www.youtube.com/watch?v=ai4xqzTVGUM
-// status: compile ok, upload ok
+// status: compile ok, upload ok, working now
 // note: uses local library file
+
 
 #include <Wire.h>
 #include "DS3231.h"

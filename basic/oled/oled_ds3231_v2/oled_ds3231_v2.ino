@@ -1,3 +1,6 @@
+// oled_ds3231_v2.ino
+// status: compile ok, upload ok, working now
+
 // https://www.youtube.com/watch?v=ai4xqzTVGUM
 
 #include <Wire.h>

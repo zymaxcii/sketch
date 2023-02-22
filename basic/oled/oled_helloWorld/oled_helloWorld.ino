@@ -1,6 +1,8 @@
 // oled_helloWorld.ino
 // https://lastminuteengineers.com/oled-display-arduino-tutorial/
 // Print hello world on oled screen
+// status: compile ok, upload ok
+
 
 #include <SPI.h>
 #include <Wire.h>

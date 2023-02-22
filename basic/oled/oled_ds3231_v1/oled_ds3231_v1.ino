@@ -1,13 +1,11 @@
 // oled_ds3231_v1.ino
-// status: compile ,upload 
+// status: compile ok,upload ok, working now
 
 // https://www.youtube.com/watch?v=ai4xqzTVGUM
 
+
 #include <Wire.h>
-
-
-#include "DS3231.h"
-// #include <Arduino-DS3231-master>
+#include "DS3231.h"      // local copy
 
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>

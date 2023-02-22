@@ -1,6 +1,6 @@
 // rtc3231_tester.ino
+// status: compile ok, upload 
 
-// time_with_rtc.ino
 // Code by tronixstuff
 
 #include "Wire.h"
@@ -28,7 +28,7 @@ void setup()
   // set the initial time here
   // DS3231 seconds, minutes, hours, day, date, month, year
   // comment out when not needed
-  // setDS3231time(00,07,15,3,17,05,22);
+  setDS3231time(00,21,14,4,22,02,23);
 }
 
 
