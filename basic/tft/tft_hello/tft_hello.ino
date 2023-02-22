@@ -1,9 +1,13 @@
-// write_text.ino
+// tft_hello.ino
+// status: compile , upload 
+// https://randomnerdtutorials.com/guide-to-1-8-tft-display-with-arduino/
 
+// write_text.ino
 /*
  * Rui Santos 
  * Complete Project Details http://randomnerdtutorials.com
- */
+*/
+
 
 // include TFT and SPI libraries
 #include <TFT.h>  
@@ -20,12 +24,12 @@ TFT TFTscreen = TFT(cs, dc, rst);
 
 void setup()
 {
-  // initialize the library
+  // initialize
   TFTscreen.begin();
 
-  // clear the screen with a black background
+  // clear screen with a black background
   TFTscreen.background(0, 0, 0);
-  //set the text size
+  // set the text size
   TFTscreen.setTextSize(2);
 }
 

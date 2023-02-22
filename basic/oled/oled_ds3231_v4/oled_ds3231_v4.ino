@@ -1,5 +1,6 @@
 // oled_ds3231_v4.ino
 // https://www.youtube.com/watch?v=ai4xqzTVGUM
+// https://github.com/jarzebski/Arduino-DS3231
 // status: compile ok, upload ok, working now
 // note: uses local library file
 

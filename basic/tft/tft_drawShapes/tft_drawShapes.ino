@@ -1,9 +1,12 @@
-// draw_shapes.ino
+// tft_drawShapes.ino
+// https://randomnerdtutorials.com/guide-to-1-8-tft-display-with-arduino/
 
+
+// draw_shapes.ino
 /*
  * Rui Santos 
  * Complete Project Details http://randomnerdtutorials.com
- */
+*/
  
 // include TFT and SPI libraries
 #include <TFT.h>  
@@ -15,15 +18,16 @@
 #define rst  8
 
 
-// create an instance of the library
+// create an instance
 TFT TFTscreen = TFT(cs, dc, rst);
+
 
 void setup()
 {
-  //initialize the library
+  // initialize
   TFTscreen.begin();
 
-  // clear the screen with a black background
+  // clear screen with a black background
   TFTscreen.background(0, 0, 0);
 }
 
@@ -36,7 +40,7 @@ void loop()
   int greenRandom = random (0, 255);
   int blueRandom = random (0, 255);
   
-  // set the color for the figures
+  // set color
   TFTscreen.stroke(redRandom, greenRandom, blueRandom);
 
   // light up a single point
@@ -48,14 +52,14 @@ void loop()
   TFTscreen.line(0, 64, 160, 64);
   delay(500);
 
-  //draw a square
+  // draw a square
   TFTscreen.rect(50, 34, 60, 60);
   delay(500);
     
-  //draw a circle
+  // draw a circle
   TFTscreen.circle(80, 64, 30);
   delay(500);
 
-  //erase all figures
+  // erase all figures
   TFTscreen.background(0, 0, 0);
 }
