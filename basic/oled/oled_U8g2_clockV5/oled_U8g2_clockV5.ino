@@ -1,6 +1,13 @@
+// oled_U8g2_clockV5.ino
+// step 5: with 2 interrupts
+// status: compile , upload 
+
+// digital-clock-step-5-interrupt
 // https://www.youtube.com/watch?v=SuSqalI90G0
 // https://arduino-tutorials.net/project/digital-arduino-clock
 // https://github.com/BasOnTech/Arduino-Projects-EN
+
+
 
 
 /*
@@ -32,6 +39,7 @@
 */
 
 
+#include <Arduino.h>
 #include <U8g2lib.h>
 
 #ifdef U8X8_HAVE_HW_SPI
@@ -47,14 +55,22 @@ byte minutes = 0;
 byte seconds = 0;
 
 // Constants for the button pins
+// The  FALLING interrupt is only available at pin 2 and 3 on the Arduino UNO 
 const int PIN_BUTTON_HOURS = 3;
 const int PIN_BUTTON_MINUTES = 2;
+
+const int BUTTON_DEBOUNCE_TIME = 100;
 
 // Variables for the button state
 // We are using the internal pull-up resistors via INPUT_PULLUP, so
 // press is LOW and not pressed is HIGH
 int buttonHoursState = HIGH;
+int elapsedButtonHoursMillis = 0; 
+unsigned long previousButtonHoursMillis = 0;
+
 int buttonMinutesState = HIGH;
+int elapsedButtonMinutesMillis = 0; 
+unsigned long previousButtonMinutesMillis = 0;
 
 // Char array for the time being showed on the display
 char timeString[9];
@@ -62,10 +78,9 @@ char timeString[9];
 // Variables to store the time
 unsigned long currentMillis = 0;
 
-
 // Int is enough to store the elapsed time
 int elapsedTimeUpdateMillis = 0; 
-unsigned long lastTimeUpdateMillis = 0;
+unsigned long previousTimeUpdateMillis = 0;
 
 float percentageOfSecondElapsed = 0;
 
@@ -74,12 +89,23 @@ U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
 void setup(void) {
 
+  // Serial.begin(9600);
+
   // Configure the pins of the buttons with the internal PULLUP resistor
   pinMode(PIN_BUTTON_HOURS, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(PIN_BUTTON_HOURS), hoursButtonPressedInterrupt, FALLING);
+
   pinMode(PIN_BUTTON_MINUTES, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(PIN_BUTTON_MINUTES), minutesButtonPressedInterrupt, FALLING);
 
   u8g2.setFont(u8g2_font_logisoso28_tf);
   u8g2.begin();
+
+  // Empty the interrupt queue. This makes sure there are 
+  // no old pending interrupts in the queue which are processed on startup
+  // More info: https://arduino.stackexchange.com/questions/30968/how-do-interrupts-work-on-the-arduino-uno-and-similar-boards
+  EIFR = bit (INTF0);  // clear flag for interrupt 0
+  EIFR = bit (INTF1);  // clear flag for interrupt 1
 }
 
 void loop(void) {
@@ -88,19 +114,7 @@ void loop(void) {
   // https://arduino.stackexchange.com/questions/113/is-it-possible-to-find-the-time-taken-by-millis
   currentMillis = millis();
 
-  elapsedTimeUpdateMillis = currentMillis - lastTimeUpdateMillis;
-
-  // Check if the hours button has been pressed
-  buttonHoursState = digitalRead(PIN_BUTTON_HOURS);
-  if (buttonHoursState == LOW) {
-    hours++;
-  }
-
-  // Check if the minutes button has been pressed
-  buttonMinutesState = digitalRead(PIN_BUTTON_MINUTES);
-  if (buttonMinutesState == LOW) {
-    minutes++;
-  }
+  elapsedTimeUpdateMillis = currentMillis - previousTimeUpdateMillis;
 
   // Check if a minutes has been elapsed
   if (seconds > 59) {
@@ -119,7 +133,6 @@ void loop(void) {
     hours = 0;
   }
 
-
   // Check if 1000ms, 1 second, has been elapsed
   if (elapsedTimeUpdateMillis > 1000) {
     seconds++;
@@ -128,13 +141,34 @@ void loop(void) {
     // Then there are already 200ms elapsed of the next second. We need to
     // substract these on the "last time". So the next second will be updated 200ms earlier. 
     // This reduces the amount of time drift.
-    lastTimeUpdateMillis = currentMillis - (elapsedTimeUpdateMillis - 1000);
+    previousTimeUpdateMillis = currentMillis - (elapsedTimeUpdateMillis - 1000);
   }
 
   // Calculate the percentage elapsed of a second
   percentageOfSecondElapsed = elapsedTimeUpdateMillis / 1000.0;
 
-  u8g2.firstPage();
+  drawScreen();
+
+}
+
+void hoursButtonPressedInterrupt() {
+  elapsedButtonHoursMillis = currentMillis - previousButtonHoursMillis;
+  if (elapsedButtonHoursMillis > BUTTON_DEBOUNCE_TIME) {
+    previousButtonHoursMillis = currentMillis;
+    hours++;
+  }
+}
+
+void minutesButtonPressedInterrupt() {
+  elapsedButtonMinutesMillis = currentMillis - previousButtonMinutesMillis;
+  if (elapsedButtonMinutesMillis > BUTTON_DEBOUNCE_TIME) {
+    previousButtonMinutesMillis = currentMillis;
+    minutes++;
+  }
+}
+
+void drawScreen() {
+    u8g2.firstPage();
 
   do {
 
@@ -151,5 +185,4 @@ void loop(void) {
     u8g2.drawStr(0, 45, timeString);
     
   } while (u8g2.nextPage());
-
 }

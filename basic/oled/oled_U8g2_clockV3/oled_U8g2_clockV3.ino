@@ -1,3 +1,8 @@
+// oled_U8g2_clockV3.ino
+// step 3: using animation
+// status: compile ok, upload ok
+
+
 // https://www.youtube.com/watch?v=SuSqalI90G0
 // https://arduino-tutorials.net/project/digital-arduino-clock
 // https://github.com/BasOnTech/Arduino-Projects-EN
@@ -47,8 +52,8 @@ byte minutes = 0;
 byte seconds = 0;
 
 // Constants for the button pins
-const int PIN_BUTTON_HOURS = 3;
-const int PIN_BUTTON_MINUTES = 2;
+const int PIN_BUTTON_HOURS   = 10;    // my Mega board
+const int PIN_BUTTON_MINUTES = 11;
 
 // Variables for the button state
 // We are using the internal pull-up resistors via INPUT_PULLUP, so
@@ -62,16 +67,17 @@ char timeString[9];
 // Variables to store the time
 unsigned long currentMillis = 0;
 
+
 // Int is enough to store the elapsed time
 int elapsedTimeUpdateMillis = 0; 
 unsigned long lastTimeUpdateMillis = 0;
+
+float percentageOfSecondElapsed = 0;
 
 // A complete list of all displays is available at: https://github.com/olikraus/u8g2/wiki/u8g2setupcpp
 U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
 void setup(void) {
-
-  // Serial.begin(9600);
 
   // Configure the pins of the buttons with the internal PULLUP resistor
   pinMode(PIN_BUTTON_HOURS, INPUT_PULLUP);
@@ -130,9 +136,16 @@ void loop(void) {
     lastTimeUpdateMillis = currentMillis - (elapsedTimeUpdateMillis - 1000);
   }
 
+  // Calculate the percentage elapsed of a second
+  percentageOfSecondElapsed = elapsedTimeUpdateMillis / 1000.0;
+
   u8g2.firstPage();
 
   do {
+
+    // Draw the yellow lines
+    u8g2.drawBox(0, 0, 127 - (127 * percentageOfSecondElapsed), 2);
+    u8g2.drawBox(0, 3, (127 * percentageOfSecondElapsed), 2);
 
     // Found at https://forum.arduino.cc/index.php?topic=371117.0
     // sprintf_P uses the Program Memory instead of RAM, more info at http://gammon.com.au/progmem

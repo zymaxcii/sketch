@@ -1,3 +1,8 @@
+// oled_U8g2_clockV4.ino
+// step 4: with debounce
+// status: compile ok, upload ok
+
+
 // https://www.youtube.com/watch?v=SuSqalI90G0
 // https://arduino-tutorials.net/project/digital-arduino-clock
 // https://github.com/BasOnTech/Arduino-Projects-EN
@@ -49,8 +54,8 @@ byte minutes = 0;
 byte seconds = 0;
 
 // Constants for the button pins
-const int PIN_BUTTON_HOURS = 3;
-const int PIN_BUTTON_MINUTES = 2;
+const int PIN_BUTTON_HOURS   = 10;    // My Mega board
+const int PIN_BUTTON_MINUTES = 11;
 
 const int BUTTON_DEBOUNCE_TIME = 100;
 

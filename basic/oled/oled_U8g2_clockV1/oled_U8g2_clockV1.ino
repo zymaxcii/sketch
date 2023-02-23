@@ -1,6 +1,8 @@
-// oled_U8g2_clock_v1.ino
+// oled_U8g2_clockV1.ino
+// using blocking delay
+// status: compile ok, upload ok
 
-
+// digital-clock-step-1-delay.ino
 // https://www.youtube.com/watch?v=SuSqalI90G0
 // https://arduino-tutorials.net/project/digital-arduino-clock
 // https://github.com/BasOnTech/Arduino-Projects-EN
@@ -48,8 +50,8 @@ byte minutes = 0;
 byte seconds = 0;
 
 // Constants for the button pins
-const int PIN_BUTTON_HOURS = 3;
-const int PIN_BUTTON_MINUTES = 2;
+const int PIN_BUTTON_HOURS   = 10;      // my Mega board
+const int PIN_BUTTON_MINUTES = 11;
 
 // Variables for the button state
 // We are using the internal pull-up resistors via INPUT_PULLUP, so
