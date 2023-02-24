@@ -3,6 +3,7 @@
 // https://github.com/jarzebski/Arduino-DS3231
 // status: compile ok, upload ok, working now
 // note: uses local library file
+// Day of Week seems to be wrong, faster by 1 day
 
 
 #include <Wire.h>

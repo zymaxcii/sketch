@@ -1,6 +1,6 @@
 // oled_U8g2_clockV5.ino
 // step 5: with 2 interrupts
-// status: compile ok, upload ok
+// status: compile ok, upload ok, working
 
 // digital-clock-step-5-interrupt
 // https://www.youtube.com/watch?v=SuSqalI90G0

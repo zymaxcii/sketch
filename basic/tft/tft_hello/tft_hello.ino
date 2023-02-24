@@ -1,5 +1,7 @@
 // tft_hello.ino
 // status: compile , upload 
+
+
 // https://randomnerdtutorials.com/guide-to-1-8-tft-display-with-arduino/
 
 // write_text.ino

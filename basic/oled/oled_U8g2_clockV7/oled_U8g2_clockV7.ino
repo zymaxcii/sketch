@@ -1,7 +1,11 @@
+// oled_U8g2_clockV7.ino
+// status: compile ok, upload ok, working
+
+
+// digital-clock-step-7-mode-set-interrupt-timeout
 // https://www.youtube.com/watch?v=SuSqalI90G0
 // https://arduino-tutorials.net/project/digital-arduino-clock
 // https://github.com/BasOnTech/Arduino-Projects-EN
-
 
 
 /*
@@ -87,19 +91,21 @@ byte currentMode = MODE_SHOW_TIME;
 volatile boolean buttonModePressed = false;
 volatile boolean buttonSetPressed = false;
 
-// A complete list of all displays is available at: https://github.com/olikraus/u8g2/wiki/u8g2setupcpp
+// A complete list of all displays is available at:
+// https://github.com/olikraus/u8g2/wiki/u8g2setupcpp
 U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
-void setup(void) {
 
+void setup(void)
+{
   u8g2.setFont(u8g2_font_logisoso28_tf);
   u8g2.begin();
 
   // Empty the interrupt queue. This makes sure there are 
   // no old pending interrupts in the queue which are processed on startup
   // More info: https://arduino.stackexchange.com/questions/30968/how-do-interrupts-work-on-the-arduino-uno-and-similar-boards
-  EIFR = bit (INTF0);  // clear flag for interrupt 0
-  EIFR = bit (INTF1);  // clear flag for interrupt 1
+  EIFR = bit (INTF0);      // clear flag for interrupt 0
+  EIFR = bit (INTF1);      // clear flag for interrupt 1
 
   digitalWrite(PIN_BUTTON_MODE, HIGH);
   digitalWrite(PIN_BUTTON_SET, HIGH);
@@ -110,11 +116,11 @@ void setup(void) {
 
   pinMode(PIN_BUTTON_SET, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(PIN_BUTTON_SET), setButtonPressedInterrupt, FALLING);
-
 }
 
-void loop(void) {
 
+void loop(void)
+{
   // millis() itself takes 1.812 micro seconds that is 0.001812 milli seconds
   // https://arduino.stackexchange.com/questions/113/is-it-possible-to-find-the-time-taken-by-millis
   currentMillis = millis();
@@ -124,58 +130,72 @@ void loop(void) {
 
   checkTime();
 
-  if (currentMode == MODE_SHOW_TIME) {
+  if (currentMode == MODE_SHOW_TIME)
+  {
     increaseSeconds();
-  } else {
-
-    if (elapsedButtonModeMillis > MODE_SET_TIMEOUT && elapsedButtonSetMillis > MODE_SET_TIMEOUT) {
+  }
+  else
+  {
+    if (elapsedButtonModeMillis > MODE_SET_TIMEOUT && elapsedButtonSetMillis > MODE_SET_TIMEOUT) 
+    {
       currentMode = MODE_SHOW_TIME;
     }
     
     previousTimeUpdateMillis = currentMillis;
   }
 
-  if (buttonModePressed) {
+  if (buttonModePressed)
+  {
     modeButtonHandler();
   }
 
-  if (buttonSetPressed) {
+  if (buttonSetPressed)
+  {
     buttonSetHandler();
   }
-
   drawScreen();
-
 }
 
-void checkTime() {
+
+void checkTime()
+{
   // Check if a minutes has been elapsed
-  if (seconds > 59) {
+  if (seconds > 59)
+  {
     seconds = 0;
     minutes++;
   }
 
   // Check if an hour has been elapsed
-  if (minutes > 59) {
+  if (minutes > 59)
+  {
     minutes = 0;
     hours++;
   }
 
   // Check if a day has been elapsed
-  if (hours > 23) {
+  if (hours > 23)
+  {
     hours = 0;
   }
 }
 
-void modeButtonPressedInterrupt() {
+
+void modeButtonPressedInterrupt()
+{
   buttonModePressed = true;
 }
 
-void modeButtonHandler() {
-  if (elapsedButtonModeMillis > BUTTON_MODE_DEBOUNCE_TIME) {
+
+void modeButtonHandler()
+{
+  if (elapsedButtonModeMillis > BUTTON_MODE_DEBOUNCE_TIME)
+  {
     previousButtonModeMillis = currentMillis;
     currentMode++;
 
-    if (currentMode > 3) {
+    if (currentMode > 3)
+    {
       currentMode = 0;
     }
 
@@ -184,32 +204,44 @@ void modeButtonHandler() {
 }
 
 
-void setButtonPressedInterrupt() {
+void setButtonPressedInterrupt()
+{
   buttonSetPressed = true;
 }
 
-void buttonSetHandler() {
-  if (elapsedButtonSetMillis > BUTTON_SET_DEBOUNCE_TIME) {
+
+void buttonSetHandler()
+{
+  if (elapsedButtonSetMillis > BUTTON_SET_DEBOUNCE_TIME)
+  {
     previousButtonSetMillis = currentMillis;
 
-    if (currentMode == MODE_SET_SECONDS) {
+    if (currentMode == MODE_SET_SECONDS)
+    {
       seconds = 0;
     }
-    if (currentMode == MODE_SET_MINUTES) {
+    
+    if (currentMode == MODE_SET_MINUTES)
+    {
       minutes++;
     }
-    if (currentMode == MODE_SET_HOURS) {
+    
+    if (currentMode == MODE_SET_HOURS)
+    {
       hours++;
     }
   }
   buttonSetPressed = false;
 }
 
-void increaseSeconds() {
+
+void increaseSeconds()
+{
   elapsedTimeUpdateMillis = currentMillis - previousTimeUpdateMillis;
 
   // Check if 1000ms, 1 second, has been elapsed
-  if (elapsedTimeUpdateMillis > 1000) {
+  if (elapsedTimeUpdateMillis > 1000)
+  {
     seconds++;
 
     // It might be possible that more than 1000ms has been elapsed e.g. 1200ms 
@@ -220,13 +252,16 @@ void increaseSeconds() {
   }
 }
 
-void drawScreen() {
+
+void drawScreen()
+{
   u8g2.firstPage();
 
-  do {
-
-    if (currentMode != MODE_SHOW_TIME) {
-      u8g2.drawTriangle((currentMode - 1) * 43 + 5, 0, currentMode * 43 - 5, 0, (currentMode - 1) * 43 + 21, 5);
+  do
+  {
+    if (currentMode != MODE_SHOW_TIME)
+    {
+      u8g2.drawTriangle((currentMode-1) * 43+5,0,currentMode*43-5,0,(currentMode-1)*43+21,5);
     }
 
     drawAnimation();
@@ -235,23 +270,27 @@ void drawScreen() {
   } while (u8g2.nextPage());
 }
 
-void drawTime() {
 
+void drawTime()
+{
   // Found at https://forum.arduino.cc/index.php?topic=371117.0
-  // sprintf_P uses the Program Memory instead of RAM, more info at http://gammon.com.au/progmem
+  // sprintf_P uses the Program Memory instead of RAM,
+  // more info at http://gammon.com.au/progmem
   // Here we format the minutes and seconds with a leading zero: e.g. 01, 02, 03 etc.
   sprintf_P(timeString, PSTR("%2d:%02d:%02d"), hours, minutes, seconds);
 
   // Draw the timeString
   u8g2.drawStr(0, 45, timeString);
-
 }
 
-void drawAnimation() {
+
+void drawAnimation()
+{
   // Calculate the percentage elapsed of a second
   percentageOfSecondElapsed = elapsedTimeUpdateMillis / 1000.0;
 
-  if (currentMode == MODE_SHOW_TIME) {
+  if (currentMode == MODE_SHOW_TIME)
+  {
     // Draw the yellow lines
     u8g2.drawBox(0, 0, 127 - (127 * percentageOfSecondElapsed), 2);
     u8g2.drawBox(0, 3, (127 * percentageOfSecondElapsed), 2);

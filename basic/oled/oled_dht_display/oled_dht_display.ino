@@ -1,4 +1,7 @@
+// oled_dht_display.ino
+// status: compile ok, upload ok
 // display_temperature_and_humidity.ino
+
 
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -13,10 +16,11 @@ Adafruit_SSD1306 display(OLED_RESET);
 // Initialize DHT sensor for normal 16mhz Arduino
 DHT dht(DHTPIN, DHTTYPE);
 
+
 void setup()
 {
   Wire.begin();
-  dht.begin();   // initialize dht
+  dht.begin();       // initialize dht
   
   // initializing the display
   // with I2C addr 0x3C (for 128x32)

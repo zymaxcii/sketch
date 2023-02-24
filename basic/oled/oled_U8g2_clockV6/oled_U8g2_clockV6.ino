@@ -1,5 +1,5 @@
 // oled_U8g2_clockV6.ino
-// status: compile ok, upload 
+// status: compile ok, upload ok
 
 // digital-clock-step-6-mode-set-no-interrupt
 // https://www.youtube.com/watch?v=SuSqalI90G0
