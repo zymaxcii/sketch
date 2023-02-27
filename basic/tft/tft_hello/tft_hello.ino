@@ -1,6 +1,6 @@
 // tft_hello.ino
-// status: compile , upload 
-
+// Display "Hello, World!" on tft lcd display
+// status: compile ok, upload ok
 
 // https://randomnerdtutorials.com/guide-to-1-8-tft-display-with-arduino/
 
@@ -15,12 +15,13 @@
 #include <TFT.h>  
 #include <SPI.h>
 
-// pin definition for Arduino UNO
+// pin definition for Arduino UNO, Mega as well
+// 3 pins
 #define cs   10
 #define dc   9
 #define rst  8
 
-// create an instance of the library
+// create an instance
 TFT TFTscreen = TFT(cs, dc, rst);
 
 

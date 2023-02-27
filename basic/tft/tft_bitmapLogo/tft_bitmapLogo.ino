@@ -1,6 +1,6 @@
 // tft_bitmapLogo.ino
-// status: compile , upload 
-
+// status: compile ok, upload ok
+// solder the pins and prepare bmp file first
 
 /*
  Arduino TFT Bitmap Logo example

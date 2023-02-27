@@ -1,4 +1,7 @@
 // tft_drawShapes.ino
+// status: compile ok, upload ok
+
+
 // https://randomnerdtutorials.com/guide-to-1-8-tft-display-with-arduino/
 
 
@@ -7,12 +10,14 @@
  * Rui Santos 
  * Complete Project Details http://randomnerdtutorials.com
 */
- 
+
+
 // include TFT and SPI libraries
 #include <TFT.h>  
 #include <SPI.h>
 
 // pin definition for Arduino UNO
+// 3 pins
 #define cs   10
 #define dc   9
 #define rst  8
