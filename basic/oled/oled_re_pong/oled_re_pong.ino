@@ -45,7 +45,7 @@ params[] =
 };
 
 const byte numParams = sizeof(params) / sizeof(params[0]);
-const byte speakerPin = A3;
+const byte speakerPin = 5;      // original A3, D5 also works
 
 byte reMin, reMax, countIncr; // RE minimum, maximum and increment size for currently selected parameter
 int screenWidth;              // LCD display's width in pixels
