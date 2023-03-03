@@ -471,6 +471,11 @@
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid 61eda8fc-7a28-4eac-9e6d-53273184b15c)
   )
+  (polyline (pts (xy 179.07 20.32) (xy 179.07 114.3))
+    (stroke (width 0) (type default) (color 0 0 0 0))
+    (uuid 6764989a-3847-499f-9836-cf44a681c1f0)
+  )
+
   (wire (pts (xy 100.33 99.06) (xy 88.9 99.06))
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid 67bc42b0-81e6-463d-8da1-e1b6574cd8ab)
@@ -543,6 +548,11 @@
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid 9d86dcf8-ae4d-4054-80d1-125ebe5a7372)
   )
+  (polyline (pts (xy 27.94 20.32) (xy 179.07 20.32))
+    (stroke (width 0) (type default) (color 0 0 0 0))
+    (uuid a1ac1f80-1f28-41c6-80e9-66b55e9d77c2)
+  )
+
   (wire (pts (xy 88.9 38.1) (xy 100.33 38.1))
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid a4e4e981-a012-4c30-b1ec-0b208df06d85)
@@ -559,6 +569,15 @@
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid b487d2b1-edae-467e-a1ea-8cfd5859777a)
   )
+  (polyline (pts (xy 179.07 114.3) (xy 27.94 114.3))
+    (stroke (width 0) (type default) (color 0 0 0 0))
+    (uuid b624e031-e4f5-4dd2-b94d-1f16e1150d88)
+  )
+  (polyline (pts (xy 27.94 20.32) (xy 27.94 114.3))
+    (stroke (width 0) (type default) (color 0 0 0 0))
+    (uuid bea3cb35-0b6c-4231-8cf1-614be2600091)
+  )
+
   (wire (pts (xy 107.95 78.74) (xy 114.3 78.74))
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid c0933959-6d48-4d88-8df8-d6aa19745075)
@@ -606,6 +625,16 @@
   (wire (pts (xy 88.9 58.42) (xy 100.33 58.42))
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid fdb5b50d-927d-4ef2-89cc-c148dab1a03c)
+  )
+
+  (text "8 LEDs" (at 43.18 27.94 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 4b491abc-0261-44c2-aac9-55b47dea7883)
+  )
+
+  (hierarchical_label "clk" (shape input) (at 204.47 49.53 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid a781ac92-91ee-48ce-b736-eee9069fde82)
   )
 
   (symbol (lib_id "Device:LED") (at 118.11 27.94 180) (unit 1)
@@ -999,8 +1028,21 @@
     (pin "2" (uuid ab959686-5ebc-48a3-811a-aa96a0f2d572))
   )
 
+  (sheet (at 204.47 36.83) (size 53.34 34.29) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid) (color 0 0 0 0))
+    (fill (color 0 0 0 0.0000))
+    (uuid fadefa33-8e30-44c4-97be-46ad588ab9fb)
+    (property "Sheet name" "Controller" (id 0) (at 204.47 36.1184 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheet file" "untitled.kicad_sch" (id 1) (at 204.47 71.7046 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+  )
+
   (sheet_instances
     (path "/" (page "1"))
+    (path "/fadefa33-8e30-44c4-97be-46ad588ab9fb" (page "2"))
   )
 
   (symbol_instances
