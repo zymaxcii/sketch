@@ -1,7 +1,7 @@
-// led_blinky.ino
-// blinkyLEDTest.ino
-// require 3 leds
+// led_blink3led.ino
 // can also use one RGB led
+// status: compile , upload 
+
 
 // https://tronixstuff.com/
 

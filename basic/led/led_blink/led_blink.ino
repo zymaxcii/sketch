@@ -1,3 +1,7 @@
+// led_blink.ino
+// status: compile , upload 
+
+
 /*
 blink.ino
 Turns on an LED for one second, then off for one second, repeatedly
