@@ -1,3 +1,7 @@
+// elapsedMillis_compare.ino
+// status: compile , upload 
+
+
 /*
   Blink with elapsed time
   Shows how to use elapsed time to free up your sketch to do interesting work
@@ -67,12 +71,11 @@
 
 #include <elapsedMillis.h>
 
-// Pin 13 has an LED connected on most Arduino boards.
 int led = 13;
 
-// the setup routine runs once when you press reset:
-void setup() {                
-  // initialize the digital pin as an output.
+
+void setup() 
+{
   pinMode(led, OUTPUT);     
 }
 
@@ -84,7 +87,9 @@ unsigned long lasttime = millis();	// used by millis() example...
 unsigned int interval = 1000;
 boolean ledState = LOW;
 
-void loop() {
+
+void loop()
+{
   // delayloop();
   // millisloop();
   elapsedmillisloop();
@@ -99,7 +104,8 @@ void loop() {
 //
 // In this example, the LED blinks on and off once per invocation of loop()
 
-void delayloop() {
+void delayloop()
+{
   // Note that any "real code" you put here will cause the time between blinks to grow
   delay(1000);                 // wait for a second
   // and, finally, blink the lights:
@@ -119,7 +125,8 @@ void delayloop() {
 // of course, that the desired blink interval is significantly larger than than that "other"
 // time)
 
-void millisloop() {
+void millisloop()
+{
 
   // your "real" code goes here:
   //      read sensors
@@ -127,12 +134,14 @@ void millisloop() {
   //      update motor driver output
   // and, finally, blink the lights:
 
-  if (millis() - lasttime >= interval) {
+  if (millis() - lasttime >= interval)
+  {
 	ledState = !ledState;			// toggle the state from HIGH to LOW to HIGH to LOW ... 
 	digitalWrite(led, ledState);
 	lasttime = millis();
   }
 }
+
 
 // ##########################  elapsedmillis() based loop ###########################
 //
@@ -142,7 +151,8 @@ void millisloop() {
 // This example is almost the same as the millis() one, with the various accounting details
 // abstracted by the new datatype.
 
-void elapsedmillisloop() {
+void elapsedmillisloop()
+{
 
   // your "real" code goes here:
   //      read sensors
@@ -150,9 +160,11 @@ void elapsedmillisloop() {
   //      update motor driver output
   // and, finally, blink the lights:
 
-  if (elapsedTime > interval) {				// Again, note that "elapsedTime" is global scope
-	ledState = !ledState;			// toggle the state from HIGH to LOW to HIGH to LOW ... 
+  if (elapsedTime > interval)
+  {
+    // Again, note that "elapsedTime" is global scope
+	ledState = !ledState;		   	            // toggle state 
 	digitalWrite(led, ledState);
-	elapsedTime = 0;							// reset the counter to 0 so the counting starts over...
+	elapsedTime = 0;							// reset counter so counting starts over
   }
 }
