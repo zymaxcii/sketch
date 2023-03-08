@@ -1,0 +1,41 @@
+Info: Backing up file '/home/mty/sketch/cad/csedunio/csedunio_orig/sym-lib-table' to '/home/mty/sketch/cad/csedunio/csedunio_orig/rescue-backup/sym-lib-table-2023-03-08-16-19-00'.
+Info: Backing up file '/home/mty/sketch/cad/csedunio/csedunio_orig/cseduinov4.sch' to '/home/mty/sketch/cad/csedunio/csedunio_orig/rescue-backup/cseduinov4-2023-03-08-16-19-00.sch'.
+Info: Backing up file '/home/mty/sketch/cad/csedunio/csedunio_orig/cseduinov4.kicad_pro' to '/home/mty/sketch/cad/csedunio/csedunio_orig/rescue-backup/cseduinov4-2023-03-08-16-19-00.kicad_pro'.
+Info: Backing up file '/home/mty/sketch/cad/csedunio/csedunio_orig/cseduinov4-cache.lib' to '/home/mty/sketch/cad/csedunio/csedunio_orig/rescue-backup/cseduinov4-cache-2023-03-08-16-19-00.lib'.
+Info: Backing up file '/home/mty/sketch/cad/csedunio/csedunio_orig/cseduinov4-rescue.lib' to '/home/mty/sketch/cad/csedunio/csedunio_orig/rescue-backup/cseduinov4-rescue-2023-03-08-16-19-00.lib'.
+Info: Backing up file '/home/mty/sketch/cad/csedunio/csedunio_orig/cseduinov4-rescue.dcm' to '/home/mty/sketch/cad/csedunio/csedunio_orig/rescue-backup/cseduinov4-rescue-2023-03-08-16-19-00.dcm'.
+Warning: No symbol +5V found in symbol library table.
+Warning: No symbol C found in symbol library table.
+Warning: No symbol CONN_01X08 found in symbol library table.
+Warning: No symbol GND found in symbol library table.
+Warning: No symbol GND found in symbol library table.
+Warning: No symbol R found in symbol library table.
+Warning: No symbol +5V found in symbol library table.
+Warning: No symbol CONN_01X06 found in symbol library table.
+Warning: No symbol SPST found in symbol library table.
+Warning: No symbol C found in symbol library table.
+Warning: No symbol GND found in symbol library table.
+Warning: No symbol +5V found in symbol library table.
+Warning: No symbol CAPAPOL found in symbol library table.
+Warning: No symbol GND found in symbol library table.
+Warning: No symbol GND found in symbol library table.
+Warning: No symbol DIODE found in symbol library table.
+Warning: No symbol +5V found in symbol library table.
+Warning: No symbol 7805 found in symbol library table.
+Warning: No symbol CAPAPOL found in symbol library table.
+Warning: No symbol ATMEGA328-P found in symbol library table.
+Warning: No symbol GND found in symbol library table.
+Warning: No symbol R found in symbol library table.
+Warning: No symbol LED found in symbol library table.
+Warning: No symbol GND found in symbol library table.
+Warning: No symbol CONN_01X02 found in symbol library table.
+Warning: No symbol PWR_FLAG found in symbol library table.
+Warning: No symbol PWR_FLAG found in symbol library table.
+Warning: No symbol CONN_01X14 found in symbol library table.
+Warning: No symbol +5V found in symbol library table.
+Warning: No symbol C found in symbol library table.
+Warning: No symbol CONN_01X04 found in symbol library table.
+Warning: No symbol GND found in symbol library table.
+Warning: No symbol GND found in symbol library table.
+Warning: No symbol CRYSTAL found in symbol library table.
+Info: Symbol library table mapping complete!
