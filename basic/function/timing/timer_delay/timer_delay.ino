@@ -1,5 +1,6 @@
 // timer_delay.ino
-// status: compile , upload 
+// status: compile ok, upload ok
+// with blocking delay, button is not very responsive
 
 
 /*
@@ -20,12 +21,18 @@
 */
 
 
+// 8 LED module with Mega, no jumpers:
+// 39,41,43,45,47,49,51,53 
+
+// The switch module with Mega, no jumpers:
+// 10,11,12,13
+
 // button and LED Pins
-#define button1Pin 9
-#define led1Pin 13
-#define led2Pin 12
-#define led3Pin 11
-#define led4Pin 10
+#define button1Pin 10
+#define led1Pin 53
+#define led2Pin 51
+#define led3Pin 49
+#define led4Pin 47
 
 int onoff = 0;      // 0 lights are off 1 lights are on
 
@@ -36,7 +43,8 @@ void setup()
   pinMode(led2Pin, OUTPUT);
   pinMode(led3Pin, OUTPUT);
   pinMode(led4Pin, OUTPUT);
-  pinMode(button1Pin, INPUT);
+  
+  pinMode(button1Pin, INPUT_PULLUP);
   Serial.begin(9600);
 }
 
@@ -58,7 +66,7 @@ void loop()
     if(digitalRead(button1Pin) == HIGH)
     {
       // turn LEDs off
-      if(onoff == 1)
+      if (onoff == 1)
       {
         digitalWrite(led1Pin, LOW);
         digitalWrite(led2Pin, LOW);

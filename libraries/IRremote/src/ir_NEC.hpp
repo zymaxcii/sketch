@@ -8,7 +8,7 @@
  ************************************************************************************
  * MIT License
  *
- * Copyright (c) 2020-2022 Armin Joachimsmeyer
+ * Copyright (c) 2020-2023 Armin Joachimsmeyer
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -61,14 +61,24 @@
  + 600,-1650 + 600,-1650 + 600,-1650 + 600,-1600
  + 650
  Sum: 68000
+
+ Protocol=NEC Address=0x8 Command=0x7 Repeat gap=40900us
+ rawData[4]:
+ -40900
+ +10450,-2250
+ + 700
+ Sum: 13400
  */
 // http://www.hifi-remote.com/wiki/index.php/NEC
 // https://www.sbprojects.net/knowledge/ir/nec.php
-// for Apple see https://en.wikipedia.org/wiki/Apple_Remote
+// for Apple see https://en.wikipedia.org/wiki/Apple_Remote - Fixed address 0x87EE, 8 bit device ID, 7 bit command, 1 bit parity - untested!
 // ONKYO like NEC but 16 independent command bits
 // PIONEER (not implemented) is NEC2 with 40 kHz
 // LSB first, 1 start bit + 16 bit address (or 8 bit address and 8 bit inverted address) + 8 bit command + 8 bit inverted command + 1 stop bit.
-// Standard NEC (or NEC1) sends a special fixed repeat frame, but I have a DVD remote with NEC2, which send the same full frame after the 110 ms.
+// Standard NEC sends a special fixed repeat frame.
+// NEC2 sends the same full frame after the 110 ms. I have a DVD remote with NEC2.
+// NEC and NEC 2 only differ in the repeat frames, so the protocol can only be detected correctly after the first repeat.
+//
 // IRP: NEC  {38.0k,564}<1,-1|1,-3>(16,-8,D:8,S:8,F:8,~F:8,1,^108m,(16,-4,1,^108m)*)  ==> "*" means send special repeat frames o ore more times
 // IRP: NEC2 {38.0k,564}<1,-1|1,-3>(16,-8,D:8,S:8,F:8,~F:8,1,^108m)+   ==> "+" means send frame 1 or more times (special repeat is missing here!)
 // {38.0k,564} ==> 38.0k -> Frequency , 564 -> unit in microseconds (we use 560), no "msb", so "lsb" is assumed
@@ -97,17 +107,18 @@
 #define NEC_REPEAT_DURATION     (NEC_HEADER_MARK  + NEC_REPEAT_HEADER_SPACE + NEC_BIT_MARK) // 12 ms
 #define NEC_REPEAT_PERIOD       110000 // Commands are repeated every 110 ms (measured from start to start) for as long as the key on the remote control is held down.
 #define NEC_REPEAT_DISTANCE         (NEC_REPEAT_PERIOD - NEC_AVERAGE_DURATION) // 48 ms
-#define NEC_MAXIMUM_REPEAT_DISTANCE (NEC_REPEAT_PERIOD - NEC_MINIMAL_DURATION + 5) // 65 ms
+#define NEC_MAXIMUM_REPEAT_DISTANCE (NEC_REPEAT_PERIOD - NEC_MINIMAL_DURATION + 10000) // 70 ms
 
 #define APPLE_ADDRESS           0x87EE
 
-struct PulseDistanceWidthProtocolConstants NECProtocolConstants = { NEC, NEC_KHZ, NEC_HEADER_MARK, NEC_HEADER_SPACE, NEC_BIT_MARK,
-NEC_ONE_SPACE, NEC_BIT_MARK, NEC_ZERO_SPACE, PROTOCOL_IS_LSB_FIRST, SEND_STOP_BIT, (NEC_REPEAT_PERIOD / MICROS_IN_ONE_MILLI),
-        &sendNECSpecialRepeat };
+struct PulseDistanceWidthProtocolConstants NECProtocolConstants =
+        { NEC, NEC_KHZ, NEC_HEADER_MARK, NEC_HEADER_SPACE, NEC_BIT_MARK,
+        NEC_ONE_SPACE, NEC_BIT_MARK, NEC_ZERO_SPACE, PROTOCOL_IS_LSB_FIRST, (NEC_REPEAT_PERIOD / MICROS_IN_ONE_MILLI),
+                &sendNECSpecialRepeat };
 
 // Like NEC but repeats are full frames instead of special NEC repeats
 struct PulseDistanceWidthProtocolConstants NEC2ProtocolConstants = { NEC2, NEC_KHZ, NEC_HEADER_MARK, NEC_HEADER_SPACE, NEC_BIT_MARK,
-NEC_ONE_SPACE, NEC_BIT_MARK, NEC_ZERO_SPACE, PROTOCOL_IS_LSB_FIRST, SEND_STOP_BIT, (NEC_REPEAT_PERIOD / MICROS_IN_ONE_MILLI), NULL };
+NEC_ONE_SPACE, NEC_BIT_MARK, NEC_ZERO_SPACE, PROTOCOL_IS_LSB_FIRST, (NEC_REPEAT_PERIOD / MICROS_IN_ONE_MILLI), NULL };
 
 /************************************
  * Start of send and decode functions
@@ -122,9 +133,6 @@ void IRsend::sendNECRepeat() {
     mark(NEC_HEADER_MARK);          // + 9000
     space(NEC_REPEAT_HEADER_SPACE); // - 2250
     mark(NEC_BIT_MARK);             // + 560
-#if !defined(DISABLE_CODE_FOR_RECEIVER)
-    IrReceiver.restartAfterSend();
-#endif
 }
 
 /**
@@ -136,9 +144,6 @@ void sendNECSpecialRepeat() {
     IrSender.mark(NEC_HEADER_MARK);          // + 9000
     IrSender.space(NEC_REPEAT_HEADER_SPACE); // - 2250
     IrSender.mark(NEC_BIT_MARK);             // + 560
-#if !defined(DISABLE_CODE_FOR_RECEIVER)
-    IrReceiver.restartAfterSend();
-#endif
 }
 
 uint32_t IRsend::computeNECRawDataAndChecksum(uint16_t aAddress, uint16_t aCommand) {
@@ -407,11 +412,7 @@ void IRsend::sendNECMSB(uint32_t data, uint8_t nbits, bool repeat) {
     space(NEC_HEADER_SPACE);
 
     // Old version with MSB first Data + stop bit
-    sendPulseDistanceWidthData(NEC_BIT_MARK, NEC_ONE_SPACE, NEC_BIT_MARK, NEC_ZERO_SPACE, data, nbits, PROTOCOL_IS_MSB_FIRST,
-            SEND_STOP_BIT);
-#if !defined(DISABLE_CODE_FOR_RECEIVER)
-    IrReceiver.restartAfterSend();
-#endif
+    sendPulseDistanceWidthData(NEC_BIT_MARK, NEC_ONE_SPACE, NEC_BIT_MARK, NEC_ZERO_SPACE, data, nbits, PROTOCOL_IS_MSB_FIRST);
 }
 
 /** @}*/

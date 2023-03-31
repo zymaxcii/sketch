@@ -1,7 +1,7 @@
 // bitWrite.ino
 // Demonstrate bitWrite() function call
 // Don't need any GPIOs to run it
-// status: compile , upload 
+// status: compile ok, upload ok
 
 
 void setup()

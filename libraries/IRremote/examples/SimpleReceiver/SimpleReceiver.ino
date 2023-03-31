@@ -1,7 +1,7 @@
 /*
  * SimpleReceiver.cpp
  *
- * Demonstrates receiving NEC IR codes with IRrecv
+ * Demonstrates receiving NEC IR codes with IRremote
  *
  *  This file is part of Arduino-IRremote https://github.com/Arduino-IRremote/Arduino-IRremote.
  *
@@ -50,6 +50,7 @@
 //#define DECODE_LEGO_PF
 //#define DECODE_MAGIQUEST
 //#define DECODE_WHYNTER
+//#define DECODE_FAST
 
 //#define DECODE_DISTANCE_WIDTH // Universal decoder for pulse distance width protocols
 //#define DECODE_HASH         // special decoder for all protocols

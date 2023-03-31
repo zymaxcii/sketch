@@ -16,8 +16,8 @@
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  See the GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
@@ -29,8 +29,8 @@
  *
  * Platform     IR input    IR output   Tone      Core/Pin schema
  * --------------------------------------------------------------
- * DEFAULT/AVR  2           3           4
- * ATtinyX5     0|PB0       4|PB4       3|PB3
+ * DEFAULT/AVR  2           3           4         Arduino
+ * ATtinyX5     0|PB0       4|PB4       3|PB3     ATTinyCore
  * ATtiny167    3|PA3       2|PA2       7|PA7     ATTinyCore
  * ATtiny167    9|PA3       8|PA2       5|PA7     Digispark pro
  * ATtiny3217  18|PA1      19|PA2      20|PA3     MegaTinyCore
@@ -48,7 +48,7 @@
 
 #if defined(__AVR__)
 #if defined(__AVR_ATtiny25__) || defined(__AVR_ATtiny45__) || defined(__AVR_ATtiny85__) // Digispark board
-#include "ATtinySerialOut.hpp" // Available as Arduino library "ATtinySerialOut". saves 370 bytes program memory and 38 bytes RAM for digistump core
+#include "ATtinySerialOut.hpp" // TX is at pin 2 - Available as Arduino library "ATtinySerialOut". Saves 700 bytes program memory and 70 bytes RAM for ATtinyCore
 #define IR_RECEIVE_PIN  0
 #define IR_SEND_PIN     4 // Pin 2 is serial output with ATtinySerialOut. Pin 1 is internal LED and Pin3 is USB+ with pullup on Digispark board.
 #define TONE_PIN        3
@@ -143,8 +143,8 @@
 #define FEEDBACK_LED_IS_ACTIVE_LOW // The LED on my board (D4) is active LOW
 #define IR_RECEIVE_PIN          14 // D5
 #define IR_SEND_PIN             12 // D6 - D4/pin 2 is internal LED
-#define _IR_TIMING_TEST_PIN     13 // D7
-#define APPLICATION_PIN          0 // D3
+#define _IR_TIMING_TEST_PIN      2 // D4
+#define APPLICATION_PIN         13 // D7
 
 #define tone(...) void()      // tone() inhibits receive timer
 #define noTone(a) void()

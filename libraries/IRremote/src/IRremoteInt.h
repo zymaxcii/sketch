@@ -9,7 +9,7 @@
  ************************************************************************************
  * MIT License
  *
- * Copyright (c) 2015-20232 Ken Shirriff http://www.righto.com, Rafi Khan, Armin Joachimsmeyer
+ * Copyright (c) 2015-2023 Ken Shirriff http://www.righto.com, Rafi Khan, Armin Joachimsmeyer
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -83,10 +83,10 @@
  * Declarations for the receiver Interrupt Service Routine
  ****************************************************/
 // ISR State-Machine : Receiver States
-#define IR_REC_STATE_IDLE      0
-#define IR_REC_STATE_MARK      1
-#define IR_REC_STATE_SPACE     2
-#define IR_REC_STATE_STOP      3 // set to IR_REC_STATE_IDLE only by resume()
+#define IR_REC_STATE_IDLE      0 // Counting the gap time and waiting for the start bit to arrive
+#define IR_REC_STATE_MARK      1 // A mark was received and we are counting the duration of it.
+#define IR_REC_STATE_SPACE     2 // A space was received and we are counting the duration of it. If space is too long, we assume end of frame.
+#define IR_REC_STATE_STOP      3 // Stopped until set to IR_REC_STATE_IDLE which can only be done by resume()
 
 /**
  * This struct contains the data and control used for receiver static functions and the ISR (interrupt service routine)
@@ -100,7 +100,7 @@ struct irparams_struct {
     volatile uint8_t *IRReceivePinPortInputRegister;
     uint8_t IRReceivePinMask;
 #endif
-    volatile uint_fast16_t TickCounterForISR;    ///< Counts 50uS ticks. The value is copied into the rawbuf array on every transition.
+    volatile uint_fast16_t TickCounterForISR; ///< Counts 50uS ticks. The value is copied into the rawbuf array on every transition.
 #if !IR_REMOTE_DISABLE_RECEIVE_COMPLETE_CALLBACK
     void (*ReceiveCompleteCallbackFunction)(void); ///< The function to call if a protocol message has arrived, i.e. StateForISR changed to IR_REC_STATE_STOP
 #endif
@@ -110,13 +110,15 @@ struct irparams_struct {
 #else
     uint_fast16_t rawlen;               ///< counter of entries in rawbuf
 #endif
-    unsigned int rawbuf[RAW_BUFFER_LENGTH]; ///< raw data / tick counts per mark/space, first entry is the length of the gap between previous and current command
+    uint16_t rawbuf[RAW_BUFFER_LENGTH]; ///< raw data / tick counts per mark/space, first entry is the length of the gap between previous and current command
 };
 
 #if (__INT_WIDTH__ < 32)
 typedef uint32_t IRRawDataType;
+#define BITS_IN_RAW_DATA_TYPE   32
 #else
 typedef uint64_t IRRawDataType;
+#define BITS_IN_RAW_DATA_TYPE   64
 #endif
 #include "IRProtocol.h"
 
@@ -161,7 +163,7 @@ struct decode_results {
     bool isRepeat;              // deprecated, moved to decodedIRData.flags ///< True if repeat of value is detected
 
 // next 3 values are copies of irparams values - see IRremoteint.h
-    unsigned int *rawbuf;       // deprecated, moved to decodedIRData.rawDataPtr->rawbuf ///< Raw intervals in 50uS ticks
+    uint16_t *rawbuf;       // deprecated, moved to decodedIRData.rawDataPtr->rawbuf ///< Raw intervals in 50uS ticks
     uint_fast8_t rawlen;        // deprecated, moved to decodedIRData.rawDataPtr->rawlen ///< Number of records in rawbuf
     bool overflow;              // deprecated, moved to decodedIRData.flags ///< true if IR raw code too long
 };
@@ -188,6 +190,9 @@ public:
     void startWithTicksToAdd(uint16_t aTicksToAddToGapCounter);
     void restartAfterSend();
 
+    void addTicksToInternalTickCounter(uint16_t aTicksToAddToInternalTickCounter);
+    void addMicrosToInternalTickCounter(uint16_t aMicrosecondsToAddToInternalTickCounter);
+
     bool available();
     IRData* read(); // returns decoded data
     // write is a method of class IRsend below
@@ -210,11 +215,13 @@ public:
     void printIRResultMinimal(Print *aSerial);
     void printIRResultRawFormatted(Print *aSerial, bool aOutputMicrosecondsInsteadOfTicks = true);
     void printIRResultAsCVariables(Print *aSerial);
+    uint32_t getTotalDurationOfRawData();
 
     /*
      * Next 4 functions are also available as non member functions
      */
     bool printIRResultShort(Print *aSerial, bool aPrintRepeatGap = true, bool aCheckForRecordGapsMicros = true);
+    void printDistanceWidthTimingInfo(Print *aSerial, DistanceWidthTimingInfoStruct *aDistanceWidthTimingInfo);
     void printIRSendUsage(Print *aSerial);
 #if defined(__AVR__)
     const __FlashStringHelper* getProtocolString();
@@ -224,13 +231,13 @@ public:
     static void printActiveIRProtocols(Print *aSerial);
 
     void compensateAndPrintIRResultAsCArray(Print *aSerial, bool aOutputMicrosecondsInsteadOfTicks = true);
-    void compensateAndPrintIRResultAsPronto(Print *aSerial, unsigned int frequency = 38000U);
+    void compensateAndPrintIRResultAsPronto(Print *aSerial, uint16_t frequency = 38000U);
 
     /*
      * Store the data for further processing
      */
     void compensateAndStoreIRResultInArray(uint8_t *aArrayPtr);
-    size_t compensateAndStorePronto(String *aString, unsigned int frequency = 38000U);
+    size_t compensateAndStorePronto(String *aString, uint16_t frequency = 38000U);
 
     /*
      * The main decoding functions used by the individual decoders
@@ -238,13 +245,13 @@ public:
     bool decodePulseDistanceWidthData(PulseDistanceWidthProtocolConstants *aProtocolConstants, uint_fast8_t aNumberOfBits,
             uint_fast8_t aStartOffset = 3);
 
-    bool decodePulseDistanceWidthData(uint_fast8_t aNumberOfBits, uint_fast8_t aStartOffset, unsigned int aOneMarkMicros,
-            unsigned int aZeroMarkMicros, unsigned int aOneSpaceMicros, unsigned int aZeroSpaceMicros, bool aMSBfirst);
+    bool decodePulseDistanceWidthData(uint_fast8_t aNumberOfBits, uint_fast8_t aStartOffset, uint16_t aOneMarkMicros,
+            uint16_t aZeroMarkMicros, uint16_t aOneSpaceMicros, uint16_t aZeroSpaceMicros, bool aMSBfirst);
 
     bool decodeBiPhaseData(uint_fast8_t aNumberOfBits, uint_fast8_t aStartOffset, uint_fast8_t aStartClockCount,
-            uint_fast8_t aValueOfSpaceToMarkTransition, unsigned int aBiphaseTimeUnit);
+            uint_fast8_t aValueOfSpaceToMarkTransition, uint16_t aBiphaseTimeUnit);
 
-    void initBiphaselevel(uint_fast8_t aRCDecodeRawbuffOffset, unsigned int aBiphaseTimeUnit);
+    void initBiphaselevel(uint_fast8_t aRCDecodeRawbuffOffset, uint16_t aBiphaseTimeUnit);
     uint_fast8_t getBiphaselevel();
 
     /*
@@ -253,6 +260,7 @@ public:
     bool decodeBangOlufsen();
     bool decodeBoseWave();
     bool decodeDenon();
+    bool decodeFAST();
     bool decodeJVC();
     bool decodeKaseikyo();
     bool decodeLegoPowerFunctions();
@@ -297,9 +305,9 @@ public:
      * Internal functions
      */
     void initDecodedIRData();
-    uint_fast8_t compare(unsigned int oldval, unsigned int newval);
+    uint_fast8_t compare(uint16_t oldval, uint16_t newval);
     bool checkHeader(PulseDistanceWidthProtocolConstants *aProtocolConstants);
-    void checkForRepeatSpaceTicksAndSetFlag(unsigned int aMaximumRepeatSpaceTicks);
+    void checkForRepeatSpaceTicksAndSetFlag(uint16_t aMaximumRepeatSpaceTicks);
     bool checkForRecordGapsMicros(Print *aSerial);
 
     IRData decodedIRData;       // New: decoded IR data for the application
@@ -317,16 +325,16 @@ extern uint_fast8_t sBiphaseDecodeRawbuffOffset; //
 /*
  * Mark & Space matching functions
  */
-bool matchTicks(unsigned int aMeasuredTicks, unsigned int aMatchValueMicros);
-bool matchMark(unsigned int aMeasuredTicks, unsigned int aMatchValueMicros);
-bool matchSpace(unsigned int aMeasuredTicks, unsigned int aMatchValueMicros);
+bool matchTicks(uint16_t aMeasuredTicks, uint16_t aMatchValueMicros);
+bool matchMark(uint16_t aMeasuredTicks, uint16_t aMatchValueMicros);
+bool matchSpace(uint16_t aMeasuredTicks, uint16_t aMatchValueMicros);
 
 /*
  * Old function names
  */
-bool MATCH(unsigned int measured, unsigned int desired);
-bool MATCH_MARK(unsigned int measured_ticks, unsigned int desired_us);
-bool MATCH_SPACE(unsigned int measured_ticks, unsigned int desired_us);
+bool MATCH(uint16_t measured, uint16_t desired);
+bool MATCH_MARK(uint16_t measured_ticks, uint16_t desired_us);
+bool MATCH_SPACE(uint16_t measured_ticks, uint16_t desired_us);
 
 int getMarkExcessMicros();
 
@@ -373,14 +381,19 @@ void setBlinkPin(uint8_t aFeedbackLEDPin) __attribute__ ((deprecated ("Please us
 #define TICKS_LOW(us)   ((us)/67 )     // (us) / ((MICROS_PER_TICK:50 / LTOL:75 ) * 100)
 #define TICKS_HIGH(us)  (((us)/40) + 1)  // (us) / ((MICROS_PER_TICK:50 / UTOL:125) * 100) + 1
 #else
-#define TICKS_LOW(us)   ((unsigned int ) ((long) (us) * LTOL / (MICROS_PER_TICK * 100) ))
-#define TICKS_HIGH(us)  ((unsigned int ) ((long) (us) * UTOL / (MICROS_PER_TICK * 100) + 1))
+#define TICKS_LOW(us)   ((uint16_t ) ((long) (us) * LTOL / (MICROS_PER_TICK * 100) ))
+#define TICKS_HIGH(us)  ((uint16_t ) ((long) (us) * UTOL / (MICROS_PER_TICK * 100) + 1))
 #endif
 
 /*
  * The receiver instance
  */
 extern IRrecv IrReceiver;
+
+/*
+ * The receiver interrupt handler for timer interrupt
+ */
+void IRReceiveTimerInterruptHandler();
 
 /****************************************************
  *                     SENDING
@@ -390,8 +403,6 @@ extern IRrecv IrReceiver;
  * Just for better readability of code
  */
 #define NO_REPEATS  0
-#define SEND_STOP_BIT true
-#define SEND_NO_STOP_BIT false
 #define SEND_REPEAT_COMMAND true ///< used for e.g. NEC, where a repeat is different from just repeating the data.
 
 /**
@@ -421,30 +432,47 @@ public:
 #endif
 
     size_t write(IRData *aIRSendData, int_fast8_t aNumberOfRepeats = NO_REPEATS);
+    size_t write(decode_type_t aProtocol, uint16_t aAddress, uint16_t aCommand, int_fast8_t aNumberOfRepeats = NO_REPEATS);
 
     void enableIROut(uint_fast8_t aFrequencyKHz);
 
-    void sendPulseDistanceWidthFromArray(uint_fast8_t aFrequencyKHz, unsigned int aHeaderMarkMicros,
-            unsigned int aHeaderSpaceMicros, unsigned int aOneMarkMicros, unsigned int aOneSpaceMicros,
-            unsigned int aZeroMarkMicros, unsigned int aZeroSpaceMicros, IRRawDataType *aDecodedRawDataArray,
-            unsigned int aNumberOfBits, bool aMSBfirst, bool aSendStopBit, unsigned int aRepeatPeriodMillis,
+    void sendPulseDistanceWidthFromArray(uint_fast8_t aFrequencyKHz, uint16_t aHeaderMarkMicros, uint16_t aHeaderSpaceMicros,
+            uint16_t aOneMarkMicros, uint16_t aOneSpaceMicros, uint16_t aZeroMarkMicros, uint16_t aZeroSpaceMicros,
+            IRRawDataType *aDecodedRawDataArray, uint16_t aNumberOfBits, uint8_t aFlags, uint16_t aRepeatPeriodMillis,
             int_fast8_t aNumberOfRepeats);
+    void sendPulseDistanceWidthFromArray(uint_fast8_t aFrequencyKHz, uint16_t aHeaderMarkMicros, uint16_t aHeaderSpaceMicros,
+            uint16_t aOneMarkMicros, uint16_t aOneSpaceMicros, uint16_t aZeroMarkMicros, uint16_t aZeroSpaceMicros,
+            IRRawDataType *aDecodedRawDataArray, uint16_t aNumberOfBits, bool aMSBFirst, bool aSendStopBit,
+            uint16_t aRepeatPeriodMillis, int_fast8_t aNumberOfRepeats)
+                    __attribute__ ((deprecated ("Since version 4.1.0 parameter aSendStopBit is not longer required.")));
     void sendPulseDistanceWidthFromArray(PulseDistanceWidthProtocolConstants *aProtocolConstants,
-            IRRawDataType *aDecodedRawDataArray, unsigned int aNumberOfBits, int_fast8_t aNumberOfRepeats);
-    void sendPulseDistanceWidth(PulseDistanceWidthProtocolConstants *aProtocolConstants, IRRawDataType aData, uint_fast8_t aNumberOfBits,
+            IRRawDataType *aDecodedRawDataArray, uint16_t aNumberOfBits, int_fast8_t aNumberOfRepeats);
+    void sendPulseDistanceWidthFromArray(uint_fast8_t aFrequencyKHz, DistanceWidthTimingInfoStruct *aDistanceWidthTimingInfo,
+            IRRawDataType *aDecodedRawDataArray, uint16_t aNumberOfBits, uint8_t aFlags, uint16_t aRepeatPeriodMillis,
             int_fast8_t aNumberOfRepeats);
+
+    void sendPulseDistanceWidth(PulseDistanceWidthProtocolConstants *aProtocolConstants, IRRawDataType aData,
+            uint_fast8_t aNumberOfBits, int_fast8_t aNumberOfRepeats);
     void sendPulseDistanceWidthData(PulseDistanceWidthProtocolConstants *aProtocolConstants, IRRawDataType aData,
             uint_fast8_t aNumberOfBits);
-    void sendPulseDistanceWidth(uint_fast8_t aFrequencyKHz, unsigned int aHeaderMarkMicros, unsigned int aHeaderSpaceMicros,
-            unsigned int aOneMarkMicros, unsigned int aOneSpaceMicros, unsigned int aZeroMarkMicros, unsigned int aZeroSpaceMicros,
-            IRRawDataType aData, uint_fast8_t aNumberOfBits, bool aMSBfirst, bool aSendStopBit, unsigned int aRepeatPeriodMillis,
+    void sendPulseDistanceWidth(uint_fast8_t aFrequencyKHz, uint16_t aHeaderMarkMicros, uint16_t aHeaderSpaceMicros,
+            uint16_t aOneMarkMicros, uint16_t aOneSpaceMicros, uint16_t aZeroMarkMicros, uint16_t aZeroSpaceMicros,
+            IRRawDataType aData, uint_fast8_t aNumberOfBits, uint8_t aFlags, uint16_t aRepeatPeriodMillis,
             int_fast8_t aNumberOfRepeats, void (*aSpecialSendRepeatFunction)() = NULL);
-    void sendPulseDistanceWidthData(unsigned int aOneMarkMicros, unsigned int aOneSpaceMicros, unsigned int aZeroMarkMicros,
-            unsigned int aZeroSpaceMicros, IRRawDataType aData, uint_fast8_t aNumberOfBits, bool aMSBfirst, bool aSendStopBit);
-    void sendBiphaseData(unsigned int aBiphaseTimeUnit, uint32_t aData, uint_fast8_t aNumberOfBits);
+    void sendPulseDistanceWidth(uint_fast8_t aFrequencyKHz, uint16_t aHeaderMarkMicros, uint16_t aHeaderSpaceMicros,
+            uint16_t aOneMarkMicros, uint16_t aOneSpaceMicros, uint16_t aZeroMarkMicros, uint16_t aZeroSpaceMicros,
+            IRRawDataType aData, uint_fast8_t aNumberOfBits, bool aMSBFirst, bool aSendStopBit, uint16_t aRepeatPeriodMillis,
+            int_fast8_t aNumberOfRepeats, void (*aSpecialSendRepeatFunction)() = NULL)
+                    __attribute__ ((deprecated ("Since version 4.1.0 parameter aSendStopBit is not longer required.")));
+    void sendPulseDistanceWidthData(uint16_t aOneMarkMicros, uint16_t aOneSpaceMicros, uint16_t aZeroMarkMicros,
+            uint16_t aZeroSpaceMicros, IRRawDataType aData, uint_fast8_t aNumberOfBits, uint8_t aFlags);
+    void sendPulseDistanceWidthData(uint16_t aOneMarkMicros, uint16_t aOneSpaceMicros, uint16_t aZeroMarkMicros,
+            uint16_t aZeroSpaceMicros, IRRawDataType aData, uint_fast8_t aNumberOfBits, bool aMSBFirst, bool aSendStopBit)
+                    __attribute__ ((deprecated ("Since version 4.1.0 last parameter aSendStopBit is not longer required.")));
+    void sendBiphaseData(uint16_t aBiphaseTimeUnit, uint32_t aData, uint_fast8_t aNumberOfBits);
 
-    void mark(unsigned int aMarkMicros);
-    static void space(unsigned int aSpaceMicros);
+    void mark(uint16_t aMarkMicros);
+    static void space(uint16_t aSpaceMicros);
     void IRLedOff();
 
 // 8 Bit array
@@ -471,6 +499,7 @@ public:
 #if !defined (DOXYGEN)
             __attribute__ ((deprecated ("Please use sendDenon(aAddress, aCommand, aNumberOfRepeats).")));
 #endif
+    void sendFAST(uint8_t aCommand, int_fast8_t aNumberOfRepeats);
     void sendJVC(uint8_t aAddress, uint8_t aCommand, int_fast8_t aNumberOfRepeats);
 
     void sendLG2Repeat();
@@ -512,7 +541,7 @@ public:
 
     void sendPronto(const __FlashStringHelper *str, int_fast8_t aNumberOfRepeats = NO_REPEATS);
     void sendPronto(const char *prontoHexString, int_fast8_t aNumberOfRepeats = NO_REPEATS);
-    void sendPronto(const uint16_t *data, unsigned int length, int_fast8_t aNumberOfRepeats = NO_REPEATS);
+    void sendPronto(const uint16_t *data, uint16_t length, int_fast8_t aNumberOfRepeats = NO_REPEATS);
 
 #if defined(__AVR__)
     void sendPronto_PF(uint_farptr_t str, int_fast8_t aNumberOfRepeats = NO_REPEATS);
@@ -525,7 +554,9 @@ public:
     /*
      * OLD send functions
      */
-    void sendDenon(unsigned long data, int nbits);
+    void sendDenon(unsigned long data,
+            int nbits)
+                    __attribute__ ((deprecated ("The function sendDenon(data, nbits) is deprecated and may not work as expected! Use sendDenonRaw(data, NumberOfRepeats) or better sendDenon(Address, Command, NumberOfRepeats).")));
     void sendDish(uint16_t aData);
     void sendJVC(unsigned long data, int nbits,
             bool repeat)
@@ -534,7 +565,9 @@ public:
     }
     void sendJVCMSB(unsigned long data, int nbits, bool repeat = false);
 
-    void sendLG(unsigned long data, int nbits);
+    void sendLG(unsigned long data,
+            int nbits)
+                    __attribute__ ((deprecated ("The function sendLG(data, nbits) is deprecated and may not work as expected! Use sendLGRaw(data, NumberOfRepeats) or better sendLG(Address, Command, NumberOfRepeats).")));
 
     void sendNEC(uint32_t aRawData,
             uint8_t nbits)
@@ -547,9 +580,10 @@ public:
     void sendRC6Raw(uint32_t data, uint8_t nbits);
     void sendRC6(uint32_t data, uint8_t nbits) __attribute__ ((deprecated ("Please use sendRC6Raw().")));
     void sendRC6Raw(uint64_t data, uint8_t nbits);
-    void sendRC6(uint64_t data, uint8_t nbits) __attribute__ ((deprecated ("Please use sendRC6Raw().")));;
+    void sendRC6(uint64_t data, uint8_t nbits) __attribute__ ((deprecated ("Please use sendRC6Raw().")));
+    ;
     void sendSharpRaw(unsigned long data, int nbits);
-    void sendSharp(unsigned int address, unsigned int command);
+    void sendSharp(uint16_t address, uint16_t command);
     void sendSAMSUNG(unsigned long data, int nbits);
     __attribute__ ((deprecated ("This old function sends MSB first! Please use sendSamsung().")));
     void sendSony(unsigned long data,
@@ -561,9 +595,9 @@ public:
 #if !defined(IR_SEND_PIN)
     uint8_t sendPin;
 #endif
-    unsigned int periodTimeMicros;
-    unsigned int periodOnTimeMicros; // compensated with PULSE_CORRECTION_NANOS for duration of digitalWrite. Around 8 microseconds for 38 kHz.
-    unsigned int getPulseCorrectionNanos();
+    uint16_t periodTimeMicros;
+    uint16_t periodOnTimeMicros; // compensated with PULSE_CORRECTION_NANOS for duration of digitalWrite. Around 8 microseconds for 38 kHz.
+    uint16_t getPulseCorrectionNanos();
 
     static void customDelayMicroseconds(unsigned long aMicroseconds);
 };
