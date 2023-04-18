@@ -1,14 +1,18 @@
 // sleep.ino
-// Missing library
+// compile ok, upload ok
+// Supposely it can run on capacitive power for a long time due to the sleep mode
+// I cannot test this because I am running Mega from USB charger
 
 // https://wattsworth.wordpress.com/
 // Running ATmega328 on Capacitor Power
 
 
-#include <JeeLib.h>
+#include <JeeLib.h>          // what library is this?
 
 int led_pin = 13;
 
+
+// Interrupt service routine
 ISR(WDT_vect)
 {
   Sleepy::watchdogEvent();
