@@ -1,0 +1,82 @@
+** Drc report for /home/mty/sketch/cad/5LED-TH/5LED-TH.kicad_pcb **
+** Created on 2023-05-10 20:29:35 **
+
+** Found 3 DRC violations **
+[invalid_outline]: Board has malformed outline (self-intersecting)
+    Local override; Severity: error
+    @(1000.00 mils, 500.00 mils): Line on Edge.Cuts
+    @(1000.00 mils, 500.00 mils): Rect on Edge.Cuts
+[invalid_outline]: Board has malformed outline (self-intersecting)
+    Local override; Severity: error
+    @(1000.00 mils, 500.00 mils): Rect on Edge.Cuts
+    @(1000.00 mils, 500.00 mils): Line on Edge.Cuts
+[invalid_outline]: Board has malformed outline (self-intersecting)
+    Local override; Severity: error
+    @(2600.00 mils, 500.00 mils): Line on Edge.Cuts
+    @(1000.00 mils, 500.00 mils): Rect on Edge.Cuts
+
+** Found 15 unconnected pads **
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(2200.00 mils, 905.00 mils): Through hole pad 1 [GND] of D2
+    @(2200.00 mils, 680.00 mils): Through hole pad 1 [GND] of D1
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(2200.00 mils, 1130.00 mils): Through hole pad 1 [GND] of D3
+    @(2200.00 mils, 905.00 mils): Through hole pad 1 [GND] of D2
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(2200.00 mils, 1355.00 mils): Through hole pad 1 [GND] of D4
+    @(2200.00 mils, 1130.00 mils): Through hole pad 1 [GND] of D3
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(2200.00 mils, 1580.00 mils): Through hole pad 1 [GND] of D5
+    @(2200.00 mils, 1355.00 mils): Through hole pad 1 [GND] of D4
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(1340.00 mils, 1020.00 mils): Through hole pad 2 [GND] of J1
+    @(2200.00 mils, 1130.00 mils): Through hole pad 1 [GND] of D3
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(2040.00 mils, 680.00 mils): Through hole pad 2 [Net-(D1-Pad2)] of R1
+    @(2300.00 mils, 680.00 mils): Through hole pad 2 [Net-(D1-Pad2)] of D1
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(2040.00 mils, 900.00 mils): Through hole pad 2 [Net-(D2-Pad2)] of R2
+    @(2300.00 mils, 905.00 mils): Through hole pad 2 [Net-(D2-Pad2)] of D2
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(2040.00 mils, 1120.00 mils): Through hole pad 2 [Net-(D3-Pad2)] of R3
+    @(2300.00 mils, 1130.00 mils): Through hole pad 2 [Net-(D3-Pad2)] of D3
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(2040.00 mils, 1360.00 mils): Through hole pad 2 [Net-(D4-Pad2)] of R4
+    @(2300.00 mils, 1355.00 mils): Through hole pad 2 [Net-(D4-Pad2)] of D4
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(2040.00 mils, 1580.00 mils): Through hole pad 2 [Net-(D5-Pad2)] of R5
+    @(2300.00 mils, 1580.00 mils): Through hole pad 2 [Net-(D5-Pad2)] of D5
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(1840.00 mils, 1120.00 mils): Through hole pad 1 [VCC] of R3
+    @(1840.00 mils, 900.00 mils): Through hole pad 1 [VCC] of R2
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(1840.00 mils, 900.00 mils): Through hole pad 1 [VCC] of R2
+    @(1840.00 mils, 680.00 mils): Through hole pad 1 [VCC] of R1
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(1840.00 mils, 1580.00 mils): Through hole pad 1 [VCC] of R5
+    @(1840.00 mils, 1360.00 mils): Through hole pad 1 [VCC] of R4
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(1840.00 mils, 1360.00 mils): Through hole pad 1 [VCC] of R4
+    @(1840.00 mils, 1120.00 mils): Through hole pad 1 [VCC] of R3
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(1340.00 mils, 1220.00 mils): Through hole pad 1 [VCC] of J1
+    @(1840.00 mils, 1120.00 mils): Through hole pad 1 [VCC] of R3
+
+** Found 0 Footprint errors **
+
+** End of Report **
