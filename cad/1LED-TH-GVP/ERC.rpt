@@ -1,0 +1,13 @@
+ERC report (Thu 11 May 2023 08:35:21 PM +08, Encoding UTF8)
+
+***** Sheet /
+[unannotated]: Item not annotated: D? (unit 1)
+
+    ; Severity: error
+    @(76.20 mm, 41.91 mm): Symbol D? [LED]
+[wire_dangling]: Wires not connected to anything
+    ; Severity: error
+    @(64.77 mm, 34.29 mm): Vertical Wire, length 7.62 mm
+    @(64.77 mm, 34.29 mm): Horizontal Wire, length 7.62 mm
+
+ ** ERC messages: 2  Errors 2  Warnings 0
