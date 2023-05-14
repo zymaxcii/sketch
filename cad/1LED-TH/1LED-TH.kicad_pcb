@@ -125,7 +125,7 @@
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp df4115ca-8914-410a-9563-2d0328f01769)
     )
-    (fp_text value "Screw_Terminal_01x02" (at 2.54 5.08) (layer "F.Fab")
+    (fp_text value "Screw_Terminal_01x02" (at 4.572 5.08) (layer "F.Fab")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 60dea5c6-9f2e-42c5-a4e9-dbb2f0bcdb4e)
     )
@@ -202,6 +202,7 @@
     )
   )
 
+  (gr_circle (center 42 180) (end 42 179) (layer "Edge.Cuts") (width 0.15) (fill none) (tstamp 51759349-1fc6-4926-a7c7-a4ae1ef1851f))
   (gr_poly
     (pts
       (xy 68.072 183.896)
@@ -209,6 +210,9 @@
       (xy 39.624 168.656)
       (xy 68.072 168.656)
     ) (layer "Edge.Cuts") (width 0.15) (fill none) (tstamp 6d467f47-9342-4820-8019-43c06a2e8999))
+  (gr_circle (center 66 170) (end 66 169) (layer "Edge.Cuts") (width 0.15) (fill none) (tstamp add2df3a-936d-4cd7-be12-cf0c0d0895dd))
+  (gr_circle (center 42 171) (end 42 170) (layer "Edge.Cuts") (width 0.15) (fill none) (tstamp c4f4b338-6bc5-4d7b-92c7-b6d2ed05c20f))
+  (gr_circle (center 59 178) (end 59 177) (layer "Edge.Cuts") (width 0.15) (fill none) (tstamp eb301670-2a13-497f-9ef7-d68c2dba6c92))
 
   (segment (start 48.768 180.34) (end 46.228 177.8) (width 0.1524) (layer "F.Cu") (net 1) (tstamp 80bcf252-cd7b-4f9d-91be-6caec94ad963))
   (segment (start 62.195 179.324) (end 61.179 180.34) (width 0.1524) (layer "F.Cu") (net 1) (tstamp a17b0eb8-eae0-41be-82da-182322bf12c3))
