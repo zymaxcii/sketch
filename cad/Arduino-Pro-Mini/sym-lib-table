@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "Arduino-Pro-Mini-eagle-import")(type "KiCad")(uri "${KIPRJMOD}/Arduino-Pro-Mini-eagle-import.kicad_sym")(options "")(descr ""))
+)
