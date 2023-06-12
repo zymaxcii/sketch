@@ -9,7 +9,9 @@ led_red   = machine.Pin(13, machine.Pin.OUT)
 led_amber = machine.Pin(12, machine.Pin.OUT)
 led_green = machine.Pin(11, machine.Pin.OUT)
 
-button = machine.Pin(10, machine.Pin.IN, machine.Pin.PULL_DOWN)
+led_pcross = machine.Pin(15, machine.Pin.OUT)
+
+button = machine.Pin(14, machine.Pin.IN, machine.Pin.PULL_DOWN)
 buzzer = machine.Pin(9, machine.Pin.OUT)
 
 global button_pressed
@@ -30,8 +32,10 @@ while True:
 
     for i in range(10):
       buzzer.value(1)
+      led_pcross.value(1)
       utime.sleep(0.2)
       buzzer.value(0)
+      led_pcross.value(0)
       utime.sleep(0.2)
     
     global button_pressed
