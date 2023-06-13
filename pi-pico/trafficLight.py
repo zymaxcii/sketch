@@ -11,7 +11,7 @@ led_green = machine.Pin(11, machine.Pin.OUT)
 
 led_pcross = machine.Pin(15, machine.Pin.OUT)
 
-button = machine.Pin(14, machine.Pin.IN, machine.Pin.PULL_DOWN)
+button = machine.Pin(10, machine.Pin.IN, machine.Pin.PULL_DOWN)
 buzzer = machine.Pin(9, machine.Pin.OUT)
 
 global button_pressed
