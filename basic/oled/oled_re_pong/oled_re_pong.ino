@@ -2,7 +2,7 @@
 // status: compile ok, upload ok
 
 // https://www.programmingelectronics.com/pong-arduino/?utm_id=LeadGen
-
+// https://www.youtube.com/watch?v=hIODQvPJT_U
 
 #include <U8glib.h>
 
