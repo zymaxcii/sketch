@@ -40,7 +40,7 @@ class Ds1302
             MONTH_JUN = 6,
             MONTH_JUL = 7,
             MONTH_AUG = 8,
-            MONTH_SET = 9,
+            MONTH_SEP = 9,
             MONTH_OCT = 10,
             MONTH_NOV = 11,
             MONTH_DEC = 12
@@ -80,6 +80,11 @@ class Ds1302
         void halt();
 
         /**
+         * Starts the oscillator.
+         */
+        void start();
+
+        /**
          * Returns the current date and time.
          */
         void getDateTime(DateTime* dt);;
@@ -108,6 +113,8 @@ class Ds1302
 
         uint8_t _dec2bcd(uint8_t dec);
         uint8_t _bcd2dec(uint8_t bcd);
+
+        void _setHaltFlag(bool stopped);
 };
 
 #endif // _DS_1302_H

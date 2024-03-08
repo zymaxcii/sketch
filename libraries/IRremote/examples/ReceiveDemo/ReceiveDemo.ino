@@ -48,6 +48,7 @@
 //#define DECODE_KASEIKYO
 //#define DECODE_PANASONIC    // alias for DECODE_KASEIKYO
 //#define DECODE_LG
+//#define DECODE_ONKYO        // Decodes only Onkyo and not NEC or Apple
 //#define DECODE_NEC          // Includes Apple and Onkyo
 //#define DECODE_SAMSUNG
 //#define DECODE_SONY
@@ -270,7 +271,7 @@ void loop() {
             }
         }
 
-        // Check if the command was repeated for more than 1000 ms
+        // Check if repeats of the IR command was sent for more than 1000 ms
         if (detectLongPress(1000)) {
             Serial.print(F("Command 0x"));
             Serial.print(IrReceiver.decodedIRData.command, HEX);
@@ -291,7 +292,9 @@ void loop() {
 unsigned long sMillisOfFirstReceive;
 bool sLongPressJustDetected;
 /**
- * @return true once after the repeated command was received for longer than aLongPressDurationMillis milliseconds, false otherwise.
+ * True once we received the consecutive repeats for more than aLongPressDurationMillis milliseconds.
+ * The first frame, which is no repeat, is NOT counted for the duration!
+ * @return true once after the repeated IR command was received for longer than aLongPressDurationMillis milliseconds, false otherwise.
  */
 bool detectLongPress(uint16_t aLongPressDurationMillis) {
     if (!sLongPressJustDetected && (IrReceiver.decodedIRData.flags & IRDATA_FLAGS_IS_REPEAT)) {

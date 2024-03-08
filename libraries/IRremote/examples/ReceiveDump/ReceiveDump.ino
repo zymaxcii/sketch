@@ -86,7 +86,7 @@ void setup() {
     Serial.println(F(" us is the (minimum) gap, after which the start of a new IR packet is assumed"));
     Serial.print(MARK_EXCESS_MICROS);
     Serial.println();
-    Serial.println(F("Because of the verbose output (>200 ms at 115200), repeats are probably not dumped correctly!"));
+    Serial.println(F("Because of the verbose output (>200 ms at 115200 baud), repeats are not dumped correctly!"));
     Serial.println();
 }
 
@@ -122,6 +122,9 @@ void loop() {
             Serial.println(MARK_EXCESS_MICROS);
             IrReceiver.compensateAndPrintIRResultAsCArray(&Serial, true); // Output the results as uint16_t source code array of micros
             IrReceiver.printIRResultAsCVariables(&Serial);  // Output address and data as source code variables
+            Serial.println();                               // blank line between entries
+            IrReceiver.printIRSendUsage(&Serial);
+            Serial.println();                               // blank line between entries
 
             IrReceiver.compensateAndPrintIRResultAsPronto(&Serial);
 
@@ -129,7 +132,7 @@ void loop() {
              * Example for using the compensateAndStorePronto() function.
              * Creating this String requires 2210 bytes program memory and 10 bytes RAM for the String class.
              * The String object itself requires additional 440 bytes RAM from the heap.
-             * This values are for an Arduino UNO.
+             * This values are for an Arduino Uno.
              */
 //        Serial.println();                                     // blank line between entries
 //        String ProntoHEX = F("Pronto HEX contains: ");        // Assign string to ProtoHex string object

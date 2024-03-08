@@ -4,7 +4,8 @@
 // http://jumptuck.com/2011/10/27/developing-a-larson-scanner/
 
 // hardware setup
-//
+// don't understand this code
+// 2024-03-07
 
 
 #define F_CPU 1000000UL
@@ -19,19 +20,19 @@ unsigned int scanDelay = 3000;    // Scanning speed (timing same as fadeDelay)
 
 
 //Variables
-volatile unsigned char pwmValues[8] = {0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00};	//PWM value storage
-volatile unsigned char ledBuffer = 0x00;	//Buffer for prewinding PWM values
-unsigned int fadeCount = 0;			        //Counter used by interrupt to time fading
-volatile unsigned char fadeFlag = 0;		//Flag set by interrupt for main loop fade timing
-unsigned char scanBuffer = 0x01;		    //Start scanning from bit 0
-unsigned char scanDirection = 1;		    //1=shift left, 0=shift right
-unsigned int scanCount = 0;		        	//Counter used by interrupt to time scanning
-volatile unsigned char scanFlag = 0;		//Flag set by interrupt for main loop scan timing
+volatile unsigned char pwmValues[8] = {0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00};	// PWM value storage
+volatile unsigned char ledBuffer = 0x00;	// Buffer for prewinding PWM values
+unsigned int fadeCount = 0;			        // Counter used by interrupt to time fading
+volatile unsigned char fadeFlag = 0;		// Flag set by interrupt for main loop fade timing
+unsigned char scanBuffer = 0x01;		    // Start scanning from bit 0
+unsigned char scanDirection = 1;		    // 1=shift left, 0=shift right
+unsigned int scanCount = 0;		        	// Counter used by interrupt to time scanning
+volatile unsigned char scanFlag = 0;		// Flag set by interrupt for main loop scan timing
 
 
 void fade(void)
 {
-  //Systematically reduces all non-zero pwmValues
+  // Systematically reduces all non-zero pwmValues
   for (unsigned char i=0; i<8; i++)
   {
     if (pwmValues[i] > 0)
@@ -80,20 +81,20 @@ int main(void)
 
   while(1)
   {
-    if (fadeFlag) {	//Targed time has passed; time to do something
+    if (fadeFlag) {	// Targed time has passed; time to do something
       fade();
       fadeFlag = 0;
     }
-    if (scanFlag) {	//Time to shift the scanning buffer
+    if (scanFlag) {	// Time to shift the scanning buffer
       larson_scanner();
       scanFlag = 0;
     }
   }
 }
 
-ISR(TIMER0_OVF_vect)	//Timer0 overflow interrupt handler
+ISR(TIMER0_OVF_vect)	// Timer0 overflow interrupt handler
 {
-  PORTD = ledBuffer;	//Set outputs prewound from last interrupt
+  PORTD = ledBuffer;	// Set outputs prewound from last interrupt
   
   static unsigned char pwmCount = 255;	//Track overflows to compare with pwmValue
 

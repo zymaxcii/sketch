@@ -10,7 +10,7 @@
  ************************************************************************************
  * MIT License
  *
- * Copyright (c) 2022 Daniel Wallner
+ * Copyright (c) 2022-2023 Daniel Wallner and Armin Joachimsmeyer
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -77,7 +77,7 @@
 // !!! We assume that the real implementations never set the official first header bit to anything other than 0 !!!
 // !!! We therefore use 4 start bits instead of the specified 3 and in turn ignore the first header bit of the specification !!!
 
-// IR messages are 16 bits long and datalink messages have different lengths
+// IR messages are 16 bits long. Datalink messages have different lengths.
 // This implementation supports up to 40 bits total length split into 8 bit data/command and a header/address of variable length
 // Header data with more than 16 bits is stored in decodedIRData.extra
 
@@ -87,8 +87,9 @@
 
 /*
  * Options for this decoder
+ *
  */
-//#define ENABLE_BEO_WITHOUT_FRAME_GAP // Requires additional 30 bytes program memory.
+#define ENABLE_BEO_WITHOUT_FRAME_GAP // Requires additional 30 bytes program memory. Enabled by default, see https://github.com/Arduino-IRremote/Arduino-IRremote/discussions/1181
 //#define SUPPORT_BEO_DATALINK_TIMING_FOR_DECODE // This also supports headers up to 32 bit. Requires additional 150 bytes program memory.
 #if defined(DECODE_BEO)
 #  if defined(ENABLE_BEO_WITHOUT_FRAME_GAP)
@@ -160,14 +161,18 @@ void IRsend::sendBangOlufsenDataLink(uint32_t aHeader, uint8_t aData, int_fast8_
  * @param aBackToBack   If true send data back to back, which cannot be decoded if ENABLE_BEO_WITHOUT_FRAME_GAP is NOT defined
  */
 void IRsend::sendBangOlufsenRaw(uint32_t aRawData, int_fast8_t aBits, bool aBackToBack) {
-#if defined(USE_NO_SEND_PWM) || BEO_KHZ == 38 // BEO_KHZ == 38 is for unit test which runs the B&O protocol with 38 kHz
+#if defined(USE_NO_SEND_PWM) || defined(SEND_PWM_BY_TIMER) || BEO_KHZ == 38 // BEO_KHZ == 38 is for unit test which runs the B&O protocol with 38 kHz
 
     /*
-     * 455 kHz PWM is currently not supported, maximum is 180 kHz
+     * 455 kHz PWM is currently only supported with SEND_PWM_BY_TIMER defined, otherwise maximum is 180 kHz
      */
-#if !defined(USE_NO_SEND_PWM)
-    enableIROut (BEO_KHZ);
-#endif
+#  if !defined(USE_NO_SEND_PWM)
+#    if defined(SEND_PWM_BY_TIMER)
+    enableHighFrequencyIROut (BEO_KHZ);
+#    elif (BEO_KHZ == 38)
+    enableIROut (BEO_KHZ); // currently only for unit test
+#    endif
+#  endif
 
 // AGC / Start - 3 bits + first constant 0 header bit described in the official documentation
     if (!aBackToBack) {

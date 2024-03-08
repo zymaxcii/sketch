@@ -2,6 +2,26 @@
 The latest version may not be released!
 See also the commit log at github: https://github.com/Arduino-IRremote/Arduino-IRremote/commits/master
 
+# 4.2.1
+- Fix wrong type of tEnableLEDFeedback in IRSend.hpp and IRReceive.hpp.
+- TinyReceiver 2.0
+  - New TinyIRReceiverData which is filled with address, command and flags.
+  - Removed parameters address, command and flags from callback handleReceivedTinyIRData() and printTinyReceiverResultMinimal().
+  - Callback function now only enabled if USE_CALLBACK_FOR_TINY_RECEIVER is activated.
+- Fix changing IR_SEND_PIN dynamically for ESP32.
+- Fix wrong type of tEnableLEDFeedback.
+- Support for ESP32-C3.
+
+# 4.2.0
+- The old decode function is renamed to decode_old(decode_results *aResults). decode (decode_results *aResults) is only available in IRremote.h and prints a message.
+- Added DECODE_ONKYO, to force 16 bit command and data decoding.
+- Enable Bang&Olufsen 455 kHz if SEND_PWM_BY_TIMER is defined.
+- Fixed bug: TinyReceiver throwing ISR not in IRAM on ESP8266.
+- Usage of ATTinyCore pin numbering scheme e.g. PIN_PB2.
+- Added ARDUINO_ARCH_NRF52 to support Seeed XIAO nRF52840 Sense.
+- First untested support of Uno R4.
+- Extraced version macros to IRVersion.h.
+
 ## 4.1.2
 - Workaround for ESP32 RTOS delay() timing bug influencing the mark() function.
 
@@ -27,7 +47,7 @@ See also the commit log at github: https://github.com/Arduino-IRremote/Arduino-I
 - Added functions addTicksToInternalTickCounter() and addMicrosToInternalTickCounter().
 
 ## 4.0.0
-- Added decoding of PulseDistanceWidth protocols and therfore changed function decodeDistance() to decodeDistanceWidth() and filename ir_DistanceProtocol.hpp to ir_DistanceWidthProtocol.hpp.
+- Added decoding of PulseDistanceWidth protocols and therefore changed function decodeDistance() to decodeDistanceWidth() and filename ir_DistanceProtocol.hpp to ir_DistanceWidthProtocol.hpp.
 - Removed static function printIRSendUsage(), but kept class function printIRSendUsage().
 - Changed type of decodedRawData and decodedRawDataArray which is now 64 bit for 32 bit platforms.
 - Added receiver callback functionality and registerReceiveCompleteCallback() function.

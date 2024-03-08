@@ -374,16 +374,16 @@ does not correspond to a standard type, then it is possible to set an alternativ
 are not guaranteed to work unless they have been tested. Alternative hardware names follow a template
 structure given in the table below
 
-Digits as rows|Col Rev|Row Rev|HW module                    |
-:------------:|:-----:|:-----:|:----------------------------|
-   NO         | NO    | NO    | DR0CR0RR0_HW                |
-   NO         | NO    | YES   | DR0CR0RR1_HW                |
-   NO         | YES   | NO    | DR0CR1RR0_HW (GENERIC_HW)   |
-   NO         | YES   | YES   | DR0CR1RR1_HW                |
-   YES        | NO    | NO    | DR1CR0RR0_HW (FC16_HW)      |
-   YES        | NO    | YES   | DR1CR0RR1_HW                |
-   YES        | YES   | NO    | DR1CR1RR0_HW (PAROLA_HW)    |
-   YES        | YES   | YES   | DR1CR1RR1_HW (ICSTATION_HW) |
+Digits as rows (DR)|Col Rev (CR)|Row Rev (RR)|HW module                    |
+:-----------------:|:----------:|:----------:|:----------------------------|
+   NO              | NO         | NO         | DR0CR0RR0_HW                |
+   NO              | NO         | YES        | DR0CR0RR1_HW                |
+   NO              | YES        | NO         | DR0CR1RR0_HW (GENERIC_HW)   |
+   NO              | YES        | YES        | DR0CR1RR1_HW                |
+   YES             | NO         | NO         | DR1CR0RR0_HW (FC16_HW)      |
+   YES             | NO         | YES        | DR1CR0RR1_HW                |
+   YES             | YES        | NO         | DR1CR1RR0_HW (PAROLA_HW)    |
+   YES             | YES        | YES        | DR1CR1RR1_HW (ICSTATION_HW) |
 
 ___
 
@@ -408,6 +408,8 @@ Version 2: Fonts allows for up to 65535 characters in the font table:
 leftmost column of the character. The most significant bit of the byte is the bottom
 pixel position of the character matrix (bit 7 is row 7).
 
+Bytes 7, 8..n are then repeated for each followiong character.
+
 Version 1: Fonts are stored as a series of contiguous bytes in the following format:
 - byte 0 - the character 'F'
 - byte 1 - the version for the file format (1)
@@ -419,6 +421,8 @@ Version 1: Fonts are stored as a series of contiguous bytes in the following for
 leftmost column of the character. The least significant bit of the byte is the bottom
 pixel position of the character matrix (row 7).
 
+Bytes 5, 6..n are then repeated for each following character.
+
 Version 0: If the 'F' is omitted then the font definition is considered a version 0 font (prior to
 MD_MAX72xx version 3.0.0) and the defaults are set to min ASCII 0, max ASCII 255, height 8. 
 In this case byte 5 of the Version 1 font is the first byte in the file.
@@ -427,11 +431,7 @@ To find a character in the font table, the library looks at the first byte (size
 skips 'size'+1 bytes to the next character size byte and repeat until the last or
 target character is reached.
 
-The compile-time switch USE_INDEX_FONT enables indexing of the font table for faster access, at
-the expense of increased RAM usage. If indexing is enabled, a single lookup is required to
-access the character data, rather than the sequential search described above.
-
-The support for fonts (methods and data) may be completely disabled  if not required through
+The support for fonts (methods and data) may be completely disabled if not required through
 the compile-time switch USE_LOCAL_FONT. This will also disable user defined fonts.
 
 ____

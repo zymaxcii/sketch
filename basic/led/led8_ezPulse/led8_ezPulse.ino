@@ -24,8 +24,14 @@
 #include <ezButton.h>
 #include <ezOutput.h>
 
-ezButton button(10);       // create Button object
-ezOutput led(39);          // create ezOutput object
+//ezButton button(10);       // create Button object
+//ezOutput led(39);          // create ezOutput object
+
+// Hardware config
+ezButton button(2);       // create Button object
+ezOutput led(6);          // create ezOutput object
+
+
 
 
 void setup()

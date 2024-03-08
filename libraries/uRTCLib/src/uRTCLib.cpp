@@ -24,7 +24,7 @@
  * @see <a href="https://www.foroelectro.net/librerias-arduino-ide-f29/rtclib-arduino-libreria-simple-y-eficaz-para-rtc-y-t95.html">https://www.foroelectro.net/librerias-arduino-ide-f29/rtclib-arduino-libreria-simple-y-eficaz-para-rtc-y-t95.html</a>
  * @see <a href="mailto:naguissa@foroelectro.net">naguissa@foroelectro.net</a>
  * @see <a href="https://github.com/Naguissa/uEEPROMLib">See uEEPROMLib for EEPROM support.</a>
- * @version 6.6.0
+ * @version 6.9.1
  */
 
 #include <Arduino.h>
@@ -69,8 +69,10 @@ uRTCLib::uRTCLib(const int rtc_address, const uint8_t model) {
 
 /**
  * \brief Refresh data from HW RTC
+ *
+ * @return False on error
  */
-void uRTCLib::refresh() {
+bool uRTCLib::refresh() {
 	uRTCLIB_YIELD
 	URTCLIB_WIRE.beginTransmission(_rtc_address);
 	URTCLIB_WIRE.write(0); // set DS3231 register pointer to 00h
@@ -78,16 +80,22 @@ void uRTCLib::refresh() {
 	uRTCLIB_YIELD
 
 	// Adjust requested bytes to selected model:
+	size_t bytesRequested = 0;
 	switch (_model) {
 		case URTCLIB_MODEL_DS1307:
-			URTCLIB_WIRE.requestFrom(_rtc_address, 8);
+			bytesRequested = 8;
 			break;
 
 		// case URTCLIB_MODEL_DS3231: // Commented out because it's default mode
 		// case URTCLIB_MODEL_DS3232: // Commented out because it's default mode
 		default:
-			URTCLIB_WIRE.requestFrom(_rtc_address, 19);
+			bytesRequested = 19;
 			break;
+	}
+	uint8_t bytesReceived = URTCLIB_WIRE.requestFrom(_rtc_address, bytesRequested);
+	if (bytesReceived < bytesRequested) {
+		// Error
+		return false;
 	}
 	// 0x00h
 	_second = URTCLIB_WIRE.read() & 0b01111111;
@@ -100,8 +108,14 @@ void uRTCLib::refresh() {
 	_minute = uRTCLIB_bcdToDec(_minute);
 
 	// 0x02h
-	_hour = URTCLIB_WIRE.read() & 0b00111111;
+	_hour = URTCLIB_WIRE.read() & 0b01111111;
 	uRTCLIB_YIELD
+	bool _12hrMode = (bool) (_hour & 0b01000000);
+	bool _pmNotAm = (bool) (_hour & 0b00100000);
+	if(_12hrMode)
+		_hour = _hour & 0b00011111;
+	else
+		_hour = _hour & 0b00111111;
 	_hour = uRTCLIB_bcdToDec(_hour);
 
 	// 0x03h
@@ -221,7 +235,10 @@ void uRTCLib::refresh() {
 			// 0x0Eh
 			LSB = URTCLIB_WIRE.read();
 			uRTCLIB_YIELD
+			// Serial.print("0x0Eh "); Serial.println(LSB, BIN);
 
+			bool _eosc = (bool) (LSB & 0b10000000);
+			// Serial.print("_eosc "); Serial.println(_eosc);
 			if (LSB & 0b00000100) {
 				_sqwg_mode = URTCLIB_SQWG_OFF_1;
 				// Alarms disabled?
@@ -243,15 +260,22 @@ void uRTCLib::refresh() {
 			}
 
 
-
 			// 0x0Fh
 			LSB = URTCLIB_WIRE.read(); //Control
 			uRTCLIB_YIELD
-
-			_lost_power = (bool) (LSB & 0x10000000b);
-			_32k = (bool) (LSB & 0x00001000b);
-			_a2_triggered_flag = (bool) (LSB & 0x00000010b);
-			_a1_triggered_flag = (bool) (LSB & 0x00000001b);
+			// Serial.print("0x0Fh "); Serial.println(LSB, BIN);
+			_controlStatus = LSB;
+			if(_eosc) _controlStatus |= 0b01000000;
+			if(_12hrMode) _controlStatus |= 0b00100000;
+			if(_pmNotAm) _controlStatus |= 0b00010000;
+			// Serial.print("_controlStatus "); Serial.println(_controlStatus, BIN);
+			// _lost_power = (bool) (_controlStatus & 0b10000000);
+			// _eosc = (bool) (_controlStatus & 0b01000000);
+			// _12hrMode = (bool) (_controlStatus & 0b00100000);
+			// _pmNotAm = (bool) (_controlStatus & 0b00010000);
+			// _32k = (bool) (_controlStatus & 0b00001000);
+			// _a2_triggered_flag = (bool) (_controlStatus & 0b00000010);
+			// _a1_triggered_flag = (bool) (_controlStatus & 0b00000001);
 
 
 			// 0x10h
@@ -278,6 +302,23 @@ void uRTCLib::refresh() {
 			_temp = _temp * 25; // *25 is the same as number + 2bit (decimals) * 100 in base 10
 			break;
 	}
+	return true;
+}
+
+/**
+ * \brief Returns Enable Oscillator Flah
+ *
+ * DS3231 Control Register (0Eh) Bit 7: Enable Oscillator (EOSC)
+ * When set to logic 0, the oscillator is started. When set to logic 1, the oscillator
+ * is stopped when the DS3231 switches to VBAT. This bit is clear (logic 0) when power 
+ * is first applied. When the DS3231 is powered by VCC, the oscillator is always on
+ * regardless of the status of the EOSC bit. When EOSC is disabled, all register data 
+ * is static.
+ *
+ * @return _eosc flag - 0 if set to enable OSC with VBAT if VCC is stopped
+ */
+bool uRTCLib::getEOSCFlag() {
+	return (bool) (_controlStatus & 0b01000000);
 }
 
 /**
@@ -294,7 +335,7 @@ void uRTCLib::refresh() {
  * @return True if power was lost (both power sources, VCC and VBAT)
  */
 bool uRTCLib::lostPower() {
-	return _lost_power;
+	return (bool) (_controlStatus & 0b10000000);
 }
 
 /**
@@ -305,19 +346,20 @@ bool uRTCLib::lostPower() {
  * Others have a 'OSF' Oscillator Stop Flag in Register 0Fh
  */
 void uRTCLib::lostPowerClear() {
-    uint8_t status;
-	_lost_power = false;
+	uint8_t status;
+	// _lost_power = (bool) (_controlStatus & 0b10000000);
+	_controlStatus &= 0b01111111;	// clear lost power status
 	switch (_model) {
 		case URTCLIB_MODEL_DS1307:
-			uRTCLIB_YIELD
 			URTCLIB_WIRE.beginTransmission(_rtc_address);
-			URTCLIB_WIRE.write(0X00);
+			uRTCLIB_YIELD
+			URTCLIB_WIRE.write(0x00);
+			uRTCLIB_YIELD
 			URTCLIB_WIRE.endTransmission();
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.requestFrom(_rtc_address, 1);
 			status = URTCLIB_WIRE.read();
 			status &= 0b01111111;
-			uRTCLIB_YIELD
 			URTCLIB_WIRE.beginTransmission(_rtc_address);
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.write(0x00);
@@ -331,15 +373,15 @@ void uRTCLib::lostPowerClear() {
 		// case URTCLIB_MODEL_DS3231: // Commented out because it's default mode
 		// case URTCLIB_MODEL_DS3232: // Commented out because it's default mode
 		default:
-			uRTCLIB_YIELD
 			URTCLIB_WIRE.beginTransmission(_rtc_address);
-			URTCLIB_WIRE.write(0X0F);
+			uRTCLIB_YIELD
+			URTCLIB_WIRE.write(0x0F);
+			uRTCLIB_YIELD
 			URTCLIB_WIRE.endTransmission();
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.requestFrom(_rtc_address, 1);
 			status = URTCLIB_WIRE.read();
 			status &= 0b01111111;
-			uRTCLIB_YIELD
 			URTCLIB_WIRE.beginTransmission(_rtc_address);
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.write(0x0F);
@@ -382,31 +424,37 @@ bool uRTCLib::enableBattery() {
 		default:
 			uint8_t status;
 			URTCLIB_WIRE.beginTransmission(_rtc_address);
+			uRTCLIB_YIELD
 			URTCLIB_WIRE.write(0x0E);
+			uRTCLIB_YIELD
 			URTCLIB_WIRE.endTransmission();
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.requestFrom(_rtc_address, 1);
 			status = URTCLIB_WIRE.read();
 			status &= 0b01111111;
-			uRTCLIB_YIELD
-
 			URTCLIB_WIRE.beginTransmission(_rtc_address);
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.write(0x0E);
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.write(status);
+			uRTCLIB_YIELD
+			URTCLIB_WIRE.endTransmission();
+			uRTCLIB_YIELD
 
 			// Return the status bit as a bool, to check against values of Control Register (0Eh)
-			uRTCLIB_YIELD
 			URTCLIB_WIRE.beginTransmission(_rtc_address);
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.write(0x0E);
 			uRTCLIB_YIELD
+			URTCLIB_WIRE.endTransmission();
+			uRTCLIB_YIELD
 			URTCLIB_WIRE.requestFrom(_rtc_address, 1);
 			uRTCLIB_YIELD
 			status =  URTCLIB_WIRE.read();
-			status &= 0b10000000;
-			return (status == 0b00000000);
+			bool _eosc = (bool) (status & 0b10000000);
+			if(_eosc) _controlStatus |= 0b01000000;
+			else _controlStatus &= 0b10111111;
+			return !_eosc;
 			break;
 	}
 
@@ -432,31 +480,36 @@ bool uRTCLib::disableBattery() {
 		default:
 			uint8_t status;
 			URTCLIB_WIRE.beginTransmission(_rtc_address);
+			uRTCLIB_YIELD
 			URTCLIB_WIRE.write(0x0E);
+			uRTCLIB_YIELD
 			URTCLIB_WIRE.endTransmission();
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.requestFrom(_rtc_address, 1);
 			status = URTCLIB_WIRE.read();
-			status |= 0b10000000;
-			uRTCLIB_YIELD
-
+			status |= 0b10000000;	// set eosc bit high to disable battery
 			URTCLIB_WIRE.beginTransmission(_rtc_address);
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.write(0x0E);
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.write(status);
+			uRTCLIB_YIELD
+			URTCLIB_WIRE.endTransmission();
+			uRTCLIB_YIELD
 
 			// Return the status bit as a bool, to check against values of Control Register (0Eh)
-			uRTCLIB_YIELD
 			URTCLIB_WIRE.beginTransmission(_rtc_address);
 			uRTCLIB_YIELD
 			URTCLIB_WIRE.write(0x0E);
 			uRTCLIB_YIELD
-			URTCLIB_WIRE.requestFrom(_rtc_address, 1);
+			URTCLIB_WIRE.endTransmission();
 			uRTCLIB_YIELD
+			URTCLIB_WIRE.requestFrom(_rtc_address, 1);
 			status =  URTCLIB_WIRE.read();
-			status &= 0b10000000;
-			return (status == 0b10000000);
+			bool _eosc = (bool) (status & 0b10000000);
+			if(_eosc) _controlStatus |= 0b01000000;
+			else _controlStatus &= 0b10111111;
+			return _eosc;
 			break;
 	}
 
@@ -505,6 +558,26 @@ uint8_t uRTCLib::minute() {
  */
 uint8_t uRTCLib::hour() {
 	return _hour;
+}
+
+/**
+ * \brief Returns whether clock is in 12 or 24 hour mode
+ * with AM or PM if in 12 hour mode
+ * 0 = 24 hour mode (0-23 hours)
+ * 1 = 12 hour mode AM hours (1-12 hours)
+ * 2 = 12 hour mode PM hours (1-12 hours)
+ *
+ * @return byte with value 0, 1 or 2
+ */
+uint8_t uRTCLib::hourModeAndAmPm() {
+	if((bool) (_controlStatus & 0b00100000)){		// _12hrMode = (bool) (_controlStatus & 0b00100000);
+		if((bool) (_controlStatus & 0b00010000))	// _pmNotAm = (bool) (_controlStatus & 0b00010000);
+			return 2;
+		else
+			return 1;
+	}
+	else
+		return 0;
 }
 
 /**
@@ -631,6 +704,81 @@ void uRTCLib::set(const uint8_t second, const uint8_t minute, const uint8_t hour
 	URTCLIB_WIRE.write((byte)statreg);
 	URTCLIB_WIRE.endTransmission();
 	*/
+}
+
+/**
+ * \brief Set clock in 12 or 24 hour mode
+ * 12 hour mode has 1-12 hours and AM or PM flag
+ * 24 hour mode has 0-23 hours
+ * get current clock mode and AM or PM flag using hourModeAndAmPm()
+ *
+ * @param twelveHrMode true or false
+ */
+void uRTCLib::set_12hour_mode(const bool twelveHrMode) {
+	bool currentMode12Hr = (bool) (_controlStatus & 0b00100000);
+	if((currentMode12Hr && twelveHrMode) || (!currentMode12Hr && !twelveHrMode))	// already in same mode, return
+		return;
+	bool _pmNotAm = (bool) (_controlStatus & 0b00010000);
+	if(twelveHrMode && !currentMode12Hr) {
+		// current Mode is 24 hour
+		// requested Mode is 12 hour
+		if(_hour == 0) {		// 0Hr = 12AM
+			_hour = 12;
+			_pmNotAm = false;
+		}
+		else if(_hour < 12) {	// 1Hr-11Hr = 1AM-11AM
+			_pmNotAm = false;
+		}
+		else if(_hour == 12) {	// 12Hr = 12PM
+			_pmNotAm = true;
+		}
+		else {					// 13Hr-23Hr = 1PM-11PM
+			_hour -= 12;
+			_pmNotAm = true;
+		}
+	}
+	else {
+		// current Mode is 12 hour
+		// requested Mode is 24 hour
+		if(!_pmNotAm) {	// AM time 1AM-11AM = 1-11Hr, 12AM = 0Hr
+			if(_hour == 12)
+				_hour = 0;
+			// else _hour = 1-11, will remain same in 24 hour mode as well
+		}
+		else {	// PM time 12PM = 12Hr, 1PM-11PM = 13-23Hr
+			if(_hour < 12)
+				_hour += 12;
+			// else _hour = 12 PM, will remain same in 24 hour mode as well
+		}
+	}
+	// prepare hour register byte
+	byte hour_bcd = uRTCLIB_decToBcd(_hour);
+	if(twelveHrMode) {
+		// _12hrMode = true;
+		_controlStatus |= 0b00100000;               // _12hrMode = (bool) (_controlStatus & 0b00100000);
+		hour_bcd |= 0B01000000;
+		// set AM or PM
+		if(_pmNotAm) {
+			_controlStatus |= 0b00010000;           // _pmNotAm = (bool) (_controlStatus & 0b00010000);
+			hour_bcd |= 0B00100000;
+		}
+	}
+	else {
+		// _12hrMode = false;
+		_controlStatus &= 0b11011111;
+	}
+	// set hour register byte
+	uRTCLIB_YIELD
+	URTCLIB_WIRE.beginTransmission(_rtc_address);
+	URTCLIB_WIRE.write(0x02); // set next input to start at the hours register
+	URTCLIB_WIRE.write(hour_bcd); // set hours
+	URTCLIB_WIRE.endTransmission();
+	uRTCLIB_YIELD
+	//
+	URTCLIB_WIRE.beginTransmission(_rtc_address);
+	URTCLIB_WIRE.write(0X0F);
+	URTCLIB_WIRE.endTransmission();
+	uRTCLIB_YIELD
 }
 
 
@@ -841,7 +989,7 @@ bool uRTCLib::alarmDisable(const uint8_t alarm) {
 
 				case URTCLIB_ALARM_2: // Alarm 2
 					mask = 0b11111101;  // A2IE bit
-					_a2_mode = URTCLIB_ALARM_TYPE_1_NONE;
+					_a2_mode = URTCLIB_ALARM_TYPE_2_NONE;
 					break;
 			} // Alarm type switch
 			if (mask) {
@@ -910,6 +1058,7 @@ bool uRTCLib::alarmClearFlag(const uint8_t alarm) {
 				URTCLIB_WIRE.requestFrom(_rtc_address, 1);
 				status = URTCLIB_WIRE.read();
 				status &= mask;  // A?F bit
+				_controlStatus &= mask;	// clear alarm triggered flags on _controlStatus as well
 				URTCLIB_WIRE.beginTransmission(_rtc_address);
 				uRTCLIB_YIELD
 				URTCLIB_WIRE.write(0x0F);
@@ -1105,22 +1254,27 @@ uint8_t uRTCLib::alarmDayDow(const uint8_t alarm) {
 }
 
 
-
 /**
- * \brief Checks if any alarm has been triggered
- *
- * @param alarm Alarm number:
- *	 - #URTCLIB_ALARM_1
- *	 - #URTCLIB_ALARM_2
- *	 - #URTCLIB_ALARM_ANY
- *
- * @return Current stored day or dow. 0b11111111 means error.
- */
+* \brief Checks if any alarm has been triggered
+*
+* NOTE: Alarm Flags A1F and A2F will be triggered whether or not Alarm Interrupt is Enabled A1IE and A2IE
+* When the RTC register values match alarm register settings, the corresponding Alarm Flag ‘A1F’ or ‘A2F’ bit is set to logic 1.
+* If using alarmTriggered function to check for alarm trigger, be sure to alarmMode function to see if alarm is enabled or not.
+*
+* @param alarm Alarm number:
+*	 - #URTCLIB_ALARM_1
+*	 - #URTCLIB_ALARM_2
+*	 - #URTCLIB_ALARM_ANY
+*
+* @return bool true or false
+*/
 bool uRTCLib::alarmTriggered(const uint8_t alarm) {
-	if ((alarm == URTCLIB_ALARM_1 || alarm == URTCLIB_ALARM_ANY) && _a1_triggered_flag) {
+	if ((alarm == URTCLIB_ALARM_1 || alarm == URTCLIB_ALARM_ANY) && (bool) (_controlStatus & 0b00000001)) {
+		// _a1_triggered_flag = (bool) (_controlStatus & 0b00000001)
 		return true;
 	}
-	if ((alarm == URTCLIB_ALARM_2 || alarm == URTCLIB_ALARM_ANY) && _a2_triggered_flag) {
+	if ((alarm == URTCLIB_ALARM_2 || alarm == URTCLIB_ALARM_ANY) && (bool) (_controlStatus & 0b00000010)) {
+		// _a2_triggered_flag = (bool) (_controlStatus & 0b00000010)
 		return true;
 	}
 	return false;
@@ -1306,7 +1460,7 @@ byte uRTCLib::ramRead(const uint8_t address) {
 			break;
 
 		case URTCLIB_MODEL_DS3232:
-			if (address < 0xeb) {
+			if (address < 0xec) {
 				offset = 0x14;
 			}
 			break;
@@ -1344,7 +1498,7 @@ bool uRTCLib::ramWrite(const uint8_t address, byte data) {
 			break;
 
 		case URTCLIB_MODEL_DS3232:
-			if (address < 0xeb) {
+			if (address < 0xec) {
 				offset = 0x14;
 			}
 			break;
@@ -1432,10 +1586,12 @@ bool uRTCLib::agingSet(int8_t val) {
 /**
  * \brief Enables 32K pin output
  *
+ * A Pull-Up resistor is required on the pin.
  * As DS1307 doen't have this functionality we map it to SqWG with 32K frequency
  */
 bool uRTCLib::enable32KOut() {
-	_32k = true;
+	//_32k = (bool) (_controlStatus & 0b00001000);
+	_controlStatus |= 0b00001000;
 	switch (_model) {
 		case URTCLIB_MODEL_DS1307: // As DS1307 doesn't have this pin, map it to SqWG at same frequency
 			return sqwgSetMode(URTCLIB_SQWG_32768H);
@@ -1468,12 +1624,13 @@ bool uRTCLib::enable32KOut() {
 }
 
 /**
- * \brief Enables 32K pin output
+ * \brief Disables 32K pin output
  *
  * As DS1307 doen't have this functionality we map it to SqWG with 32K frequency
  */
 bool uRTCLib::disable32KOut() {
-	_32k = false;
+	//_32k = (bool) (_controlStatus & 0b00001000);
+	_controlStatus &= 0b11110111;
 	switch (_model) {
 		case URTCLIB_MODEL_DS1307: // As DS1307 doesn't have this pin, map it to SqWG at same frequency
 			return sqwgSetMode(URTCLIB_SQWG_OFF_0);
@@ -1512,7 +1669,7 @@ bool uRTCLib::disable32KOut() {
  * As DS1307 doen't have this functionality we map it to SqWG with 32K frequency
  */
 bool uRTCLib::status32KOut() {
-	return _32k;
+	return (bool) (_controlStatus & 0b00001000);
 }
 
 

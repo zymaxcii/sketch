@@ -1,7 +1,7 @@
 /*Library by TMRh20 2012-2014*/
 
 #define RESOLUTION_BASE ((F_CPU) / 10)
-    
+
 #include <pcmConfig.h>
 #if !defined (SDFAT)
     #include <SD.h>
@@ -165,7 +165,7 @@
 #endif
 
 //*********** Standard Global Variables ***************
-volatile unsigned int dataEnd;
+volatile int dataEnd;
 volatile boolean buffEmpty[2] = {true,true}, whichBuff = false, playing = 0, a, b;
 
 //*** Options/Indicators from MSb to LSb: paused, qual, rampUp, 2-byte samples, loop, loop2nd track, 16-bit ***
@@ -192,13 +192,13 @@ byte tt;
 #endif
 
 #if defined (ENABLE_RECORDING)
-    
+
     #if defined(SDFAT)
       SdCard card1;
     #else
       Sd2Card card1;
     #endif
-      
+
     byte recording = 0;
 #endif
 //**************************************************************
@@ -207,7 +207,15 @@ byte tt;
 
 #if !defined (USE_TIMER2) //NOT using timer2
 void TMRpcm::timerSt(){
-    *ICRn[tt] = resolution;
+    #if defined (SPEED_CONTROL)
+       if(!speedPersist){
+    #endif
+         *ICRn[tt] = resolution;
+    #if defined (SPEED_CONTROL)
+       }else{
+         *ICRn[tt] = speedControlVar[tt];
+       }
+    #endif
     #if !defined (DISABLE_SPEAKER2)
         *TCCRnA[tt] = _BV(WGM11) | _BV(COM1A1) | _BV(COM1B0) | _BV(COM1B1); //WGM11,12,13 all set to 1 = fast PWM/w ICR TOP
     #else
@@ -215,7 +223,15 @@ void TMRpcm::timerSt(){
     #endif
     *TCCRnB[tt] = _BV(WGM13) | _BV(WGM12) | _BV(CS10);
   #if defined (MODE2)
-    *ICRn[tt2] = resolution;
+    #if defined (SPEED_CONTROL)
+       if(!speedPersist){
+    #endif
+         *ICRn[tt2] = resolution;
+    #if defined (SPEED_CONTROL)
+       }else{
+         *ICRn[tt2] = speedControlVar[tt2];
+       }
+    #endif
     *TCCRnA[tt2] = _BV(WGM11) | _BV(COM1A1) | _BV(COM1B0) | _BV(COM1B1); //WGM11,12,13 all set to 1 = fast PWM/w ICR TOP
     *TCCRnB[tt2] = _BV(WGM13) | _BV(WGM12) | _BV(CS10);
   #endif
@@ -276,7 +292,7 @@ void TMRpcm::setPins(){
 #endif
 
 
-boolean TMRpcm::wavInfo(char* filename){
+boolean TMRpcm::wavInfo(const char* filename){
 
   //check for the string WAVE starting at 8th bit in header of file
   #if !defined (SDFAT)
@@ -426,6 +442,7 @@ Prevents a whole lot more #if defined statements */
 
     boolean TMRpcm::ifOpen(){
         if(sFile){ return 1;}
+        return 0;
     }
 
 #else
@@ -449,15 +466,26 @@ Prevents a whole lot more #if defined statements */
 //***************************************************************************************
 //********************** Functions for single track playback ****************************
 
+unsigned int TMRpcm::FSHlength(const __FlashStringHelper * FSHinput) {
+  PGM_P FSHinputPointer = reinterpret_cast<PGM_P>(FSHinput);
+  unsigned int stringLength = 0;
+  while (pgm_read_byte(FSHinputPointer++)) {
+    stringLength++;
+  }
+  return stringLength;
+}
+
 #if !defined (ENABLE_MULTI) //Below section for normal playback of 1 track at a time
 
 
-void TMRpcm::play(char* filename){
-    play(filename,0);
+void TMRpcm::play(const __FlashStringHelper* FS, unsigned long seekPoint){
+    const byte textLength = FSHlength(FS);
+    char buffer[textLength + 1];
+    memcpy_P(buffer, FS, textLength + 1);
+    play(buffer,seekPoint);
 }
 
-
-void TMRpcm::play(char* filename, unsigned long seekPoint){
+void TMRpcm::play(const char* filename, unsigned long seekPoint){
 
   if(speakerPin != lastSpeakPin){
       #if !defined (MODE2)
@@ -725,7 +753,7 @@ void TMRpcm::disable(){
                 *OCRnB[tt] = constrain((current - i),0,resolution);
                 *OCRnA[tt] = constrain((current - i),0,resolution);
             #endif
-            for(int i=0; i<10; i++){ while(*TCNT[tt] < resolution-50){} }
+            for(int i=0; i<10; i++){ while(*TCNT[tt] < (unsigned int)(resolution-50) ){} }
         }
     }
     bitSet(optionByte,5);
@@ -750,17 +778,27 @@ void TMRpcm::loop(boolean set, boolean which){
     else{       bitWrite(optionByte,2,set); }
 }
 
-void TMRpcm::play(char* filename, boolean which){
+void TMRpcm::play(const char* filename, boolean which){
     play(filename,0,which);
 }
 
-void TMRpcm::play(char* filename){
-    play(filename,0,0);
+void TMRpcm::play(const __FlashStringHelper* FS, boolean which){
+    const byte textLength = FSHlength(FS);
+    char buffer[textLength + 1];
+    memcpy_P(buffer, FS, textLength + 1);
+    play(buffer,0, which);
+}
+
+void TMRpcm::play(const __FlashStringHelper* FS, unsigned long seekPoint, boolean which){
+    const byte textLength = FSHlength(FS);
+    char buffer[textLength + 1];
+    memcpy_P(buffer, FS, textLength + 1);
+    play(buffer,seekPoint, which);
 }
 
 byte hold = 0;
 
-void TMRpcm::play(char* filename, unsigned long seekPoint, boolean which){
+void TMRpcm::play(const char* filename, unsigned long seekPoint, boolean which){
 
   if(speakerPin != lastSpeakPin){
       #if defined (MODE2)
@@ -1266,7 +1304,7 @@ boolean TMRpcm::isPlaying(boolean which){
 
 
 
-byte TMRpcm::getInfo(char* filename, char* tagData, byte infoNum){
+byte TMRpcm::getInfo(const char* filename, char* tagData, byte infoNum){
     byte gotInfo = 0;
     if( (gotInfo = metaInfo(1,filename, tagData, infoNum)) < 1){
         gotInfo = metaInfo(0,filename, tagData, infoNum);
@@ -1275,7 +1313,7 @@ byte TMRpcm::getInfo(char* filename, char* tagData, byte infoNum){
 
 }
 
-byte TMRpcm::listInfo(char* filename, char* tagData, byte infoNum){
+byte TMRpcm::listInfo(const char* filename, char* tagData, byte infoNum){
     return metaInfo(0, filename, tagData, infoNum);
 
 }
@@ -1283,7 +1321,7 @@ byte TMRpcm::listInfo(char* filename, char* tagData, byte infoNum){
 
 
 //http://id3.org/id3v2.3.0
-byte TMRpcm::id3Info(char* filename, char* tagData, byte infoNum){
+byte TMRpcm::id3Info(const char* filename, char* tagData, byte infoNum){
     return metaInfo(1, filename, tagData, infoNum);
 }
 
@@ -1295,7 +1333,6 @@ boolean TMRpcm::searchMainTags(File xFile, char *datStr){
 unsigned long TMRpcm::searchMainTags(SdFile xFile, char *datStr){
     xFile.seekSet(36);
 #endif
-        boolean found = 0;
         char dChars[4] = {'d','a','t','a'};
         char tmpChars[4];
 
@@ -1347,7 +1384,6 @@ unsigned long TMRpcm::searchMainTags(SdFile xFile, char *datStr){
             if(xFile.read() == datStr[0] && xFile.peek() == datStr[1]){
                 xFile.read((char*)tmpChars,3);
                 if( tmpChars[1] == datStr[2] &&  tmpChars[2] == datStr[3] ){
-                        found = 1;
                         #if !defined (SDFAT)
                             return 1; break;
                         #else
@@ -1369,7 +1405,7 @@ unsigned long TMRpcm::searchMainTags(SdFile xFile, char *datStr){
 
 
 
-byte TMRpcm::metaInfo(boolean infoType, char* filename, char* tagData, byte whichInfo){
+byte TMRpcm::metaInfo(boolean infoType, const char* filename, char* tagData, byte whichInfo){
 
 
     if(ifOpen()){ noInterrupts();}
@@ -1385,8 +1421,8 @@ byte TMRpcm::metaInfo(boolean infoType, char* filename, char* tagData, byte whic
     #endif
 
     boolean found=0;
-        char* datStr = "LIST";
-        if(infoType == 1){datStr = "ID3 "; datStr[3] = 3;}
+        char datStr[5] = "LIST";
+        if(infoType == 1){strncpy(datStr, "ID3 ", sizeof(datStr)); datStr[3] = 3;}
         char tmpChars[4];
 
     if(infoType == 0){ //if requesting LIST info, check for data at beginning of file first
@@ -1414,7 +1450,7 @@ byte TMRpcm::metaInfo(boolean infoType, char* filename, char* tagData, byte whic
 
     unsigned long listEnd;
     unsigned int listLen;
-    char* tagNames[] = {"INAM","IART","IPRD"};
+    const char* tagNames[] = {"INAM","IART","IPRD"};
 
     if(infoType == 0){ //LIST format
         listLen = xFile.read(); listLen = xFile.read() << 8 | listLen;
@@ -1493,10 +1529,8 @@ byte TMRpcm::metaInfo(boolean infoType, char* filename, char* tagData, byte whic
             }else{
                 if(p==3){
                     if(infoType == 1){
-                        byte junk;
                         for(byte j=0; j<len; j++){
                             tagData[j] = xFile.read();
-                            junk=xFile.read();
                         }
                     }else{
                         xFile.read((char*)tagData,len);
@@ -1539,10 +1573,41 @@ byte TMRpcm::metaInfo(boolean infoType, char* filename, char* tagData, byte whic
 
 
 /*********************************************************************************
+********************** Audio Playback Speed Control ******************************/
+#if defined SPEED_CONTROL
+void TMRpcm::speedUp(uint8_t amount, bool persist, uint8_t timerNo){
+    speedPersist = persist;
+    *ICRn[timerNo] = *ICRn[timerNo] - amount;
+    speedControlVar[timerNo] = *ICRn[timerNo];
+}
+
+void TMRpcm::speedDown(uint8_t amount, bool persist, uint8_t timerNo){
+    speedPersist = persist;
+    *ICRn[timerNo] = *ICRn[timerNo] + amount;
+    speedControlVar[timerNo] = *ICRn[timerNo];
+}
+
+void TMRpcm::setSpeed( uint32_t newSpeed, bool persist, uint8_t timerNo){
+    speedPersist = persist;
+    speedControlVar[timerNo] = newSpeed;
+    *ICRn[timerNo] = newSpeed;
+}
+
+uint32_t TMRpcm::getSpeed(uint8_t timerNo){
+   return *ICRn[timerNo];   
+}
+#endif
+
+/*********************************************************************************
 ********************** DIY Digital Audio Generation ******************************/
+void TMRpcm::finalizeWavTemplate(const __FlashStringHelper* FS){
+    const byte textLength = FSHlength(FS);
+    char buffer[textLength + 1];
+    memcpy_P(buffer, FS, textLength + 1);
+    finalizeWavTemplate(buffer);
+}
 
-
-void TMRpcm::finalizeWavTemplate(char* filename){
+void TMRpcm::finalizeWavTemplate(const char* filename){
     disable();
 
     unsigned long fSize = 0;
@@ -1572,12 +1637,11 @@ void TMRpcm::finalizeWavTemplate(char* filename){
 
 
 
-    seek(4); byte data[4] = {lowByte(fSize),highByte(fSize), fSize >> 16,fSize >> 24};
+    seek(4); byte data[4] = {lowByte(fSize),highByte(fSize), (byte)(fSize >> 16), (byte)(fSize >> 24)};
     sFile.write(data,4);
-    byte tmp;
     seek(40);
     fSize = fSize - 36;
-    data[0] = lowByte(fSize); data[1]=highByte(fSize);data[2]=fSize >> 16;data[3]=fSize >> 24;
+    data[0] = lowByte(fSize); data[1]=highByte(fSize); data[2]=(byte)(fSize >> 16); data[3]= (byte)(fSize >> 24);
     sFile.write((byte*)data,4);
     sFile.close();
 
@@ -1602,9 +1666,14 @@ void TMRpcm::finalizeWavTemplate(char* filename){
     #endif
 }
 
+void TMRpcm::createWavTemplate(const __FlashStringHelper* FS, unsigned int sampleRate){
+    const byte textLength = FSHlength(FS);
+    char buffer[textLength + 1];
+    memcpy_P(buffer, FS, textLength + 1);
+    createWavTemplate(buffer,sampleRate);
+}
 
-
-void TMRpcm::createWavTemplate(char* filename, unsigned int sampleRate){
+void TMRpcm::createWavTemplate(const char* filename, unsigned int sampleRate){
     disable();
 
   #if !defined (SDFAT)
@@ -1657,12 +1726,19 @@ void TMRpcm::createWavTemplate(char* filename, unsigned int sampleRate){
 
 #if defined (ENABLE_RECORDING)
 
-void TMRpcm::startRecording(char *fileName, unsigned int SAMPLE_RATE, byte pin){
-    startRecording(fileName,SAMPLE_RATE,pin,0);
+void TMRpcm::startRecording(const __FlashStringHelper* FS, unsigned int sampleRate, byte pin, byte passThrough){
+    const byte textLength = FSHlength(FS);
+    char buffer[textLength + 1];
+    memcpy_P(buffer, FS, textLength + 1);
+    startRecording(buffer,sampleRate,pin,passThrough);
 }
 
-void TMRpcm::startRecording(char *fileName, unsigned int SAMPLE_RATE, byte pin, byte passThrough){
 
+void TMRpcm::startRecording(const char *fileName, unsigned int SAMPLE_RATE, byte pin, byte passThrough){
+
+    adcsra = ADCSRA;
+    adcsrb = ADCSRB;
+    admux = ADMUX;
     recording = passThrough + 1;
     setPin();
     if(recording < 3){
@@ -1725,7 +1801,15 @@ void TMRpcm::startRecording(char *fileName, unsigned int SAMPLE_RATE, byte pin, 
         *TCCRnA[tt] = _BV(COM1A1); //Enable the timer port/pin as output for passthrough
 
     }
-    *ICRn[tt] = 10 * (RESOLUTION_BASE/SAMPLE_RATE);//Timer will count up to this value from 0;
+    #if defined (SPEED_CONTROL)
+      if(!speedPersist){
+    #endif
+        *ICRn[tt] = 10 * (RESOLUTION_BASE/SAMPLE_RATE);//Timer will count up to this value from 0;
+    #if defined (SPEED_CONTROL)
+      }else{
+        *ICRn[tt] = speedControlVar[tt];
+      }
+    #endif
     *TCCRnA[tt] |= _BV(WGM11); //WGM11,12,13 all set to 1 = fast PWM/w ICR TOP
     *TCCRnB[tt] = _BV(WGM13) | _BV(WGM12) | _BV(CS10); //CS10 = no prescaling
 
@@ -1749,17 +1833,24 @@ void TMRpcm::startRecording(char *fileName, unsigned int SAMPLE_RATE, byte pin, 
 
 }
 
-void TMRpcm::stopRecording(char *fileName){
+void TMRpcm::stopRecording(const __FlashStringHelper* FS){
+    const byte textLength = FSHlength(FS);
+    char buffer[textLength + 1];
+    memcpy_P(buffer, FS, textLength + 1);
+    stopRecording(buffer);
+}
+
+void TMRpcm::stopRecording(const char *fileName){
 
     *TIMSK[tt] &= ~(_BV(OCIE1B) | _BV(OCIE1A));
-    ADCSRA = 0;
-    ADCSRB = 0;
+    ADCSRA = adcsra;
+    ADCSRB = adcsrb;
+    ADMUX = admux;
 
     if(recording == 1 || recording == 2){
         recording = 0;
-        unsigned long position = fPosition();
         #if defined (SDFAT)
-            sFile.truncate(position);
+            sFile.truncate(fPosition());
         #endif
         sFile.close();
         finalizeWavTemplate(fileName);

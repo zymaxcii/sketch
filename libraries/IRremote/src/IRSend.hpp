@@ -95,7 +95,7 @@ void IRsend::begin(){
  */
 void IRsend::begin(bool aEnableLEDFeedback, uint_fast8_t aFeedbackLEDPin) {
 #if !defined(NO_LED_FEEDBACK_CODE)
-    bool tEnableLEDFeedback = DO_NOT_ENABLE_LED_FEEDBACK;
+    uint_fast8_t tEnableLEDFeedback = DO_NOT_ENABLE_LED_FEEDBACK;
     if(aEnableLEDFeedback) {
         tEnableLEDFeedback = LED_FEEDBACK_ENABLED_FOR_SEND;
     }
@@ -143,7 +143,7 @@ void IRsend::begin(uint_fast8_t aSendPin, bool aEnableLEDFeedback, uint_fast8_t 
 #endif
 
 #if !defined(NO_LED_FEEDBACK_CODE)
-    bool tEnableLEDFeedback = DO_NOT_ENABLE_LED_FEEDBACK;
+    uint_fast8_t tEnableLEDFeedback = DO_NOT_ENABLE_LED_FEEDBACK;
     if (aEnableLEDFeedback) {
         tEnableLEDFeedback = LED_FEEDBACK_ENABLED_FOR_SEND;
     }
@@ -933,6 +933,15 @@ void IRsend::sendBiphaseData(uint16_t aBiphaseTimeUnit, uint32_t aData, uint_fas
  * The mark output is modulated at the PWM frequency if USE_NO_SEND_PWM is not defined.
  * The output is guaranteed to be OFF / inactive after after the call of the function.
  * This function may affect the state of feedback LED.
+ * Period time is 26 us for 38.46 kHz, 27 us for 37.04 kHz, 25 us for 40 kHz.
+ * On time is 8 us for 30% duty cycle
+ *
+ * The mark() function relies on the correct implementation of:
+ * delayMicroseconds() for pulse time, and micros() for pause time.
+ * The delayMicroseconds() of pulse time is guarded on AVR CPU's with noInterrupts() / interrupts().
+ * At the start of pause time, interrupts are enabled once, the rest of the pause is also guarded on AVR CPU's with noInterrupts() / interrupts().
+ * The maximum length of an interrupt during sending should not exceed 26 us - 8 us = 18 us, otherwise timing is disturbed.
+ * This disturbance is no problem, if the exceedance is small and does not happen too often.
  */
 void IRsend::mark(uint16_t aMarkMicros) {
 
@@ -950,7 +959,7 @@ void IRsend::mark(uint16_t aMarkMicros) {
      */
     enableSendPWMByTimer(); // Enable timer or ledcWrite() generated PWM output
     customDelayMicroseconds(aMarkMicros);
-    IRLedOff();// disables hardware PWM and manages feedback LED
+    IRLedOff(); // disables hardware PWM and manages feedback LED
     return;
 
 #elif defined(USE_NO_SEND_PWM)
@@ -1000,7 +1009,7 @@ void IRsend::mark(uint16_t aMarkMicros) {
         // 4.3 us from do{ to pin setting if sendPin is no constant
         digitalWriteFast(sendPin, HIGH);
 #  endif
-        delayMicroseconds (periodOnTimeMicros); // this is normally implemented by a blocking wait
+        delayMicroseconds (periodOnTimeMicros); // On time is 8 us for 30% duty cycle. This is normally implemented by a blocking wait.
 
         /*
          * Output the PWM pause
@@ -1034,12 +1043,15 @@ void IRsend::mark(uint16_t aMarkMicros) {
 #  endif
         /*
          * PWM pause timing
-         * Measured delta between pause duration values are 13 us for a 16 MHz UNO (from 13 to 26)
+         * Measured delta between pause duration values are 13 us for a 16 MHz Uno (from 13 to 26), if interrupts are disabled below
+         * Measured delta between pause duration values are 20 us for a 16 MHz Uno (from 7.8 to 28), if interrupts are not disabled below
          * Minimal pause duration is 5.2 us with NO_LED_FEEDBACK_CODE enabled
          * and 8.1 us with NO_LED_FEEDBACK_CODE disabled.
          */
         tNextPeriodEnding += periodTimeMicros;
-        noInterrupts();
+#if defined(__AVR__) // micros() for STM sometimes give decreasing values if interrupts are disabled. See https://github.com/stm32duino/Arduino_Core_STM32/issues/1680
+        noInterrupts(); // disable interrupts (especially the 20 us receive interrupts) only at start of the PWM pause. Otherwise it may extend the pause too much.
+#endif
         do {
 #if defined(_IR_MEASURE_TIMING) && defined(_IR_TIMING_TEST_PIN)
             digitalWriteFast(_IR_TIMING_TEST_PIN, HIGH); // 2 clock cycles
@@ -1051,19 +1063,19 @@ void IRsend::mark(uint16_t aMarkMicros) {
              * The rest of the loop takes 1.2 us with NO_LED_FEEDBACK_CODE enabled
              * and 3 us with NO_LED_FEEDBACK_CODE disabled.
              */
-            tMicros = micros(); //
 #if defined(_IR_MEASURE_TIMING) && defined(_IR_TIMING_TEST_PIN)
             digitalWriteFast(_IR_TIMING_TEST_PIN, LOW); // 2 clock cycles
 #endif
             /*
              * Exit the forever loop if aMarkMicros has reached
              */
-            unsigned int tDeltaMicros = tMicros - tStartMicros;
+            tMicros = micros();
+            uint16_t tDeltaMicros = tMicros - tStartMicros;
 #if defined(__AVR__)
-//            tDeltaMicros += (160 / CLOCKS_PER_MICRO); // adding this once increases program size !
+            // reset feedback led in the last pause before end
+//            tDeltaMicros += (160 / CLOCKS_PER_MICRO); // adding this once increases program size, so do it below !
 #  if !defined(NO_LED_FEEDBACK_CODE)
             if (tDeltaMicros >= aMarkMicros - (30 + (112 / CLOCKS_PER_MICRO))) { // 30 to be constant. Using periodTimeMicros increases program size too much.
-            // reset feedback led in the last pause before end
                 if (FeedbackLEDControl.LedFeedbackEnabled == LED_FEEDBACK_ENABLED_FOR_SEND) {
                     setFeedbackLED(false);
                 }
@@ -1079,7 +1091,9 @@ void IRsend::mark(uint16_t aMarkMicros) {
                 }
 #  endif
 #endif
+#if defined(__AVR__)
                 interrupts();
+#endif
                 return;
             }
         } while (tMicros < tNextPeriodEnding);
@@ -1137,16 +1151,14 @@ void IRsend::customDelayMicroseconds(unsigned long aMicroseconds) {
 #if defined(ESP32) || defined(ESP8266)
     // from https://github.com/crankyoldgit/IRremoteESP8266/blob/00b27cc7ea2e7ac1e48e91740723c805a38728e0/src/IRsend.cpp#L123
     // Invoke a delay(), where possible, to avoid triggering the WDT.
-    // see https://github.com/Arduino-IRremote/Arduino-IRremote/issues/1114 for the reason of checking for > 20000 ( 20000 is just a best guess :-))
-    if (aMicroseconds > 20000) {
+    // see https://github.com/Arduino-IRremote/Arduino-IRremote/issues/1114 for the reason of checking for > 16383)
+    // delayMicroseconds() is only accurate to 16383 us. Ref: https://www.arduino.cc/en/Reference/delayMicroseconds
+    if (aMicroseconds > 16383) {
         delay(aMicroseconds / 1000UL);  // Delay for as many whole milliseconds as we can.
         // Delay the remaining sub-millisecond.
         delayMicroseconds(static_cast<uint16_t>(aMicroseconds % 1000UL));
     } else {
-        unsigned long start = micros();
-        // overflow invariant comparison :-)
-        while (micros() - start < aMicroseconds) {
-        }
+        delayMicroseconds(aMicroseconds);
     }
 #else
 
@@ -1169,15 +1181,15 @@ void IRsend::customDelayMicroseconds(unsigned long aMicroseconds) {
  */
 void IRsend::enableIROut(uint_fast8_t aFrequencyKHz) {
 #if defined(SEND_PWM_BY_TIMER)
-        timerConfigForSend(aFrequencyKHz); // must set output pin mode and disable receive interrupt if required, e.g. uses the same resource
+    timerConfigForSend(aFrequencyKHz); // must set output pin mode and disable receive interrupt if required, e.g. uses the same resource
 
 #elif defined(USE_NO_SEND_PWM)
-        (void) aFrequencyKHz;
+    (void) aFrequencyKHz;
 
 #else
     periodTimeMicros = (1000U + (aFrequencyKHz / 2)) / aFrequencyKHz; // rounded value -> 26 for 38.46 kHz, 27 for 37.04 kHz, 25 for 40 kHz.
 #  if defined(IR_SEND_PIN)
-        periodOnTimeMicros = (((periodTimeMicros * IR_SEND_DUTY_CYCLE_PERCENT) + 50) / 100U); // +50 for rounding -> 830/100 for 30% and 16 MHz
+    periodOnTimeMicros = (((periodTimeMicros * IR_SEND_DUTY_CYCLE_PERCENT) + 50) / 100U); // +50 for rounding -> 830/100 for 30% and 16 MHz
 #  else
 // Heuristics! We require a nanosecond correction for "slow" digitalWrite() functions
     periodOnTimeMicros = (((periodTimeMicros * IR_SEND_DUTY_CYCLE_PERCENT) + 50 - (PULSE_CORRECTION_NANOS / 10)) / 100U); // +50 for rounding -> 530/100 for 30% and 16 MHz
@@ -1186,9 +1198,9 @@ void IRsend::enableIROut(uint_fast8_t aFrequencyKHz) {
 
 #if defined(USE_OPEN_DRAIN_OUTPUT_FOR_SEND_PIN) && defined(OUTPUT_OPEN_DRAIN) // the mode INPUT for mimicking open drain is set at IRLedOff()
 #  if defined(IR_SEND_PIN)
-        pinModeFast(IR_SEND_PIN, OUTPUT_OPEN_DRAIN);
+    pinModeFast(IR_SEND_PIN, OUTPUT_OPEN_DRAIN);
 #  else
-        pinModeFast(sendPin, OUTPUT_OPEN_DRAIN);
+    pinModeFast(sendPin, OUTPUT_OPEN_DRAIN);
 #  endif
 #else
 
@@ -1196,13 +1208,29 @@ void IRsend::enableIROut(uint_fast8_t aFrequencyKHz) {
 // because ESP 2.0.2 ledcWrite does not work if pin mode is set, and RP2040 requires gpio_set_function(IR_SEND_PIN, GPIO_FUNC_PWM);
 #  if defined(__AVR__) || !defined(SEND_PWM_BY_TIMER)
 #    if defined(IR_SEND_PIN)
-        pinModeFast(IR_SEND_PIN, OUTPUT);
+    pinModeFast(IR_SEND_PIN, OUTPUT);
 #    else
     pinModeFast(sendPin, OUTPUT);
 #    endif
 #  endif
 #endif // defined(USE_OPEN_DRAIN_OUTPUT_FOR_SEND_PIN)
 }
+
+#if defined(SEND_PWM_BY_TIMER)
+// Used for Bang&Olufsen
+void IRsend::enableHighFrequencyIROut(uint_fast16_t aFrequencyKHz) {
+    timerConfigForSend(aFrequencyKHz); // must set output pin mode and disable receive interrupt if required, e.g. uses the same resource
+    // For Non AVR platforms pin mode for SEND_PWM_BY_TIMER must be handled by the timerConfigForSend() function
+    // because ESP 2.0.2 ledcWrite does not work if pin mode is set, and RP2040 requires gpio_set_function(IR_SEND_PIN, GPIO_FUNC_PWM);
+#  if defined(__AVR__)
+#    if defined(IR_SEND_PIN)
+    pinModeFast(IR_SEND_PIN, OUTPUT);
+#    else
+    pinModeFast(sendPin, OUTPUT);
+#    endif
+#  endif
+}
+#endif
 
 uint16_t IRsend::getPulseCorrectionNanos() {
     return PULSE_CORRECTION_NANOS;

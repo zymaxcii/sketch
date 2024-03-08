@@ -51,7 +51,7 @@
 //#define _IR_TIMING_TEST_PIN 7 // "pinModeFast(_IR_TIMING_TEST_PIN, OUTPUT);" is executed at start()
 //
 /*
- * Check for additional characteristics of timing like length of mark for a constant mark protocol,
+ * Check for additional required characteristics of timing like length of mark for a constant mark protocol,
  * where space length determines the bit value. Requires up to 194 additional bytes of program memory.
  */
 //#define DECODE_STRICT_CHECKS
@@ -124,7 +124,7 @@ IRrecv::IRrecv(uint_fast8_t aReceivePin, uint_fast8_t aFeedbackLEDPin) {
 #if defined(ESP8266) || defined(ESP32)
 IRAM_ATTR
 #endif
-void IRReceiveTimerInterruptHandler(){
+void IRReceiveTimerInterruptHandler() {
 #if defined(_IR_MEASURE_TIMING) && defined(_IR_TIMING_TEST_PIN)
     digitalWriteFast(_IR_TIMING_TEST_PIN, HIGH); // 2 clock cycles
 #endif
@@ -173,7 +173,7 @@ void IRReceiveTimerInterruptHandler(){
                 irparams.rawlen = 1;
                 irparams.StateForISR = IR_REC_STATE_MARK;
             } // otherwise stay in idle state
-            irparams.TickCounterForISR = 0;// reset counter in both cases
+            irparams.TickCounterForISR = 0; // reset counter in both cases
         }
 
     } else if (irparams.StateForISR == IR_REC_STATE_MARK) {  // Timing mark
@@ -186,7 +186,7 @@ void IRReceiveTimerInterruptHandler(){
 #endif
             irparams.rawbuf[irparams.rawlen++] = irparams.TickCounterForISR; // record mark
             irparams.StateForISR = IR_REC_STATE_SPACE;
-            irparams.TickCounterForISR = 0;// This resets the tick counter also at end of frame :-)
+            irparams.TickCounterForISR = 0; // This resets the tick counter also at end of frame :-)
         }
 
     } else if (irparams.StateForISR == IR_REC_STATE_SPACE) {  // Timing space
@@ -287,7 +287,7 @@ void IRrecv::begin(uint_fast8_t aReceivePin, bool aEnableLEDFeedback, uint_fast8
 
     setReceivePin(aReceivePin);
 #if !defined(NO_LED_FEEDBACK_CODE)
-    bool tEnableLEDFeedback = DO_NOT_ENABLE_LED_FEEDBACK;
+    uint_fast8_t tEnableLEDFeedback = DO_NOT_ENABLE_LED_FEEDBACK;
     if (aEnableLEDFeedback) {
         tEnableLEDFeedback = LED_FEEDBACK_ENABLED_FOR_RECEIVE;
     }
@@ -407,10 +407,11 @@ bool IRrecv::isIdle() {
 }
 
 /**
- * Restart the ISR (Interrupt Service Routine) state machine, to enable receiving of the next IR frame
+ * Restart the ISR (Interrupt Service Routine) state machine, to enable receiving of the next IR frame.
+ * Counting of gap timing is independent of StateForISR and therefore independent of call time of resume().
  */
 void IRrecv::resume() {
-    // check allows to call resume at arbitrary places or more than once
+    // This check allows to call resume at arbitrary places or more than once
     if (irparams.StateForISR == IR_REC_STATE_STOP) {
         irparams.StateForISR = IR_REC_STATE_IDLE;
     }
@@ -487,8 +488,8 @@ bool IRrecv::decode() {
         return true;
     }
 
-#if defined(DECODE_NEC)
-    IR_TRACE_PRINTLN(F("Attempting NEC decode"));
+#if defined(DECODE_NEC) || defined(DECODE_ONKYO)
+    IR_TRACE_PRINTLN(F("Attempting NEC/Onkyo decode"));
     if (decodeNEC()) {
         return true;
     }
@@ -664,6 +665,7 @@ bool IRrecv::decodePulseDistanceWidthData(uint_fast8_t aNumberOfBits, uint_fast8
         // get one mark and space pair
         unsigned int tMarkTicks;
         unsigned int tSpaceTicks;
+        bool tBitValue;
 
         if (isPulseDistanceProtocol) {
             /*
@@ -676,6 +678,7 @@ bool IRrecv::decodePulseDistanceWidthData(uint_fast8_t aNumberOfBits, uint_fast8
             tRawBufPointer++;
 #endif
             tSpaceTicks = *tRawBufPointer++; // maybe buffer overflow for last bit, but we do not evaluate this value :-)
+            tBitValue = matchSpace(tSpaceTicks, aOneSpaceMicros); // Check for variable length space indicating a 1 or 0
 
 #if defined DECODE_STRICT_CHECKS
             // Check for constant length mark
@@ -698,6 +701,8 @@ bool IRrecv::decodePulseDistanceWidthData(uint_fast8_t aNumberOfBits, uint_fast8
              * Pulse width here, it is not required to check (constant) space duration and zero mark duration.
              */
             tMarkTicks = *tRawBufPointer++;
+            tBitValue = matchMark(tMarkTicks, aOneMarkMicros); // Check for variable length mark indicating a 1 or 0
+
 #if defined DECODE_STRICT_CHECKS
             tSpaceTicks = *tRawBufPointer++; // maybe buffer overflow for last bit, but we do not evaluate this value :-)
 #else
@@ -710,17 +715,7 @@ bool IRrecv::decodePulseDistanceWidthData(uint_fast8_t aNumberOfBits, uint_fast8
         if (aMSBfirst) {
             tDecodedData <<= 1;
         }
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-        bool tBitValue;
-        if (isPulseDistanceProtocol) {
-            // Check for variable length space indicating a 1 or 0
-            tBitValue = matchSpace(tSpaceTicks, aOneSpaceMicros); // tSpaceTicks is initialized here, even if some compiler are complaining!
-        } else {
-            // Check for variable length mark indicating a 1 or 0
-            tBitValue = matchMark(tMarkTicks, aOneMarkMicros); // tMarkTicks is initialized here, even if some compiler are complaining!
-        }
-#pragma GCC diagnostic pop
+
         if (tBitValue) {
             // It's a 1 -> set the bit
             if (aMSBfirst) {
@@ -1143,7 +1138,9 @@ void IRrecv::printActiveIRProtocols(Print *aSerial) {
     ::printActiveIRProtocols(aSerial);
 }
 void printActiveIRProtocols(Print *aSerial) {
-#if defined(DECODE_NEC)
+#if defined(DECODE_ONKYO)
+    aSerial->print(F("Onkyo, "));
+#elif defined(DECODE_NEC)
     aSerial->print(F("NEC/NEC2/Onkyo/Apple, "));
 #endif
 #if defined(DECODE_PANASONIC) || defined(DECODE_KASEIKYO)
@@ -1654,19 +1651,10 @@ const char* IRrecv::getProtocolString() {
  * aResults->bits
  * aResults->decode_type
  **********************************************************************************************************************/
-bool IRrecv::decode(decode_results *aResults) {
-    static bool sDeprecationMessageSent = false;
+bool IRrecv::decode_old(decode_results *aResults) {
 
     if (irparams.StateForISR != IR_REC_STATE_STOP) {
         return false;
-    }
-
-    if (!sDeprecationMessageSent) {
-#if !(defined(__AVR_ATtiny25__) || defined(__AVR_ATtiny45__) || defined(__AVR_ATtiny85__) || defined(__AVR_ATtiny87__) || defined(__AVR_ATtiny167__))
-//        Serial.println(
-//                "The function decode(&results)) is deprecated and may not work as expected! Just use decode() without a parameter and IrReceiver.decodedIRData.<fieldname> .");
-#endif
-        sDeprecationMessageSent = true;
     }
 
 // copy for usage by legacy programs

@@ -76,12 +76,11 @@
 #define JVC_ONE_SPACE         (3 * JVC_UNIT)  // 1578 - The length of a Bit:Space for 1's
 #define JVC_ZERO_SPACE        JVC_UNIT        // The length of a Bit:Space for 0's
 
-#define JVC_REPEAT_DISTANCE      (uint16_t)(45 * JVC_UNIT)  // 23625 - Commands are repeated with a distance of 23 ms for as long as the key on the remote control is held down.
-#define JVC_REPEAT_PERIOD     65000 // assume around 40 ms for a JVC frame
+#define JVC_REPEAT_DISTANCE   (uint16_t)(45 * JVC_UNIT)  // 23625 - Commands are repeated with a distance of 23 ms for as long as the key on the remote control is held down.
+#define JVC_REPEAT_PERIOD     65000 // assume around 40 ms for a JVC frame. JVC IR Remotes: RM-SA911U, RM-SX463U have 45 ms period
 
 struct PulseDistanceWidthProtocolConstants JVCProtocolConstants = { JVC, JVC_KHZ, JVC_HEADER_MARK, JVC_HEADER_SPACE, JVC_BIT_MARK,
-JVC_ONE_SPACE, JVC_BIT_MARK, JVC_ZERO_SPACE, PROTOCOL_IS_LSB_FIRST, (JVC_REPEAT_PERIOD
-        / MICROS_IN_ONE_MILLI), NULL };
+JVC_ONE_SPACE, JVC_BIT_MARK, JVC_ZERO_SPACE, PROTOCOL_IS_LSB_FIRST, (JVC_REPEAT_PERIOD / MICROS_IN_ONE_MILLI), NULL };
 
 /************************************
  * Start of send and decode functions
@@ -232,6 +231,7 @@ bool IRrecv::decodeJVCMSB(decode_results *aResults) {
 /**
  * With Send sendJVCMSB() you can send your old 32 bit codes.
  * To convert one into the other, you must reverse the byte positions and then reverse all bit positions of each byte.
+ * Use bitreverse32Bit().
  * Or write it as one binary string and reverse/mirror it.
  * Example:
  * 0xCB340102 byte reverse -> 02 01 34 CB bit reverse-> 40 80 2C D3.
@@ -250,8 +250,7 @@ void IRsend::sendJVCMSB(unsigned long data, int nbits, bool repeat) {
     }
 
     // Old version with MSB first Data
-    sendPulseDistanceWidthData(JVC_BIT_MARK, JVC_ONE_SPACE, JVC_BIT_MARK, JVC_ZERO_SPACE, data, nbits,
-            PROTOCOL_IS_MSB_FIRST);
+    sendPulseDistanceWidthData(JVC_BIT_MARK, JVC_ONE_SPACE, JVC_BIT_MARK, JVC_ZERO_SPACE, data, nbits, PROTOCOL_IS_MSB_FIRST);
 }
 
 /** @}*/

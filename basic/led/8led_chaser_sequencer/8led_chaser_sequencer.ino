@@ -1,5 +1,6 @@
 // 8led_chaser_sequencer.ino
 // https://www.engineersgarage.com/articles-arduino-led-chaser-sequencer-13-light-patterns/
+// 2024-03-07 led4 missing
 
 
 // my standard pin assignments for 8 leds on uno and nano: 6,7,8,9,10,11,12,13
@@ -14,15 +15,14 @@
 // #define led7 13
 
 // with nano and the 8 led module
-#define led0 5
-#define led1 6
-#define led2 7
-#define led3 8
-#define led4 9
-#define led5 10
-#define led6 11
-#define led7 12
-
+#define led0 6
+#define led1 7
+#define led2 8
+#define led3 9
+#define led4 10
+#define led5 11
+#define led6 12
+#define led7 13
 
 
 int delayTime1 = 300;
@@ -45,11 +45,12 @@ void setup()
 
 void loop()
 {
-  //Pattern 01
+  // Pattern 01
   digitalWrite(led0, LOW); delay(delayTime1);
   digitalWrite(led1, LOW); delay(delayTime1);
   digitalWrite(led2, LOW); delay(delayTime1);
   digitalWrite(led3, LOW); delay(delayTime1);
+  digitalWrite(led4, LOW); delay(delayTime1);
   digitalWrite(led5, LOW); delay(delayTime1);
   digitalWrite(led6, LOW); delay(delayTime1);
   digitalWrite(led7, LOW); delay(delayTime1);
@@ -58,14 +59,16 @@ void loop()
   digitalWrite(led1, HIGH); delay(delayTime2);
   digitalWrite(led2, HIGH); delay(delayTime2);
   digitalWrite(led3, HIGH); delay(delayTime2);
+  digitalWrite(led4, HIGH); delay(delayTime2);
   digitalWrite(led5, HIGH); delay(delayTime2);
   digitalWrite(led6, HIGH); delay(delayTime2);
   digitalWrite(led7, HIGH); delay(delayTime2);
 
-  //Pattern 02
+  // Pattern 02
   digitalWrite(led7, LOW); delay(delayTime1);
   digitalWrite(led6, LOW); delay(delayTime1);
   digitalWrite(led5, LOW); delay(delayTime1);
+  digitalWrite(led4, LOW); delay(delayTime1);
   digitalWrite(led3, LOW); delay(delayTime1);
   digitalWrite(led2, LOW); delay(delayTime1);
   digitalWrite(led1, LOW); delay(delayTime1);
@@ -74,75 +77,137 @@ void loop()
   digitalWrite(led7, HIGH); delay(delayTime2);
   digitalWrite(led6, HIGH); delay(delayTime2);
   digitalWrite(led5, HIGH); delay(delayTime2);
+  digitalWrite(led4, HIGH); delay(delayTime2);
   digitalWrite(led3, HIGH); delay(delayTime2);
   digitalWrite(led2, HIGH); delay(delayTime2);
   digitalWrite(led1, HIGH); delay(delayTime2);
   digitalWrite(led0, HIGH); delay(delayTime2);
 
-  //Pattern 03
-  digitalWrite(led7, LOW);  digitalWrite(led6, HIGH); 
-  digitalWrite(led5, LOW);  digitalWrite(led3, HIGH); 
-  digitalWrite(led2, LOW);  digitalWrite(led1, HIGH); 
-  digitalWrite(led0, LOW);  delay(delayTime1);  
+  // Pattern 03
+  digitalWrite(led7, HIGH);
+  digitalWrite(led6, LOW); 
+  digitalWrite(led5, HIGH);
+  digitalWrite(led4, LOW);   // incorrect?
+  digitalWrite(led3, HIGH); 
+  digitalWrite(led2, LOW);
+  digitalWrite(led1, HIGH); 
+  digitalWrite(led0, LOW);
+  delay(delayTime1);  
 
-  digitalWrite(led7, HIGH); digitalWrite(led6, LOW); 
-  digitalWrite(led5, HIGH); digitalWrite(led3, LOW); 
-  digitalWrite(led2, HIGH); digitalWrite(led1, LOW); 
-  digitalWrite(led0, HIGH); delay(delayTime1); //Rep1  
+  digitalWrite(led7, HIGH);
+  digitalWrite(led6, LOW);
+  digitalWrite(led5, HIGH);
+  digitalWrite(led4, HIGH);  // incorrect?
+  digitalWrite(led3, LOW); 
+  digitalWrite(led2, HIGH);
+  digitalWrite(led1, LOW); 
+  digitalWrite(led0, HIGH);
+  delay(delayTime1);        // Rep1  
 
-  digitalWrite(led7, LOW);  digitalWrite(led6, HIGH); 
-  digitalWrite(led5, LOW);  digitalWrite(led3, HIGH); 
-  digitalWrite(led2, LOW);  digitalWrite(led1, HIGH); 
-  digitalWrite(led0, LOW);  delay(delayTime1);  
+  digitalWrite(led7, LOW);
+  digitalWrite(led6, HIGH); 
+  digitalWrite(led5, LOW);
+  digitalWrite(led4, LOW);  // incorrect?
+  digitalWrite(led3, HIGH); 
+  digitalWrite(led2, LOW);
+  digitalWrite(led1, HIGH); 
+  digitalWrite(led0, LOW);
+  delay(delayTime1);  
 
-  digitalWrite(led7, HIGH); digitalWrite(led6, LOW); 
-  digitalWrite(led5, HIGH); digitalWrite(led3, LOW); 
-  digitalWrite(led2, HIGH); digitalWrite(led1, LOW); 
-  digitalWrite(led0, HIGH); delay(delayTime1); //Rep2  
+  digitalWrite(led7, HIGH);
+  digitalWrite(led6, LOW); 
+  digitalWrite(led5, HIGH);
+  digitalWrite(led4, HIGH);  // incorrect?
+  digitalWrite(led3, LOW); 
+  digitalWrite(led2, HIGH);
+  digitalWrite(led1, LOW); 
+  digitalWrite(led0, HIGH);
+  delay(delayTime1);        // Rep2  
 
-  digitalWrite(led7, LOW);  digitalWrite(led6, HIGH); 
-  digitalWrite(led5, LOW);  digitalWrite(led3, HIGH); 
-  digitalWrite(led2, LOW);  digitalWrite(led1, HIGH); 
-  digitalWrite(led0, LOW);  delay(delayTime1);  
+  digitalWrite(led7, LOW);
+  digitalWrite(led6, HIGH); 
+  digitalWrite(led5, LOW);
+  digitalWrite(led4, LOW);  // incorrect?
+  digitalWrite(led3, HIGH); 
+  digitalWrite(led2, LOW);
+  digitalWrite(led1, HIGH); 
+  digitalWrite(led0, LOW);
+  delay(delayTime1);  
 
-  digitalWrite(led7, HIGH); digitalWrite(led6, LOW); 
-  digitalWrite(led5, HIGH); digitalWrite(led3, LOW); 
-  digitalWrite(led2, HIGH); digitalWrite(led1, LOW); 
-  digitalWrite(led0, HIGH); delay(delayTime1); //Rep3  
+  digitalWrite(led7, HIGH);
+  digitalWrite(led6, LOW); 
+  digitalWrite(led5, HIGH);
+  digitalWrite(led4, HIGH);  // incorrect?
+  digitalWrite(led3, LOW); 
+  digitalWrite(led2, HIGH);
+  digitalWrite(led1, LOW); 
+  digitalWrite(led0, HIGH);
+  delay(delayTime1);         // Rep3  
 
-  digitalWrite(led7, LOW);  digitalWrite(led6, HIGH); 
-  digitalWrite(led5, LOW);  digitalWrite(led3, HIGH); 
-  digitalWrite(led2, LOW);  digitalWrite(led1, HIGH); 
-  digitalWrite(led0, LOW);  delay(delayTime1);  
+  digitalWrite(led7, LOW);
+  digitalWrite(led6, HIGH); 
+  digitalWrite(led5, LOW);
+  digitalWrite(led4, LOW);   // incorrect?
+  digitalWrite(led3, HIGH); 
+  digitalWrite(led2, LOW);
+  digitalWrite(led1, HIGH); 
+  digitalWrite(led0, LOW);
+  delay(delayTime1);  
 
-  digitalWrite(led7, HIGH); digitalWrite(led6, LOW); 
-  digitalWrite(led5, HIGH); digitalWrite(led3, LOW); 
-  digitalWrite(led2, HIGH); digitalWrite(led1, LOW); 
-  digitalWrite(led0, HIGH); delay(delayTime1); //Rep4  
+  digitalWrite(led7, HIGH);
+  digitalWrite(led6, LOW); 
+  digitalWrite(led5, HIGH);
+  digitalWrite(led4, HIGH);  // incorrect?
+  digitalWrite(led3, LOW); 
+  digitalWrite(led2, HIGH);
+  digitalWrite(led1, LOW); 
+  digitalWrite(led0, HIGH);
+  delay(delayTime1);         // Rep4  
 
-  digitalWrite(led7, LOW);  digitalWrite(led6, HIGH); 
-  digitalWrite(led5, LOW);  digitalWrite(led3, HIGH); 
-  digitalWrite(led2, LOW);  digitalWrite(led1, HIGH); 
-  digitalWrite(led0, LOW);  delay(delayTime1);  
+  digitalWrite(led7, LOW);
+  digitalWrite(led6, HIGH); 
+  digitalWrite(led5, LOW);
+  digitalWrite(led4, LOW);   // incorrect?
+  digitalWrite(led3, HIGH); 
+  digitalWrite(led2, LOW);
+  digitalWrite(led1, HIGH); 
+  digitalWrite(led0, LOW);
+  delay(delayTime1);  
 
-  digitalWrite(led7, HIGH); digitalWrite(led6, LOW); 
-  digitalWrite(led5, HIGH); digitalWrite(led3, LOW); 
-  digitalWrite(led2, HIGH); digitalWrite(led1, LOW); 
-  digitalWrite(led0, HIGH); delay(delayTime1); //Rep5  
+  digitalWrite(led7, HIGH);
+  digitalWrite(led6, LOW); 
+  digitalWrite(led5, HIGH);
+  digitalWrite(led4, HIGH);  // incorrect?
+  digitalWrite(led3, LOW); 
+  digitalWrite(led2, HIGH);
+  digitalWrite(led1, LOW); 
+  digitalWrite(led0, HIGH);
+  delay(delayTime1);        // Rep5  
 
-  digitalWrite(led7, LOW);  digitalWrite(led6, HIGH); 
-  digitalWrite(led5, LOW);  digitalWrite(led3, HIGH); 
-  digitalWrite(led2, LOW);  digitalWrite(led1, HIGH); 
-  digitalWrite(led0, LOW);  delay(delayTime1);  
+  digitalWrite(led7, LOW);
+  digitalWrite(led6, HIGH); 
+  digitalWrite(led5, LOW);
+  digitalWrite(led4, LOW);  // incorrect?
+  digitalWrite(led3, HIGH); 
+  digitalWrite(led2, LOW);
+  digitalWrite(led1, HIGH); 
+  digitalWrite(led0, LOW);
+  delay(delayTime1);  
 
-  digitalWrite(led7, HIGH); digitalWrite(led6, LOW); 
-  digitalWrite(led5, HIGH); digitalWrite(led3, LOW); 
-  digitalWrite(led2, HIGH); digitalWrite(led1, LOW); 
-  digitalWrite(led0, HIGH); delay(delayTime1); //Rep6  
+  digitalWrite(led7, HIGH);
+  digitalWrite(led6, LOW); 
+  digitalWrite(led5, HIGH);
+  digitalWrite(led4, HIGH);  // incorrect?
+  digitalWrite(led3, LOW); 
+  digitalWrite(led2, HIGH);
+  digitalWrite(led1, LOW); 
+  digitalWrite(led0, HIGH);
+  delay(delayTime1);        // Rep6  
 
   digitalWrite(led7, LOW); 
   digitalWrite(led6, HIGH); 
-  digitalWrite(led5, LOW); 
+  digitalWrite(led5, LOW);
+  digitalWrite(led4, LOW);  // incorrect?
   digitalWrite(led3, HIGH); 
   digitalWrite(led2, LOW); 
   digitalWrite(led1, HIGH); 
@@ -151,16 +216,18 @@ void loop()
 
   digitalWrite(led7, HIGH); 
   digitalWrite(led6, LOW); 
-  digitalWrite(led5, HIGH); 
+  digitalWrite(led5, HIGH);
+  digitalWrite(led4, HIGH);  // incorrect?
   digitalWrite(led3, LOW); 
   digitalWrite(led2, HIGH); 
   digitalWrite(led1, LOW); 
   digitalWrite(led0, HIGH); 
-  delay(delayTime1); //Rep7  
+  delay(delayTime1);         // Rep7  
 
   digitalWrite(led7, LOW); 
   digitalWrite(led6, HIGH); 
-  digitalWrite(led5, LOW); 
+  digitalWrite(led5, LOW);
+  digitalWrite(led4, LOW);   // incorrect?
   digitalWrite(led3, HIGH); 
   digitalWrite(led2, LOW); 
   digitalWrite(led1, HIGH); 
@@ -169,7 +236,8 @@ void loop()
 
   digitalWrite(led7, HIGH); 
   digitalWrite(led6, LOW); 
-  digitalWrite(led5, HIGH); 
+  digitalWrite(led5, HIGH);
+  digitalWrite(led5, HIGH);  // incorrect?
   digitalWrite(led3, LOW); 
   digitalWrite(led2, HIGH); 
   digitalWrite(led1, LOW); 
@@ -1453,9 +1521,8 @@ void loop()
   digitalWrite(led7, LOW);
   delay(delayTime3); 
    
-  digitalWrite(led3, HIGH); 
-  delay(delayTime3);
-  digitalWrite(led2, HIGH); 
+  digitalWrite(led3, HIGH); delay(delayTime3);
+  digitalWrite(led2, HIGH);
   digitalWrite(led5, HIGH);
   delay(delayTime3); 
   digitalWrite(led1, HIGH); 

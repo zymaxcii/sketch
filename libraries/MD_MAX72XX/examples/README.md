@@ -30,6 +30,12 @@ two matrix modules. Eyes are coordinated to work together and are
 created to fill all available modules.
 <hr>
 
+**MD_MAX72xx_Hourglass**  
+Uses the graphics functions to animate an hourglass on 
+two matrix modules. The matrices are placed diagonally touching
+at one point.
+<hr>
+
 **MD_MAX72xx_HW_Mapper**  
 Test software to map display hardware rows and columns. Uses a 
 generic SPI interface and only one MAX72xx/8x8 LED module is required.
@@ -42,11 +48,11 @@ instructions and output on the serial monitor. The outcome is a
 recommendation used to set the hardware type for the library.
 <hr>
 
-**MD_MAX72XX_Message_ESP8266**  
+**MD_MAX72XX_Message_ESP32**  
 Use the MD_MAX72XX library to scroll text on the display received 
-through the ESP8266 WiFi interface. Text is sent from a web page 
+through the ESP32 WiFi interface. Text is sent from a web page 
 served by the application and displayed as a scrolling message on 
-the display. The IP address for the ESP8266 is displayed on the 
+the display. The IP address for the ESP32 is displayed on the 
 scrolling display after startup initialization and WiFi is connected.
 <hr>
 

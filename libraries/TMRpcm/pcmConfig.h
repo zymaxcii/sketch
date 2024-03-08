@@ -45,7 +45,7 @@ Blog: https://tmrh20.blogspot.com/
 /****************** ADVANCED USER DEFINES ********************************
    See https://github.com/TMRh20/TMRpcm/wiki for info on usage
 
-   /* Use the SDFAT library from http://code.google.com/p/sdfatlib/            */
+   * Use the SDFAT library from https://github.com/greiman/SdFat          */
 //#define SDFAT
 
    /* MULTI Track mode currently allows playback of 2 tracks at once          */
@@ -76,6 +76,8 @@ Blog: https://tmrh20.blogspot.com/
 	// Amount of space to pre-allocate for recording
 //	#define BLOCK_COUNT 10000UL  // 10000 = 500MB   2000 = 100MB
 
+/* Allow users to control the speed of playback on the fly */
+//#define SPEED_CONTROL
 //*********************** Radio (NRF24L01+) Streaming *********************
 
    /* Comment or Uncomment to en/disable RF streaming of wav files. Make sure

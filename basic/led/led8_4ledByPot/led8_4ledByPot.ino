@@ -42,10 +42,17 @@ int potPin = A0;
 // int led4 = 5;
 
 // with the 8 led module and mega
-const int led1 = 39;
-const int led2 = 41;
-const int led3 = 43;
-const int led4 = 45;
+//const int led1 = 39;
+//const int led2 = 41;
+//const int led3 = 43;
+//const int led4 = 45;
+
+// with the 8 led module and nano
+const int led1 = 6;
+const int led2 = 7;
+const int led3 = 8;
+const int led4 = 9;
+
 
 int potValue;
 int percent;

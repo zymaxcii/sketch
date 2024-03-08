@@ -65,17 +65,7 @@
 #ifndef _IR_REMOTE_HPP
 #define _IR_REMOTE_HPP
 
-#define VERSION_IRREMOTE "4.1.0"
-#define VERSION_IRREMOTE_MAJOR 4
-#define VERSION_IRREMOTE_MINOR 1
-#define VERSION_IRREMOTE_PATCH 0
-
-/*
- * Macro to convert 3 version parts into an integer
- * To be used in preprocessor comparisons, such as #if VERSION_IRREMOTE_HEX >= VERSION_HEX_VALUE(3, 7, 0)
- */
-#define VERSION_HEX_VALUE(major, minor, patch) ((major << 16) | (minor << 8) | (patch))
-#define VERSION_IRREMOTE_HEX  VERSION_HEX_VALUE(VERSION_IRREMOTE_MAJOR, VERSION_IRREMOTE_MINOR, VERSION_IRREMOTE_PATCH)
+#include "IRVersion.h"
 
 // activate it for all cores that does not use the -flto flag, if you get false error messages regarding begin() during compilation.
 //#define SUPPRESS_ERROR_MESSAGE_FOR_BEGIN
@@ -96,7 +86,7 @@
 
 #if !defined(NO_DECODER) // for sending raw only
 #  if (!(defined(DECODE_DENON) || defined(DECODE_JVC) || defined(DECODE_KASEIKYO) \
-|| defined(DECODE_PANASONIC) || defined(DECODE_LG) || defined(DECODE_NEC) || defined(DECODE_SAMSUNG) \
+|| defined(DECODE_PANASONIC) || defined(DECODE_LG) || defined(DECODE_NEC) || defined(DECODE_ONKYO) || defined(DECODE_SAMSUNG) \
 || defined(DECODE_SONY) || defined(DECODE_RC5) || defined(DECODE_RC6) \
 || defined(DECODE_DISTANCE_WIDTH) || defined(DECODE_HASH) || defined(DECODE_BOSEWAVE) \
 || defined(DECODE_LEGO_PF) || defined(DECODE_MAGIQUEST) || defined(DECODE_FAST) || defined(DECODE_WHYNTER)))
@@ -202,7 +192,7 @@
 #if (defined(ESP32) || defined(ARDUINO_ARCH_RP2040) || defined(PARTICLE)) || defined(ARDUINO_ARCH_MBED)
 #  if !defined(SEND_PWM_BY_TIMER)
 #define SEND_PWM_BY_TIMER       // the best and default method for ESP32 etc.
-#warning INFO: For ESP32, RP2040, mbed and particle boards SEND_PWM_BY_TIMER is enabled by default. If this is not intended, deactivate the line in IRremote.hpp over this warning message in file IRremote.hpp.
+#warning INFO: For ESP32, RP2040, mbed and particle boards SEND_PWM_BY_TIMER is enabled by default, since we have the resources and timing is more exact than the software generated one. If this is not intended, deactivate the line in IRremote.hpp over this warning message in file IRremote.hpp.
 #  endif
 #else
 #  if defined(SEND_PWM_BY_TIMER)

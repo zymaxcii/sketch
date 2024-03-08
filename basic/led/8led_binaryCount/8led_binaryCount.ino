@@ -17,8 +17,10 @@ int state;				    // used for HIGH or LOW
 // byte pins[] = {6,7,8,9,10,11,12,13};
 
 // with the 8 led module and mega - no jumper wires no separate GND jumper
-int ledPins[] = {39,41,43,45,47,49,51,53};
+// int ledPins[] = {39,41,43,45,47,49,51,53};
 
+// with the 8 led module and nano - no jumper wires no separate GND jumper
+byte pins[] = {6,7,8,9,10,11,12,13};
 
 
 void setup()

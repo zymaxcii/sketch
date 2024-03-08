@@ -62,7 +62,7 @@ void Ds1302::getDateTime(DateTime* dt)
     dt->day    = _bcd2dec(_readByte() & 0b00111111);
     dt->month  = _bcd2dec(_readByte() & 0b00011111);
     dt->dow    = _bcd2dec(_readByte() & 0b00000111);
-    dt->year   = _bcd2dec(_readByte() & 0b01111111);
+    dt->year   = _bcd2dec(_readByte() & 0b11111111);
     _end();
 }
 
@@ -88,8 +88,32 @@ void Ds1302::setDateTime(DateTime* dt)
 
 void Ds1302::halt()
 {
-    _prepareWrite(REG_SECONDS);
-    _writeByte(0b10000000);
+    _setHaltFlag(true);
+}
+
+
+void Ds1302::start()
+{
+    _setHaltFlag(false);
+}
+
+
+void Ds1302::_setHaltFlag(bool stopped)
+{
+    uint8_t regs[8];
+    _prepareRead(REG_BURST);
+    for (int b = 0; b < 8; b++) regs[b] = _readByte();
+    _end();
+
+    if (stopped) regs[0] |= 0b10000000; else regs[0] &= ~0b10000000;
+    regs[7] = 0b10000000;
+
+    _prepareWrite(REG_WP);
+    _writeByte(0b00000000);
+    _end();
+
+    _prepareWrite(REG_BURST);
+    for (int b = 0; b < 8; b++) _writeByte(regs[b]);
     _end();
 }
 

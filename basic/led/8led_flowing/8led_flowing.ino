@@ -12,45 +12,38 @@ This process will repeat indefinitely.
 // Website:www.primerobotics.in
 
 
-const int lowestPin = 2;   // the lowest one attach to
-const int highestPin = 9;  // the highest one attach to 
-int delayTime = 100;
+const int lowestPin = 6;    // the lowest one attach to
+const int highestPin = 13;  // the highest one attach to
+int delayTime = 500;        // 100
 
-void setup()
-{
-  // set pins 2 through 9 as output  
-  for (int thisPin = lowestPin;thisPin <= highestPin;thisPin++)
-  {
-    pinMode(thisPin,OUTPUT);
+void setup() {
+  // set pins 2 through 9 as output
+  for (int thisPin = lowestPin; thisPin <= highestPin; thisPin++) {
+    pinMode(thisPin, OUTPUT);
   }
 }
 
 
-void loop()
-{
+void loop() {
   // turn led on from lowest to highest
-  for (int thisPin = lowestPin; thisPin <= highestPin; thisPin++)
-  {
-    digitalWrite(thisPin,HIGH);    // turn led on
+  for (int thisPin = lowestPin; thisPin <= highestPin; thisPin++) {
+    digitalWrite(thisPin, HIGH);  // turn led on
     delay(delayTime);
   }
 
   // fade from highest to lowest
-  for (int thisPin = highestPin; thisPin >= lowestPin; thisPin--)
-  {
-    digitalWrite(thisPin, LOW);    // turn led off
+  for (int thisPin = highestPin; thisPin >= lowestPin; thisPin--) {
+    digitalWrite(thisPin, LOW);  // turn led off
     delay(delayTime);
   }
 
-  for (int thisPin = highestPin; thisPin >= lowestPin; thisPin--)
-  {
-    digitalWrite(thisPin,HIGH);    // turn led on
+  for (int thisPin = highestPin; thisPin >= lowestPin; thisPin--) {
+    digitalWrite(thisPin, HIGH);  // turn led on
     delay(delayTime);
   }
 
-  for ( int thisPin = lowestPin; thisPin <= highestPin; thisPin++)
-  {
-    digitalWrite(thisPin, LOW);    // turn led off
+  for (int thisPin = lowestPin; thisPin <= highestPin; thisPin++) {
+    digitalWrite(thisPin, LOW);  // turn led off
     delay(delayTime);
   }
 }

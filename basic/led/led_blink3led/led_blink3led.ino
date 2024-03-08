@@ -10,9 +10,17 @@
 */
 
 
-int red   = 2;
-int green = 3;
-int blue  = 4;
+//int red   = 2;
+//int green = 3;
+//int blue  = 4;
+
+// with the 8-led module and nano
+int red   = 6;
+int green = 7;
+int blue  = 8;
+
+
+
 int d = 300;
 
 

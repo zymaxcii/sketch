@@ -100,7 +100,7 @@ struct irparams_struct {
     volatile uint8_t *IRReceivePinPortInputRegister;
     uint8_t IRReceivePinMask;
 #endif
-    volatile uint_fast16_t TickCounterForISR; ///< Counts 50uS ticks. The value is copied into the rawbuf array on every transition.
+    volatile uint_fast16_t TickCounterForISR; ///< Counts 50uS ticks. The value is copied into the rawbuf array on every transition. Counting is independent of state or resume().
 #if !IR_REMOTE_DISABLE_RECEIVE_COMPLETE_CALLBACK
     void (*ReceiveCompleteCallbackFunction)(void); ///< The function to call if a protocol message has arrived, i.e. StateForISR changed to IR_REC_STATE_STOP
 #endif
@@ -124,6 +124,8 @@ typedef uint64_t IRRawDataType;
 
 /*
  * Debug directives
+ * Outputs with IR_DEBUG_PRINT can only be activated by defining DEBUG!
+ * If LOCAL_DEBUG is defined in one file, all outputs with IR_DEBUG_PRINT are still suppressed.
  */
 #if defined(DEBUG) || defined(TRACE)
 #  define IR_DEBUG_PRINT(...)    Serial.print(__VA_ARGS__)
@@ -162,7 +164,7 @@ struct decode_results {
     uint16_t magnitude;         // deprecated, moved to decodedIRData.extra ///< Used by MagiQuest [16-bits]
     bool isRepeat;              // deprecated, moved to decodedIRData.flags ///< True if repeat of value is detected
 
-// next 3 values are copies of irparams values - see IRremoteint.h
+// next 3 values are copies of irparams_struct values - see above
     uint16_t *rawbuf;       // deprecated, moved to decodedIRData.rawDataPtr->rawbuf ///< Raw intervals in 50uS ticks
     uint_fast8_t rawlen;        // deprecated, moved to decodedIRData.rawDataPtr->rawlen ///< Number of records in rawbuf
     bool overflow;              // deprecated, moved to decodedIRData.flags ///< true if IR raw code too long
@@ -293,13 +295,15 @@ public:
     bool decodeSAMSUNG(decode_results *aResults);
     bool decodeHashOld(decode_results *aResults);
 
+    bool decode_old(decode_results *aResults);
+
     bool decode(
             decode_results *aResults)
-                    __attribute__ ((deprecated ("Please use IrReceiver.decode() without a parameter and IrReceiver.decodedIRData.<fieldname> ."))); // deprecated
+                    __attribute__ ((deprecated ("Please use IrReceiver.decode() without a parameter and IrReceiver.decodedIRData.<fieldname> .")));
 
     // for backward compatibility. Now in IRFeedbackLED.hpp
     void blink13(uint8_t aEnableLEDFeedback)
-            __attribute__ ((deprecated ("Please use setLEDFeedback() or enableLEDFeedback() / disableLEDFeedback()."))); // deprecated
+            __attribute__ ((deprecated ("Please use setLEDFeedback() or enableLEDFeedback() / disableLEDFeedback().")));
 
     /*
      * Internal functions
@@ -413,7 +417,7 @@ public:
     IRsend();
 
     /*
-     * IR_SEND_PIN is defined
+     * IR_SEND_PIN is defined or fixed by timer, value of IR_SEND_PIN is then "DeterminedByTimer"
      */
 #if defined(IR_SEND_PIN)
     void begin();
@@ -435,6 +439,9 @@ public:
     size_t write(decode_type_t aProtocol, uint16_t aAddress, uint16_t aCommand, int_fast8_t aNumberOfRepeats = NO_REPEATS);
 
     void enableIROut(uint_fast8_t aFrequencyKHz);
+#if defined(SEND_PWM_BY_TIMER)
+    void enableHighFrequencyIROut(uint_fast16_t aFrequencyKHz); // Used for Bang&Olufsen
+#endif
 
     void sendPulseDistanceWidthFromArray(uint_fast8_t aFrequencyKHz, uint16_t aHeaderMarkMicros, uint16_t aHeaderSpaceMicros,
             uint16_t aOneMarkMicros, uint16_t aOneSpaceMicros, uint16_t aZeroMarkMicros, uint16_t aZeroSpaceMicros,
