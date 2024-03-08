@@ -3,11 +3,16 @@
 // https://www.instructables.com/how-make-8-leds-blinking-with-arduino/
 
 // with the 8 led module and mega - no jumper wires no separate GND jumper
-int ledPins[] = {39,41,43,45,47,49,51,53};
+// int ledPins[] = {39,41,43,45,47,49,51,53};
 
 // with normal leds on breadboard
 // int ledPins[] = {2,3,4,5,6,7,8,9};
-int delayTime = 100;
+
+// with nano and the 8 led module breadboard
+int ledPins[] = {5,6,7,8,9,10,11,12};
+
+
+int delayTime = 500;  // 100
 
 
 void setup()
